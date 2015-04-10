@@ -62,7 +62,6 @@ gulp.task('lint', function () {
 
 gulp.task('minify-html', function () {
     gulp.src(_HTML)
-    .pipe(rename({suffix: '.min'}))
     .pipe(minifyHTML())
     .pipe(gulp.dest('game'))
     .pipe(reload({stream: true, once: true}));
