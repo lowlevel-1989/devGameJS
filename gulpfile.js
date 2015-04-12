@@ -11,20 +11,6 @@ var stylus      = require('gulp-stylus');
 var nib         = require('nib');
 var jshint      = require('gulp-jshint');
 
-
-// MANAGER USER
-
-var _LIBS = [
-    'libs/**/*.js',
-    'libs/**/*.js.map'
-];
-
-var _IMGS = [
-    'core/media/**/*.png',
-    'media/**/*.png'
-];
-
-
 // WARNING CORE
 
 var _CORE = [
@@ -33,6 +19,15 @@ var _CORE = [
 
 var _HTML = [
     'core/static/**/*.html'
+];
+
+var _IMGS = [
+    'core/media/**/*.png',
+    'media/**/*.png'
+];
+
+var _LIBS = [
+    'libs/**/*.js'
 ];
 
 var _STYLUS = 'assets/stylus/**/*.styl';
@@ -54,6 +49,14 @@ gulp.task('minify-js', function () {
     .pipe(reload({stream: true, once: true}));
 });
 
+gulp.task('libs-js', function(){
+	gulp.src(_LIBS)
+    .pipe(concat('libs.min.js'))
+    .pipe(minifyJS())
+    .pipe(gulp.dest('game/assets/js'))
+    .pipe(reload({stream: true, once: true}));
+});
+
 gulp.task('lint', function () {
     gulp.src(_CORE)
     .pipe(jshint())
@@ -66,12 +69,6 @@ gulp.task('minify-html', function () {
     .pipe(gulp.dest('game'))
     .pipe(reload({stream: true, once: true}));
 });
-
-gulp.task('copyJs', function(){
-	gulp.src(_LIBS)
-    .pipe(gulp.dest('game/assets/js'));
-});
-
 
 gulp.task('copyImgs', function(){
 	gulp.src(_IMGS)
@@ -101,7 +98,7 @@ gulp.task('debug', function() {
 });
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('copyJs', 'copyImgs', 'minify-css', 'minify-html', 'minify-js', 'lint');
+    gulp.start('libs-Js', 'copyImgs', 'minify-css', 'minify-html', 'minify-js', 'lint');
 });
 
 gulp.task('server', function() {
