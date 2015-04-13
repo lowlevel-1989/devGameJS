@@ -98,7 +98,7 @@ gulp.task('debug', function() {
 });
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('libs-Js', 'copyImgs', 'minify-css', 'minify-html', 'minify-js', 'lint');
+    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'minify-js', 'lint');
 });
 
 gulp.task('server', function() {
