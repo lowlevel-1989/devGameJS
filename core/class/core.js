@@ -1,5 +1,12 @@
 (function(){
 
+   //CONSTRUCTOR
+   window.core = function(){
+      this.count = 0;
+      console.info('Iniciando...');
+   };
+
+
    //METODOS PRIVADOS
 
    function Static(){
@@ -17,11 +24,6 @@
 
 
    //METODOS PUBLICOS
-
-   window.core = function(){
-      this.count = 0;
-      console.info('Iniciando...');
-   };
 
    window.core.prototype.debug = function(){
       Static().cleanCanvas();
