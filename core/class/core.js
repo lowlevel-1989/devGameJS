@@ -11,6 +11,7 @@
    
    };
 
+
    //METODOS PRIVADOS
 
    function Static(){
@@ -53,11 +54,12 @@
       ctx.restore();
    }
 
-   //METODOS PUBLICOS
+   function drawFps(currentFps){
+      drawText(Static().context, 10, 20, 'black', 'bold', '12px', 'sans-serif', 'FPS: ' + currentFps + '/60');
+   }
 
-   window.core.prototype.drawFps = function(){
-      drawText(Static().context, 10, 20, 'black', 'bold', '12px', 'sans-serif', 'FPS: ' + this.currentFps + '/60');
-   };
+
+   //METODOS PUBLICOS
 
    window.core.prototype.gameLoop = function(){
       //borrar canvas
@@ -70,7 +72,7 @@
       this.lastFps    = dataFps.lastFps;
 
       //dibujar
-      this.drawFps();
+      drawFps(this.currentFps);
    };
 
 })();
