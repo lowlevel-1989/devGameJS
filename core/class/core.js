@@ -5,10 +5,10 @@
 
       console.info('Iniciando...');
       
-      this.frameCount = 0;
-      this.currentFps = 0;
-      this.lastFps    = new Date().getTime();
-   
+      this.frameCount   = 0;
+      this.currentFps   = 0;
+      this.lastFps      = new Date().getTime();
+      this.drawInterval = 1000/Static().maxFps;   
    };
 
 
@@ -17,13 +17,15 @@
    function Static(){
       var canvas      = document.getElementById('game');
       var context     = canvas.getContext('2d');
+      var maxFps      = 60;
       var cleanCanvas = function(){
          context.clearRect(0, 0, canvas.width, canvas.height);
       };
       return {
          canvas      : canvas,
          context     : context,
-         cleanCanvas : cleanCanvas
+         cleanCanvas : cleanCanvas,
+         maxFps      : maxFps
       };
    }
 
@@ -55,7 +57,7 @@
    }
 
    function drawFps(currentFps){
-      drawText(Static().context, 10, 20, 'black', 'bold', '12px', 'sans-serif', 'FPS: ' + currentFps + '/60');
+      drawText(Static().context, 10, 20, 'black', 'bold', '12px', 'sans-serif', 'FPS: ' + currentFps + '/' + Static().maxFps);
    }
 
 
