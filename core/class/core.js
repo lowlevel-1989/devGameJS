@@ -1,10 +1,14 @@
 (function(){
 
    //CONSTRUCTOR
-   window.core = function(){
+   window.Core = function(settings){
 
       console.info('Iniciando...');
       
+      Static().canvas.width  = settings.canvas.width;
+      Static().canvas.height = settings.canvas.height;
+
+
       this.frameCount   = 0;
       this.currentFps   = 0;
       this.lastFps      = new Date().getTime();
@@ -63,7 +67,7 @@
 
    //METODOS PUBLICOS
 
-   window.core.prototype.gameLoop = function(){
+   window.Core.prototype.gameLoop = function(){
       //borrar canvas
       Static().cleanCanvas();
 

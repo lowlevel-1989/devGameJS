@@ -1,6 +1,7 @@
 window.onload = function(){
    
-   var game = new core();
+   var settings = new Settings();
+   var game     = new Core(settings);
 
    // Creando GameLoop {
    var getRequestAnimationFrame = function () {

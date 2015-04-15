@@ -17,6 +17,10 @@ var _CORE = [
     'core/class/**/*.js'
 ];
 
+var _DEV = [
+    'dev/**/*.js'
+];
+
 var _HTML = [
     'core/static/**/*.html'
 ];
@@ -41,9 +45,17 @@ gulp.task('minify-css', function () {
     .pipe(reload({stream: true, once: true}));
 });
 
-gulp.task('minify-js', function () {
+gulp.task('core-minify-js', function () {
     gulp.src(_CORE)
-    .pipe(concat('main.min.js'))
+    .pipe(concat('core.min.js'))
+    .pipe(minifyJS())
+    .pipe(gulp.dest('game/assets/js'))
+    .pipe(reload({stream: true, once: true}));
+});
+
+gulp.task('dev-minify-js', function () {
+    gulp.src(_DEV)
+    .pipe(concat('dev.min.js'))
     .pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
@@ -78,7 +90,8 @@ gulp.task('copyImgs', function(){
 
 gulp.task('watch', function() {
     // Cambios principales
-    gulp.watch(_CORE, ['lint', 'minify-js']);
+    gulp.watch(_CORE, ['lint', 'core-minify-js']);
+    gulp.watch(_DEV, ['lint', 'dev-minify-js']);
     gulp.watch(_STYLUS,      ['minify-css']);
     gulp.watch(_HTML,       ['minify-html']);
 });
@@ -98,7 +111,7 @@ gulp.task('debug', function() {
 });
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'minify-js', 'lint');
+    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'core-minify-js', 'dev-minify-js', 'lint');
 });
 
 gulp.task('server', function() {
