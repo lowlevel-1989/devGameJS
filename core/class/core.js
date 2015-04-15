@@ -2,10 +2,14 @@
 
    //CONSTRUCTOR
    window.core = function(){
-      this.count = 0;
-      console.info('Iniciando...');
-   };
 
+      console.info('Iniciando...');
+      
+      this.frameCount = 0;
+      this.currentFps = 0;
+      this.lastFps    = new Date().getTime();
+   
+   };
 
    //METODOS PRIVADOS
 
@@ -22,14 +26,51 @@
       };
    }
 
+   function fpsUpdate(frameCount, currentFps, lastFps){
+      var thisFrame = new Date().getTime();
+      var diffTime  = Math.ceil((thisFrame - lastFps));
+
+      if (diffTime >= 1000){
+         currentFps = frameCount;
+         frameCount = 0;
+         lastFps    = thisFrame;
+      }
+
+      frameCount++;
+
+      return {
+         frameCount : frameCount,
+         currentFps : currentFps,
+         lastFps    : lastFps
+      };
+   }
+
+   function drawText(ctx, x, y, color, tipo, px, fuente, texto){
+      ctx.save();
+         ctx.fillStyle = color;
+         ctx.font = tipo+' '+px+' '+fuente;
+         ctx.fillText(texto, x, y);
+      ctx.restore();
+   }
 
    //METODOS PUBLICOS
 
-   window.core.prototype.debug = function(){
+   window.core.prototype.drawFps = function(){
+      drawText(Static().context, 10, 20, 'black', 'bold', '12px', 'sans-serif', 'FPS: ' + this.currentFps + '/60');
+   };
+
+   window.core.prototype.gameLoop = function(){
+      //borrar canvas
       Static().cleanCanvas();
-      Static().context.fillStyle = 'red';
-      Static().context.font = 'bold 12px sans-serif';
-      Static().context.fillText(this.count++, 9, 20);
+
+      //logica
+      var dataFps  = fpsUpdate(this.frameCount, this.currentFps, this.lastFps);
+      this.frameCount = dataFps.frameCount;
+      this.currentFps = dataFps.currentFps;
+      this.lastFps    = dataFps.lastFps;
+
+      //dibujar
+      this.drawFps();
    };
 
 })();
