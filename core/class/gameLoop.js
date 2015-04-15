@@ -10,7 +10,7 @@ window.onload = function(){
                window.oRequestAnimationFrame ||
                window.msRequestAnimationFrame ||
                function (callback){
-                  window.setTimeout(callback, game.drawInterval);
+                  window.setTimeout(callback, game.intervalFps);
                };
    };
    var fpAnimationFrame = getRequestAnimationFrame();

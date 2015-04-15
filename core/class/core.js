@@ -8,7 +8,7 @@
       this.frameCount   = 0;
       this.currentFps   = 0;
       this.lastFps      = new Date().getTime();
-      this.drawInterval = 1000/Static().maxFps;   
+      this.intervalFps  = 1000/Static().maxFps;   
    };
 
 
