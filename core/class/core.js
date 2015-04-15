@@ -48,7 +48,7 @@
    function drawText(ctx, x, y, color, tipo, px, fuente, texto){
       ctx.save();
          ctx.fillStyle = color;
-         ctx.font = tipo+' '+px+' '+fuente;
+         ctx.font      = tipo+' '+px+' '+fuente;
          ctx.fillText(texto, x, y);
       ctx.restore();
    }
@@ -64,7 +64,7 @@
       Static().cleanCanvas();
 
       //logica
-      var dataFps  = fpsUpdate(this.frameCount, this.currentFps, this.lastFps);
+      var dataFps     = fpsUpdate(this.frameCount, this.currentFps, this.lastFps);
       this.frameCount = dataFps.frameCount;
       this.currentFps = dataFps.currentFps;
       this.lastFps    = dataFps.lastFps;
