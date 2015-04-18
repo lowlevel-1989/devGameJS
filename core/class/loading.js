@@ -21,8 +21,18 @@
 
 
    //METODOS PRIVADOS
-   
-   
+   function handleImageLoad(imageLocation){
+
+   }
+
+   function loadImageLocation(imageLocation){
+      var image    = new Image();
+      image.onload = function(event){
+         handleImageLoad(event.target.src);
+         image = event = null;
+      };
+   }
+
 
    //METODOS PUBLICOS
    window.loading.prototype.isInitiated = function (){
@@ -40,9 +50,10 @@
    window.loading.prototype.load = function(){
       if (this.isInitiated())
          return this.imgs; //PENSAR ESTO MEJOR
-      this.state = this.states.LOADING;
-      for ( var i = 0 ; i < this.imageCount ; i++ ) {
-         this.loadImageLocation(this.imgs[i]); //FALTA PENSARLO PRIVADO, ESTO DARA ERROR
+      this.state  = this.states.LOADING;
+      var notify;
+      for (var i = 0 ; i < this.imageCount ; i++) {
+         notify = loadImageLocation(this.imgs[i]); //Le falta trabajo para llevarlo a privado
       }
       return this.imgs; //PENSAR ESTO MEJOR
    };
