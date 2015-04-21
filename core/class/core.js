@@ -34,23 +34,17 @@
       };
    }
 
-   function fpsUpdate(frameCount, currentFps, lastFps){
+   function fpsUpdate(self){
       var thisFrame = new Date().getTime();
-      var diffTime  = Math.ceil((thisFrame - lastFps));
+      var diffTime  = Math.ceil((thisFrame - self.lastFps));
 
       if (diffTime >= 1000){
-         currentFps = frameCount;
-         frameCount = 0;
-         lastFps    = thisFrame;
+         self.currentFps = self.frameCount;
+         self.frameCount = 0;
+         self.lastFps    = thisFrame;
       }
 
-      frameCount++;
-
-      return {
-         frameCount : frameCount,
-         currentFps : currentFps,
-         lastFps    : lastFps
-      };
+      self.frameCount++;
    }
 
    function drawText(ctx, x, y, color, tipo, px, fuente, texto){
@@ -85,10 +79,7 @@
       Static().cleanCanvas();
 
       //logica
-      var dataFps     = fpsUpdate(this.frameCount, this.currentFps, this.lastFps);
-      this.frameCount = dataFps.frameCount;
-      this.currentFps = dataFps.currentFps;
-      this.lastFps    = dataFps.lastFps;
+      fpsUpdate(this);
 
       //dibujar
       drawBackground(Static().context, this.colorBackground, this.mediaBackground);
