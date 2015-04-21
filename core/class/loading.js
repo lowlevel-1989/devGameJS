@@ -1,7 +1,7 @@
 (function(){
 
    //CONSTRUCTOR
-   window.loading = function(imgs){
+   window.Loading = function(imgs){
 
       this.imgs       = imgs;
       this.imageCount = this.imgs.length;
@@ -21,39 +21,54 @@
 
 
    //METODOS PRIVADOS
-   function handleImageLoad(imageLocation){
+   function handleImageLoad(self, imageLocation){
+      
+      console.log(self);
 
-   }
+      // this.loadCount++; //este va para notify
+      // if ( this.isRejected() ) { //esta va para notify
+      //     return;
+      // }
+      // this.deferred.notify({
+      //     percent: Math.ceil( this.loadCount / this.imageCount * 100 ), // esta ve para notify
+      //     imageLocation: imageLocation //este va para notify
+      // });
+      // if ( this.loadCount === this.imageCount ) {
+      //     this.state = this.states.RESOLVED;
+      //     this.deferred.resolve( this.imageLocations );
+      // }
+  }
 
-   function loadImageLocation(imageLocation){
+   function loadImageLocation(self, imageLocation){
       var image    = new Image();
       image.onload = function(event){
-         handleImageLoad(event.target.src);
+         handleImageLoad(self, event.target.src);
          image = event = null;
       };
+      image.src   = imageLocation;
    }
 
 
    //METODOS PUBLICOS
-   window.loading.prototype.isInitiated = function (){
+   window.Loading.prototype.isInitiated = function (){
       return ( this.state !== this.states.PENDING );
    };
 
-   window.loading.prototype.isRejected = function(){
+   window.Loading.prototype.isRejected = function(){
       return ( this.state === this.states.REJECTED );
    };
 
-   window.loading.prototype.isResolved = function(){
+   window.Loading.prototype.isResolved = function(){
       return ( this.state === this.states.RESOLVED );
    };
 
-   window.loading.prototype.load = function(){
+   window.Loading.prototype.load = function(){
       if (this.isInitiated())
          return this.imgs; //PENSAR ESTO MEJOR
       this.state  = this.states.LOADING;
       var notify;
       for (var i = 0 ; i < this.imageCount ; i++) {
-         notify = loadImageLocation(this.imgs[i]); //Le falta trabajo para llevarlo a privado
+         notify = loadImageLocation(this, this.imgs[i]); //Le falta trabajo para llevarlo a privado
       }
       return this.imgs; //PENSAR ESTO MEJOR
    };
