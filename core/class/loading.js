@@ -8,6 +8,11 @@
       this.loadCount  = 0;
       this.errorCount = 0;
 
+      //VARIABLES DE CONTROL
+      this.isLoading     = true;
+      this.isSuccessful  = false;
+      this.percentLoaded = 0;
+
       this.states = {
          PENDING  : 1,
          LOADING  : 2,
