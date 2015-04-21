@@ -22,18 +22,13 @@
 
    //METODOS PRIVADOS
    function handleImageLoad(self, imageLocation){
-      
-      console.log('entre porque cargue');
-      console.log(self.imgs.length);
-
-      // this.loadCount++; //este va para notify
-      // if ( this.isRejected() ) { //esta va para notify
-      //     return;
-      // }
-      // this.deferred.notify({
-      //     percent: Math.ceil( this.loadCount / this.imageCount * 100 ), // esta ve para notify
-      //     imageLocation: imageLocation //este va para notify
-      // });
+      self.loadCount++;
+      if (self.isRejected()){
+         console.log('Error al cargar una de las imagenes');
+         return;
+      }
+      console.log(Math.ceil( self.loadCount / self.imageCount * 100 ));
+      console.log(imageLocation);
       // if ( this.loadCount === this.imageCount ) {
       //     this.state = this.states.RESOLVED;
       //     this.deferred.resolve( this.imageLocations );
@@ -64,14 +59,15 @@
    };
 
    window.Loading.prototype.load = function(){
-      if (this.isInitiated())
-         return this.imgs; //PENSAR ESTO MEJOR
-      this.state  = this.states.LOADING;
-      var notify;
-      for (var i = 0 ; i < this.imageCount ; i++) {
-         notify = loadImageLocation(this, this.imgs[i]); //Le falta trabajo para llevarlo a privado
+      if (this.isInitiated()){
+         console.log('Ya el load ha sido iniciado anteriormente.');
+         return;
       }
-      return this.imgs; //PENSAR ESTO MEJOR
+      this.state  = this.states.LOADING;
+      for (var i = 0 ; i < this.imageCount ; i++) {
+         loadImageLocation(this, this.imgs[i]); //Le falta trabajo para llevarlo a privado
+      }
+      console.log('Cargando...');
    };
 
 })();
