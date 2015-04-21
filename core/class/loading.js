@@ -23,7 +23,8 @@
    //METODOS PRIVADOS
    function handleImageLoad(self, imageLocation){
       
-      console.log(self);
+      console.log('entre porque cargue');
+      console.log(self.imgs.length);
 
       // this.loadCount++; //este va para notify
       // if ( this.isRejected() ) { //esta va para notify

@@ -2,6 +2,8 @@ window.onload = function(){
    
    var settings = new Settings();
    var game     = new Core(settings);
+   var test     = new Loading(['assets/img/tileInMap.png']);
+   test.load();
 
    // Creando GameLoop {
    var getRequestAnimationFrame = function () {
