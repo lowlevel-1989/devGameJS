@@ -21,6 +21,16 @@
 
 
    //METODOS PRIVADOS
+   function handleImageError(self, imageLocation){
+      self.errorCount++;
+      if (self.isRejected()){
+         console.warn('Error...');
+         return;
+      }
+      self.state = self.states.REJECTED;
+      console.warn(imageLocation);
+  }
+
    function handleImageLoad(self, imageLocation){
       self.loadCount++;
       if (self.isRejected()){
@@ -29,16 +39,18 @@
       }
       console.log(Math.ceil( self.loadCount / self.imageCount * 100 ));
       console.log(imageLocation);
-      // if ( this.loadCount === this.imageCount ) {
-      //     this.state = this.states.RESOLVED;
-      //     this.deferred.resolve( this.imageLocations );
-      // }
+      if (self.loadCount === self.imageCount)
+         self.state = self.states.RESOLVED;
   }
 
    function loadImageLocation(self, imageLocation){
       var image    = new Image();
       image.onload = function(event){
          handleImageLoad(self, event.target.src);
+         image = event = null;
+      };
+      image.onerror = function(event){
+         handleImageError(self, event.target.src);
          image = event = null;
       };
       image.src   = imageLocation;
