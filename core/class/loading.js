@@ -26,26 +26,35 @@
 
 
    //METODOS PRIVADOS
+   function isLoading(self){
+      if (self.imageCount === (self.errorCount+self.loadCount)){
+         return false;
+      }
+   }
+
    function handleImageError(self, imageLocation){
       self.errorCount++;
-      if (self.isRejected()){
-         console.warn('Error...');
+      if (!isLoading(self))
+         self.isLoading = false;
+
+      if (self.isRejected())
          return;
-      }
+
       self.state = self.states.REJECTED;
-      console.warn(imageLocation);
   }
 
    function handleImageLoad(self, imageLocation){
       self.loadCount++;
-      if (self.isRejected()){
-         console.log('Error al cargar una de las imagenes');
+      if (self.isRejected())
          return;
+
+      self.percentLoaded = (Math.ceil( self.loadCount / self.imageCount * 100 ));
+      
+      if (!isLoading(self)){
+         self.state        = self.states.RESOLVED;
+         self.isLoading    = false;
+         self.isSuccessful = true;
       }
-      console.log(Math.ceil( self.loadCount / self.imageCount * 100 ));
-      console.log(imageLocation);
-      if (self.loadCount === self.imageCount)
-         self.state = self.states.RESOLVED;
   }
 
    function loadImageLocation(self, imageLocation){
@@ -76,15 +85,12 @@
    };
 
    window.Loading.prototype.load = function(){
-      if (this.isInitiated()){
-         console.log('Ya el load ha sido iniciado anteriormente.');
+      if (this.isInitiated())
          return;
-      }
       this.state  = this.states.LOADING;
       for (var i = 0 ; i < this.imageCount ; i++) {
          loadImageLocation(this, this.imgs[i]); //Le falta trabajo para llevarlo a privado
       }
-      console.log('Cargando...');
    };
 
 })();
