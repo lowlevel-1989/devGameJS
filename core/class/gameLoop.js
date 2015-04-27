@@ -1,9 +1,9 @@
 window.onload = function(){
    
-   var settings = new Settings();
-   var game     = new Core(settings);
-   var loading  = new Loading(['assets/img/tileInMap.png', 'asets/img/tileInMap.png']);
-   loading.load();
+   var settings   = new Settings();
+   var game       = new Core(settings);
+   window.storage = new Storage(settings.resources);
+   window.storage.load();
 
    // Creando GameLoop {
    var getRequestAnimationFrame = function () {
@@ -18,9 +18,9 @@ window.onload = function(){
    };
    var fpAnimationFrame = getRequestAnimationFrame();
    var gameLoop = function () {
-      if (loading.isResolved())
+      if (window.storage.isResolved())
          game.gameLoop();
-      else if (loading.isRejected())
+      else if (window.storage.isRejected())
          game.isRejected();
       else
          game.isLoading();
