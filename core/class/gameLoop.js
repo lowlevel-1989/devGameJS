@@ -18,9 +18,10 @@ window.onload = function(){
    };
    var fpAnimationFrame = getRequestAnimationFrame();
    var gameLoop = function () {
-      if (loading.isResolved())
+      if (loading.isResolved()){
+         console.info('cargado');
          game.gameLoop();
-      else if (loading.isRejected())
+      }else if (loading.isRejected())
          console.warn('Error');
       else
          console.info('cargando...');
