@@ -1,8 +1,8 @@
 (function(){
 	window.Settings = function(){
 		this.canvas = {
-			width  : 200,
-			height : 300
+			width  : 475,
+			height : 316
 		};
 
 		this.resources = [
