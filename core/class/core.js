@@ -5,7 +5,7 @@
       Static().canvas.width    = settings.canvas.width;
       Static().canvas.height   = settings.canvas.height;
       this.colorBackground     = settings.colorBackground;
-      this.mediaBackground     = settings.mediaBackground;
+      this.mediaBackground     = serializer(settings.mediaBackground);
 
       this.frameCount   = 0;
       this.currentFps   = 0;
@@ -15,6 +15,15 @@
 
 
    //METODOS PRIVADOS
+   function serializer(objs){
+      var temp = [];
+      for (var indice in objs) {
+         var nivel   = objs[indice].nivel;
+         var src     = objs[indice].src;
+         temp[nivel] = src;
+      }
+      return temp;
+   }
 
    function Static(){
       var canvas      = document.getElementById('game');
@@ -54,13 +63,17 @@
 
    function drawBackground(ctx, color, media){
       if(color !== null){
-         ctx.fillStyle = color;
-         ctx.fillRect(0, 0, Static().canvas.width, Static().canvas.height);
+         ctx.save();
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, Static().canvas.width, Static().canvas.height);
+         ctx.restore();
       }
       if(media !== null){
          var background = new Image();
-         background.src = media;
-         ctx.drawImage(background, 0, 0);
+         background.src = media[1];
+         ctx.save();
+            ctx.drawImage(background, 0, 0);
+         ctx.restore();
       }
    }
 

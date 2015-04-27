@@ -17,6 +17,19 @@
 		];
 
 		this.colorBackground = null;
-		this.mediaBackground = this.resources[0].src;
+		this.mediaBackground = [
+			{
+				"nivel" : 1,
+				"src"   : this.resources[0].src
+			},
+			{
+				"nivel" : 2,
+				"src"   : null
+			},
+			{
+				"nivel" : 3,
+				"src"   : null
+			}
+		];
 	};
 })();
