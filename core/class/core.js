@@ -2,9 +2,6 @@
 
    //CONSTRUCTOR
    window.Core = function(settings){
-
-      console.info('Iniciando...');
-      
       Static().canvas.width    = settings.canvas.width;
       Static().canvas.height   = settings.canvas.height;
       this.colorBackground     = settings.colorBackground;
@@ -73,6 +70,20 @@
 
 
    //METODOS PUBLICOS
+
+   window.Core.prototype.isRejected = function(){
+      Static().cleanCanvas();
+      fpsUpdate(this);
+      drawText(Static().context, 10, 40, 'black', 'bold', '12px', 'sans-serif', 'Error...');
+      drawFps(this.currentFps);
+   };
+
+   window.Core.prototype.isLoading = function(){
+      Static().cleanCanvas();
+      fpsUpdate(this);
+      drawText(Static().context, 10, 40, 'black', 'bold', '12px', 'sans-serif', 'Cargando...');
+      drawFps(this.currentFps);
+   };
 
    window.Core.prototype.gameLoop = function(){
       //borrar canvas

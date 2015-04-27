@@ -2,7 +2,7 @@ window.onload = function(){
    
    var settings = new Settings();
    var game     = new Core(settings);
-   var loading     = new Loading(['assets/img/tileInMap.png', 'asets/img/tileInMap.png']);
+   var loading  = new Loading(['assets/img/tileInMap.png', 'asets/img/tileInMap.png']);
    loading.load();
 
    // Creando GameLoop {
@@ -18,13 +18,12 @@ window.onload = function(){
    };
    var fpAnimationFrame = getRequestAnimationFrame();
    var gameLoop = function () {
-      if (loading.isResolved()){
-         console.info('cargado');
+      if (loading.isResolved())
          game.gameLoop();
-      }else if (loading.isRejected())
-         console.warn('Error');
+      else if (loading.isRejected())
+         game.isRejected();
       else
-         console.info('cargando...');
+         game.isLoading();
       fpAnimationFrame(gameLoop);
    };
 
