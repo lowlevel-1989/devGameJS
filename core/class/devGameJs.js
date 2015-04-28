@@ -14,6 +14,8 @@
    var aGameObjects = [];
    var aToRemove    = [];
 
+   var oModules = {};
+
    //variables del control FPS
    var oFps = {
       maxFps      : 60,
