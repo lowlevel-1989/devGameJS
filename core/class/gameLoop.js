@@ -1,9 +1,4 @@
 window.onload = function(){
-   
-   var settings   = new Settings();
-   var game       = new Core(settings);
-   window.storage = new Storage(settings.resources);
-   window.storage.load();
 
    // Creando GameLoop {
    var getRequestAnimationFrame = function () {
@@ -13,17 +8,12 @@ window.onload = function(){
                window.oRequestAnimationFrame ||
                window.msRequestAnimationFrame ||
                function (callback){
-                  window.setTimeout(callback, game.intervalFps);
+                  window.setTimeout(callback, devGameJs.getIntervalFps());
                };
    };
    var fpAnimationFrame = getRequestAnimationFrame();
    var gameLoop = function () {
-      if (window.storage.isResolved())
-         game.gameLoop();
-      else if (window.storage.isRejected())
-         game.isRejected();
-      else
-         game.isLoading();
+      devGameJs.startGame();
       fpAnimationFrame(gameLoop);
    };
 
