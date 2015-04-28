@@ -14,9 +14,6 @@
    var aGameObjects = [];
    var aToRemove    = [];
 
-   //modulos del framework
-   var oModules = {};
-
    //variables del control FPS
    var oFps = {
       maxFps      : 60,
@@ -127,16 +124,6 @@
                if (oCurrentGameObject.__id === sObjectId) {
                   aToRemove.push(nObjectCount);
                }
-            }
-         }
-      },
-      addModule : function (sModuleId, fpBuilder) {
-         if (typeof sModuleId === 'string') {
-            if (typeof oModules[sModuleId] === 'undefined') {
-               oModules[sModuleId] = {
-                  fpBuilder : fpBuilder,
-                  oInstance : null
-               };
             }
          }
       },
