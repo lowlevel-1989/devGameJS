@@ -60,7 +60,6 @@
       oGameExecution.remove();
       oGameExecution.update();
       oGameExecution.draw();
-      console.log('test');
    };
 
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
