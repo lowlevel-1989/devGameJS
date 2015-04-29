@@ -14,6 +14,17 @@
    var aGameObjects = [];
    var aToRemove    = [];
 
+   //estados del GameLoop
+   var oStates  = {
+      init    : 0,
+      loading : 1,
+      remove  : 2,
+      update  : 3,
+      draw    : 4
+   };
+   var nState = oStates.init;
+
+
    var oModules = {};
 
    //variables del control FPS
@@ -49,6 +60,7 @@
       oGameExecution.remove();
       oGameExecution.update();
       oGameExecution.draw();
+      console.log('test');
    };
 
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
@@ -65,6 +77,10 @@
 
    var oGameExecution = {
       remove : function () {
+         
+         if (nState !== oStates.remove)
+            nState = oStates.remove;
+
          var nRemoveLength  = aToRemove.length;
          var nCount         = 0;
          var nCurrentObject = 0;
@@ -77,6 +93,11 @@
          aToRemove = [];
       },
       update : function () {
+
+         if (nState !== oStates.update)
+            nState = oStates.update;
+
+
          fpCallGameObjectMethods('update', oCanvas);
          // Reordenamos los objetos en el eje Z.
          aGameObjects.sort(function(oObjA, oObjB) {
@@ -84,6 +105,10 @@
          });
       },
       draw : function () {
+
+         if (nState !== oStates.draw)
+            nState = oStates.draw;
+
          oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
          fpCallGameObjectMethods('draw', oCanvas);
          oCanvas.mainContext.clearRect(0, 0, oCanvas.main.width, oCanvas.main.height);
@@ -114,18 +139,32 @@
    };
 
 
+   var setState = function(state){
+      nState = state;
+   };
+
    var oPreStart = {
       
       buildModules : function () {
          var sModule;
          var oModule;
 
+         var state = {
+            get : nState,
+            set : setState
+         };
+
+         var oBinding = {
+            canvas   : oCanvas,
+            state    : state
+         };
+
          // Build Modules.
          for (sModule in oModules) {
             if (oModules.hasOwnProperty(sModule)) {
                oModule = oModules[sModule];
                if (typeof oModule !== 'undefined') {
-                  oModule.oInstance = oModule.fpBuilder(oSandbox);
+                  oModule.oInstance = oModule.fpBuilder(oBinding);
                   if (oModule.oInstance.init)
                      oModule.oInstance.init();
                }
@@ -136,7 +175,8 @@
       startGame : function () {
          var fpAnimationFrame = fpGetRequestAnimationFrame();
          var gameLoop = function(){
-            fpGameInterval();
+            if (nState !== oStates.loading)
+               fpGameInterval();
             fpAnimationFrame(gameLoop);
          };
          fpAnimationFrame(gameLoop);
@@ -179,6 +219,13 @@
                   oInstance : null
                };
             }
+         }
+      },
+      getModule: function(sModule){
+         var oModule;
+         if (oModules.hasOwnProperty(sModule)) {
+            oModule = oModules[sModule];
+            return oModule;
          }
       },
       getIntervalFps : function () {
