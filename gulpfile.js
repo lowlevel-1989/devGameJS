@@ -47,7 +47,7 @@ gulp.task('minify-css', function () {
 
 gulp.task('core-minify-js', function () {
     gulp.src(_CORE)
-    .pipe(concat('core.min.js'))
+    .pipe(concat('devGameJs.min.js'))
     .pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
