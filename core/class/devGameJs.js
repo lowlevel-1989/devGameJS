@@ -61,6 +61,7 @@
       oGameExecution.update();
       oGameExecution.draw();
       console.log('test de loading');
+      console.log('y contando');
    };
 
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
