@@ -57,11 +57,15 @@
    }, false);
 
    var fpGameInterval = function () {
+
       oGameExecution.remove();
       oGameExecution.update();
       oGameExecution.draw();
+
+      /* Comentarios Temporales */
       console.log('test de loading');
       console.log('y contando');
+      /* Comentarios Temporales */
    };
 
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
