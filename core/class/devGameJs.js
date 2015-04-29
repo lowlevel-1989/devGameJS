@@ -102,6 +102,48 @@
       }
    };
 
+   var fpGetRequestAnimationFrame = function () {
+      return   window.requestAnimationFrame ||
+               window.webkitRequestAnimationFrame ||
+               window.mozRequestAnimationFrame ||
+               window.oRequestAnimationFrame ||
+               window.msRequestAnimationFrame ||
+               function (callback){
+                  window.setTimeout(callback, devGameJs.getIntervalFps());
+               };
+   };
+
+
+   var oPreStart = {
+      
+      buildModules : function () {
+         var sModule;
+         var oModule;
+
+         // Build Modules.
+         for (sModule in oModules) {
+            if (oModules.hasOwnProperty(sModule)) {
+               oModule = oModules[sModule];
+               if (typeof oModule !== 'undefined') {
+                  oModule.oInstance = oModule.fpBuilder(oSandbox);
+                  if (oModule.oInstance.init)
+                     oModule.oInstance.init();
+               }
+            }
+         }
+      },
+
+      startGame : function () {
+         var fpAnimationFrame = fpGetRequestAnimationFrame();
+         var gameLoop = function(){
+            fpGameInterval();
+            fpAnimationFrame(gameLoop);
+         };
+         fpAnimationFrame(gameLoop);
+      }
+
+   };
+
    //Metodos Publicos
    window.devGameJs = {
       addGameObject : function (sObjectId, fpObjectBuilder) {
@@ -129,12 +171,23 @@
             }
          }
       },
+      addModule : function (sModuleId, fpBuilder) {
+         if (typeof sModuleId === 'string') {
+            if (typeof oModules[sModuleId] === 'undefined') {
+               oModules[sModuleId] = {
+                  fpBuilder : fpBuilder,
+                  oInstance : null
+               };
+            }
+         }
+      },
       getIntervalFps : function () {
          return oFps.intervalFps;
       },
       startGame : function () {
-         fpGameInterval();
+         oPreStart.buildModules();
+         oPreStart.startGame();
       }
    };
-   
+
 })();
