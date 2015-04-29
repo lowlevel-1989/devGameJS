@@ -21,6 +21,11 @@
       var state = states.PENDING;
 
       //Metodos Privados
+      var isInitiated = function (){
+         return ( state !== states.PENDING );
+      };
+
+      //Metodos Publicos
       return {
          init : function () {
             binding.state.set(1);
