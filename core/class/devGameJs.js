@@ -224,7 +224,7 @@
          var oModule;
          if (oModules.hasOwnProperty(sModule)) {
             oModule = oModules[sModule];
-            return oModule;
+            return oModule.oInstance;
          }
       },
       getIntervalFps : function () {

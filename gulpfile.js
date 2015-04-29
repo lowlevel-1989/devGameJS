@@ -84,7 +84,7 @@ gulp.task('minify-html', function () {
 
 gulp.task('copyImgs', function(){
 	gulp.src(_IMGS)
-    .pipe(gulp.dest('game/assets/img'));
+    .pipe(gulp.dest('game/assets/imgs'));
 });
 
 
