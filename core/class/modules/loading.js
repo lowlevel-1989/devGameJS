@@ -1,5 +1,5 @@
 (function(){
-   devGameJs.addModule("loading", function (binding) {
+   devGameJs.addModule('loading', function (binding) {
       
       var imgs;
       var imageCount;
@@ -21,8 +21,21 @@
       var state = states.PENDING;
 
       //Metodos Privados
-      var isInitiated = function (){
+      var isInitiated = function () {
          return ( state !== states.PENDING );
+      };
+
+      var loadImageLocation = function (imageLocation) {
+         var image    = new Image();
+         image.onload = function (event) {
+            handleImageLoad(event.target.src);
+            image = event = null;
+         };
+         image.onerror = function(event){
+            handleImageError(event.target.src);
+            image = event = null;
+         };
+         image.src = imageLocation;
       };
 
       //Metodos Publicos
