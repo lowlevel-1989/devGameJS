@@ -1,8 +1,8 @@
 (function(){
    devGameJs.addModule('loading', function (binding) {
       
-      var imgs = ['assets/imgs/tileInMap.png'];
-      var imageCount = imgs.length;
+      var imgs;
+      var imageCount;
       var loadCount;
       var errorCount;
 
@@ -34,11 +34,22 @@
          percentLoaded = (Math.ceil( loadCount / imageCount * 100 ));
 
          if (!fpIsLoading()){
-            console.info('cargado completamente.');
             state        = states.RESOLVED;
             isLoading    = false;
             isSuccessful = true;
+            binding.state.set(0); //cambia estado a init en el framework
          }
+      };
+
+      var handleImageError = function (imageLocation){
+         errorCount++;
+         if (!fpIsLoading())
+            isLoading = false;
+
+         if (isRejected())
+            return;
+
+         self.state = self.states.REJECTED;
       };
 
       var isInitiated = function () {
@@ -69,9 +80,13 @@
       //Metodos Publicos
       return {
          init : function () {
-            binding.state.set(1);
+            binding.state.set(1); //cambia estado a loading en el framework
          },
-         load : function(){
+         load : function(aImgs){
+            
+            imgs       = aImgs;
+            imageCount = imgs.length;
+
             if (isInitiated())
                return;
             state  = states.LOADING;
