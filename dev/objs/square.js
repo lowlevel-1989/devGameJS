@@ -29,6 +29,7 @@ devGameJs.addGameObject('square', function () {
       },
 
       draw : function (canvas) {
+         
          canvas.bufferContext.fillStyle = '#000';
          canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
       },
@@ -39,13 +40,13 @@ devGameJs.addGameObject('square', function () {
             bMoveRight = true;
          
          if (nKeyCode === 37)
-            bMoveLeft = true;
+            bMoveLeft  = true;
 
          if (nKeyCode === 38)
-            bMoveUp = true;
+            bMoveUp    = true;
 
          if (nKeyCode === 40)
-            bMoveDown = true;
+            bMoveDown  = true;
       },
 
       keyup : function (nKeyCode) {
@@ -54,13 +55,13 @@ devGameJs.addGameObject('square', function () {
             bMoveRight = false;
 
          if (nKeyCode === 37)
-            bMoveLeft = false;
+            bMoveLeft  = false;
 
          if (nKeyCode === 38)
-            bMoveUp = false;
+            bMoveUp    = false;
 
          if (nKeyCode === 40)
-            bMoveDown = false;
+            bMoveDown  = false;
       }
    };
 });
