@@ -1,4 +1,6 @@
 window.onload = function(){
+
    devGameJs.startGame();
-   devGameJs.getModule('loading').load(['assets/imgs/tileInMap.png']);
+   devGameJs.module('loading').load(['tileInMap.png']);
+   
 };

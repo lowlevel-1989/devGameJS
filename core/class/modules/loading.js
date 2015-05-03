@@ -1,100 +1,125 @@
 (function(){
-   devGameJs.addModule('loading', function (binding) {
+   devGameJs.addModule('loading', function (oBinding) {
       
-      var imgs;
-      var imageCount;
-      var loadCount;
-      var errorCount;
+      var aImgs;       //Contenedor de imagenes.
+      var nImgCount;   //Numero total de imagenes.
+      var nLoadCount;  //Numero de imagenes cargadas.
+      var nErrorCount; //Numero de imagenes que lanzaron error.
+      
+      var sDir = 'assets/imgs/'; //Direccion de imagenes.
 
       //VARIABLES DE CONTROL
-      var isLoading     = true;
-      var isSuccessful  = false;
-      var percentLoaded = 0;
+      var isLoading      = true;  //Para saber si esta cargando.
+      var isSuccessful   = false; //Notifica si se cargo todo correctamente.
+      var nPercentLoaded = 0;     //Porcentaje de carga.
 
-      var states = {
+
+      //Manejador de estados
+      var oState = {
          PENDING  : 1,
          LOADING  : 2,
          RESOLVED : 3,
          REJECTED : 4
       };
 
-      var state = states.PENDING;
+      //Variable de estado.
+      var nState = oState.PENDING;
+
 
       //Metodos Privados
-
-      function fpIsLoading(){
-         if (imageCount === (errorCount+loadCount))
+      var fpIsLoading = function () {
+        
+         if (nImgCount === (nErrorCount+nLoadCount))
             return false;
-      }
 
-      var handleImageLoad = function (imageLocation) {
-         loadCount++;
-         if (isRejected())
+      };
+
+
+      var fpHandleImageLoad = function (imageLocation) {
+
+         nLoadCount++;
+
+         if (fpIsRejected()) //Si ocurrio un error, se sale de la funcion.
             return;
-         percentLoaded = (Math.ceil( loadCount / imageCount * 100 ));
 
-         if (!fpIsLoading()){
-            state        = states.RESOLVED;
-            isLoading    = false;
-            isSuccessful = true;
-            binding.state.set(0); //cambia estado a init en el framework
+         nPercentLoaded = (Math.ceil( nLoadCount / nImgCount * 100 )); //Se calcula el porcentaje de carga.
+
+         if (!fpIsLoading()){ //Verifica si ya cargaron todas las imagenes.
+
+            nState       = oState.RESOLVED; //Se cambia el estado a RESOLVED.
+            isLoading    = false;            //Se finaliza el loading.
+            isSuccessful = true;             //Se indica que se cargaron los datos exitosamente.
+            oBinding.state.set(0);           //cambia estado a init en el framework.
          }
+
       };
 
-      var handleImageError = function (imageLocation){
-         errorCount++;
-         if (!fpIsLoading())
-            isLoading = false;
 
-         if (isRejected())
+      var fpHandleImageError = function (imageLocation) {
+
+         nErrorCount++;
+
+         if (!fpIsLoading())    //Verifica si ya cargaron todas las imagenes.
+            isLoading = false;  //Se finaliza el loading.
+
+         if (fpIsRejected()) //Si ocurrio un error, se sale de la funcion.
             return;
 
-         self.state = self.states.REJECTED;
+         nState = oState.REJECTED; //Se cambia el estado a REJECTED.
+      
       };
 
-      var isInitiated = function () {
-         return ( state !== states.PENDING );
+
+      var fpIsInitiated = function () {
+         return ( nState !== oState.PENDING );
       };
 
-      var isRejected = function () {
-         return ( state === states.REJECTED );
+      var fpIsRejected = function () {
+         return ( nState === oState.REJECTED );
       };
 
-      var isResolved = function () {
-         return ( state === states.RESOLVED );
+      var fpIsResolved = function () {
+         return ( nState === oState.RESOLVED );
       };
 
-      var loadImageLocation = function (imageLocation) {
+      var fpLoadImageLocation = function (imageLocation) {
+         
          var image    = new Image();
          image.onload = function (event) {
-            handleImageLoad(event.target.src);
+            fpHandleImageLoad(event.target.src);
             image = event = null;
          };
          image.onerror = function(event){
-            // handleImageError(event.target.src);
+            fpHandleImageError(event.target.src);
             image = event = null;
          };
-         image.src = imageLocation;
+         image.src = sDir + imageLocation;
       };
 
       //Metodos Publicos
       return {
+
          init : function () {
-            binding.state.set(1); //cambia estado a loading en el framework
+            oBinding.state.set(1); //cambia estado a loading en el framework
          },
+
          load : function(aImgs){
             
-            imgs       = aImgs;
-            imageCount = imgs.length;
+            aImgs       = aImgs;
+            nImgCount   = aImgs.length;
 
-            if (isInitiated())
+            if (fpIsInitiated())
                return;
-            state  = states.LOADING;
-            for (var i = 0 ; i < imageCount ; i++) {
-               loadImageLocation(imgs[i]);
+
+            nState  = oState.LOADING;
+
+            for (var i = 0 ; i < nImgCount ; i++) {
+               fpLoadImageLocation(aImgs[i]);
             }
          }
+
       };
+
    });
 
 })();

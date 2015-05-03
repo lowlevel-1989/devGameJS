@@ -15,16 +15,16 @@
    var aToRemove    = [];
 
    //estados del GameLoop
-   var oStates  = {
+   var oState  = {
       init    : 0,
       loading : 1,
       remove  : 2,
       update  : 3,
       draw    : 4
    };
-   var nState = oStates.init;
+   var nState = oState.init;
 
-
+   //Modulos externos
    var oModules = {};
 
    //variables del control FPS
@@ -37,6 +37,8 @@
    };
 
    //Metodos Privados
+
+   //Auto-Ajustar control de canvas
    (function () {
       oCanvas.main = document.getElementById('game');
       if(oCanvas.main !== null) {
@@ -48,6 +50,8 @@
       }
    })();
 
+
+   //Manejo de evento del teclado 
    window.addEventListener('keydown', function (eEvent) {
       oGameExecution.keyPush(eEvent);
    }, false);
@@ -56,18 +60,8 @@
       oGameExecution.keyPush(eEvent);
    }, false);
 
-   var fpGameInterval = function () {
 
-      oGameExecution.remove();
-      oGameExecution.update();
-      oGameExecution.draw();
-
-      /* Comentarios Temporales */
-      console.log('test de loading');
-      console.log('y contando');
-      /* Comentarios Temporales */
-   };
-
+   //ejecuta metodos de cada objeto por individual
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject = null;
       var nObjectCount       = 0;
@@ -80,11 +74,21 @@
       }
    };
 
+
+   var fpGameInterval = function () {
+
+      oGameExecution.remove();
+      oGameExecution.update();
+      oGameExecution.draw();
+
+   };
+
+
    var oGameExecution = {
       remove : function () {
          
-         if (nState !== oStates.remove)
-            nState = oStates.remove;
+         if (nState !== oState.remove)
+            nState = oState.remove;
 
          var nRemoveLength  = aToRemove.length;
          var nCount         = 0;
@@ -99,8 +103,8 @@
       },
       update : function () {
 
-         if (nState !== oStates.update)
-            nState = oStates.update;
+         if (nState !== oState.update)
+            nState = oState.update;
 
 
          fpCallGameObjectMethods('update', oCanvas);
@@ -111,8 +115,8 @@
       },
       draw : function () {
 
-         if (nState !== oStates.draw)
-            nState = oStates.draw;
+         if (nState !== oState.draw)
+            nState = oState.draw;
 
          oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
          fpCallGameObjectMethods('draw', oCanvas);
@@ -120,6 +124,7 @@
          oCanvas.mainContext.drawImage(oCanvas.buffer, 0, 0);
       },
       keyPush : function (eEvent) {
+
          var sEventType = eEvent.type;
          var nKeyCode   = eEvent.keyCode;
 
@@ -180,7 +185,7 @@
       startGame : function () {
          var fpAnimationFrame = fpGetRequestAnimationFrame();
          var gameLoop = function(){
-            if (nState !== oStates.loading)
+            if (nState !== oState.loading)
                fpGameInterval();
             fpAnimationFrame(gameLoop);
          };
@@ -226,7 +231,7 @@
             }
          }
       },
-      getModule: function(sModule){
+      module: function(sModule){
          var oModule;
          if (oModules.hasOwnProperty(sModule)) {
             oModule = oModules[sModule];
