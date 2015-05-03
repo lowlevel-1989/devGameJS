@@ -1,67 +1,77 @@
-devGameJs.addGameObject('square', function () {
+(function(){
 
-   var nAxisX  = 50;
-   var nAxisY  = 50;
-   var nWidth  = 25;
-   var nHeight = 25;
-   var nSpeed  = 5;
+   devGameJs.addGameObject('square', function () {
 
-   var bMoveRight = false;
-   var bMoveLeft  = false;
-   var bMoveUp    = false;
-   var bMoveDown  = false;
+      var nLayer  = 2;
+      var nAxisX  = 50;
+      var nAxisY  = 50;
+      var nWidth  = 25;
+      var nHeight = 25;
+      var nSpeed  = 5;
 
-   return {
-   
-      update : function (canvas) {
 
-         if (bMoveRight)
-            nAxisX += nSpeed;
+      var bMoveRight = false;
+      var bMoveLeft  = false;
+      var bMoveUp    = false;
+      var bMoveDown  = false;
 
-         if (bMoveLeft)
-            nAxisX -= nSpeed;
+      return {
+      
+         layer : nLayer,
 
-         if (bMoveUp)
-            nAxisY -= nSpeed;
-         
-         if (bMoveDown)
-            nAxisY += nSpeed;
-      },
+         update : function (canvas) {
 
-      draw : function (canvas) {
-         
-         canvas.bufferContext.fillStyle = '#000';
-         canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
-      },
+            if (bMoveRight)
+               nAxisX += nSpeed;
 
-      keydown : function (nKeyCode) {
-         
-         if (nKeyCode === 39)
-            bMoveRight = true;
-         
-         if (nKeyCode === 37)
-            bMoveLeft  = true;
+            if (bMoveLeft)
+               nAxisX -= nSpeed;
 
-         if (nKeyCode === 38)
-            bMoveUp    = true;
+            if (bMoveUp)
+               nAxisY -= nSpeed;
+            
+            if (bMoveDown)
+               nAxisY += nSpeed;
+         },
 
-         if (nKeyCode === 40)
-            bMoveDown  = true;
-      },
+         draw : function (canvas) {
+            
+            canvas.bufferContext.fillStyle = '#000';
+            canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
+         },
 
-      keyup : function (nKeyCode) {
+         keydown : function (nKeyCode) {
+            
+            if (nKeyCode === 39)
+               bMoveRight = true;
+            
+            if (nKeyCode === 37)
+               bMoveLeft  = true;
 
-         if (nKeyCode === 39)
-            bMoveRight = false;
+            if (nKeyCode === 38)
+               bMoveUp    = true;
 
-         if (nKeyCode === 37)
-            bMoveLeft  = false;
+            if (nKeyCode === 40)
+               bMoveDown  = true;
+         },
 
-         if (nKeyCode === 38)
-            bMoveUp    = false;
+         keyup : function (nKeyCode) {
 
-         if (nKeyCode === 40)
-            bMoveDown  = false;
-      }
-   };
-});
+            if (nKeyCode === 39)
+               bMoveRight = false;
+
+            if (nKeyCode === 37)
+               bMoveLeft  = false;
+
+            if (nKeyCode === 38)
+               bMoveUp    = false;
+
+            if (nKeyCode === 40)
+               bMoveDown  = false;
+         }
+
+      };
+
+   });
+
+})();

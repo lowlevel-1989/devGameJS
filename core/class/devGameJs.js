@@ -108,9 +108,9 @@
 
 
          fpCallGameObjectMethods('update', oCanvas);
-         // Reordenamos los objetos en el eje Z.
+         // Reordenamos los objetos por capas.
          aGameObjects.sort(function(oObjA, oObjB) {
-            return oObjA.z - oObjB.z;
+            return oObjA.layer - oObjB.layer;
          });
       },
       draw : function () {
