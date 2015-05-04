@@ -103,7 +103,7 @@
             oBinding.state.set(1); //cambia estado a loading en el framework
          },
 
-         load : function(aImgs){
+         load : function (aImgs) {
             
             aImgs       = aImgs;
             nImgCount   = aImgs.length;

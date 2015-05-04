@@ -15,8 +15,8 @@
 
          draw : function (canvas) {
             
-            canvas.bufferContext.fillStyle = '#006';
-            canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
+            devGameJs.module('text').draw(canvas, 0, 10, '04146081330', 16);
+         
          }
 
       };
