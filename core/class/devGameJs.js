@@ -153,6 +153,10 @@
       nState = state;
    };
 
+   var getState = function(){
+
+   };
+
    var oPreStart = {
       
       buildModules : function () {
@@ -160,7 +164,7 @@
          var oModule;
 
          var state = {
-            get : nState,
+            get : getState,
             set : setState
          };
 
