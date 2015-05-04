@@ -6,7 +6,7 @@
 
          draw : function (canvas) {
             
-            devGameJs.module('text').draw(canvas, 0, 10, '04146081330', 16);
+            drawText(canvas, 0, 10, '0414#######', 16);
          
          }
 
