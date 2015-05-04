@@ -14,7 +14,7 @@ var jshint      = require('gulp-jshint');
 // WARNING CORE
 
 var _CORE = [
-    'core/class/**/*.js'
+    'core/source/**/*.js'
 ];
 
 var _DEV = [
