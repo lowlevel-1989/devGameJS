@@ -6,6 +6,8 @@
       oSpriteFont.row    = 4;
       oSpriteFont.column = 3;
 
+      var nLoading = true;
+
       oSpriteFont.image.src = 'assets/imgs/spriteFont.png';
 
       var oMapper = {}; //Contiene las direcciones del spriteFont.
@@ -16,6 +18,8 @@
          oSpriteFont.image.onload = function (event) {
             sMapper = mapper; 
             
+            nLoading = false;
+
             oSpriteFont.width  = oSpriteFont.image.width  / oSpriteFont.column;
             oSpriteFont.height = oSpriteFont.image.height / oSpriteFont.row;
 
@@ -51,25 +55,27 @@
 
          draw : function (canvas, nAxisX, nAxisY, sText, nSize) {
             
-            var nLetter;
-            var nPos = 0;
-            oSpriteFont.Size = nSize;
+            if (!nLoading){
+               var nLetter;
+               var nPos = 0;
+               oSpriteFont.Size = nSize;
 
-            for (var i = 0; i < sText.length; i++){
-               
-               nLetter = sText[i];
-               
-               canvas.bufferContext.drawImage(
-                  oSpriteFont.image, 
-                  oMapper[nLetter].sx, 
-                  oMapper[nLetter].sy,
-                  32, 32, nPos + nAxisX, nAxisY,
-                  oSpriteFont.Size,
-                  oSpriteFont.Size
-               );
+               for (var i = 0; i < sText.length; i++){
+                  
+                  nLetter = sText[i];
+                  
+                  canvas.bufferContext.drawImage(
+                     oSpriteFont.image, 
+                     oMapper[nLetter].sx, 
+                     oMapper[nLetter].sy,
+                     32, 32, nPos + nAxisX, nAxisY,
+                     oSpriteFont.Size,
+                     oSpriteFont.Size
+                  );
 
-               nPos += oSpriteFont.Size;
+                  nPos += oSpriteFont.Size;
 
+               }
             }
          }
 
