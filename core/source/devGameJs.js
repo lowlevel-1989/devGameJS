@@ -28,13 +28,9 @@
    var oModules = {};
 
    //variables del control FPS
-   var oFps = {
-      maxFps      : 60,
-      frameCount  : 0,
-      currentFps  : 0,
-      lastFps     : new Date().getTime(),
-      intervalFps : 1000/60
-   };
+   var oFps      = {};
+   oFps.max      = 60;
+   oFps.interval = 1000/oFps.max;
 
    //Metodos Privados
 
@@ -144,7 +140,7 @@
                window.oRequestAnimationFrame ||
                window.msRequestAnimationFrame ||
                function (callback){
-                  window.setTimeout(callback, devGameJs.getIntervalFps());
+                  window.setTimeout(callback, oFps.interval);
                };
    };
 
@@ -170,7 +166,8 @@
 
          var oBinding = {
             canvas   : oCanvas,
-            state    : state
+            state    : state,
+            fps      : oFps
          };
 
          // Build Modules.
@@ -241,9 +238,6 @@
             oModule = oModules[sModule];
             return oModule.oInstance;
          }
-      },
-      getIntervalFps : function () {
-         return oFps.intervalFps;
       },
       startGame : function () {
          oPreStart.buildModules();
