@@ -3,6 +3,8 @@
    devGameJs.addGameObject('square', function () {
 
       var nLayer  = 2;
+      var sColor  = '#007';
+
       var nAxisX  = 50;
       var nAxisY  = 50;
       var nWidth  = 25;
@@ -36,7 +38,7 @@
 
          draw : function (canvas) {
             
-            canvas.bufferContext.fillStyle = '#000';
+            canvas.bufferContext.fillStyle = sColor;
             canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
          },
 
