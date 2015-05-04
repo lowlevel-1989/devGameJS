@@ -1,13 +1,8 @@
 (function(){
 
-   devGameJs.addGameObject('block', function () {
+   devGameJs.addGameObject('text', function () {
 
       var nLayer  = 1;
-      var nAxisX  = 80;
-      var nAxisY  = 50;
-      var nWidth  = 25;
-      var nHeight = 25;
-
 
       return {
       
