@@ -34,7 +34,7 @@ var _LIBS = [
     'libs/**/*.js'
 ];
 
-var _STYLUS = 'assets/stylus/**/*.styl';
+var _STYLUS = 'core/stylus/**/*.styl';
 
 gulp.task('minify-css', function () {
     gulp.src(_STYLUS)
