@@ -68,7 +68,9 @@
                      oSpriteFont.image, 
                      oMapper[nLetter].sx, 
                      oMapper[nLetter].sy,
-                     32, 32, nPos + nAxisX, nAxisY,
+                     oSpriteFont.width,
+                     oSpriteFont.height,
+                     nPos + nAxisX, nAxisY,
                      oSpriteFont.Size,
                      oSpriteFont.Size
                   );
