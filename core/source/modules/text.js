@@ -53,7 +53,7 @@
             pfLoad('123456789*0#');
          },
 
-         draw : function (canvas, nAxisX, nAxisY, sText, nSize) {
+         draw : function (oCanvas, nAxisX, nAxisY, sText, nSize) {
             
             if (!nLoading){
                var nLetter;
@@ -64,7 +64,7 @@
                   
                   nLetter = sText[i];
                   
-                  canvas.bufferContext.drawImage(
+                  oCanvas.bufferContext.drawImage(
                      oSpriteFont.image, 
                      oMapper[nLetter].sx, 
                      oMapper[nLetter].sy,
