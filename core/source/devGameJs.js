@@ -10,7 +10,20 @@
       bufferContext : null
    };
 
-   var debug = false;
+   //Control de depuracion
+
+   var oDebug = {};
+   oDebug.active = false;
+
+   oDebug.show = function (){
+      if (oDebug.active)
+         document.getElementById('debug').style.display = 'block';
+   };
+
+   oDebug.set = function (debug) {
+      oDebug.active = debug;
+      oDebug.show();
+   };
 
    //objectos del juego
    var aGameObjects = [];
@@ -152,7 +165,7 @@
    };
 
    var getState = function(){
-
+      return nState;
    };
 
    var oPreStart = {
@@ -170,7 +183,7 @@
             canvas   : oCanvas,
             state    : state,
             fps      : oFps,
-            debug    : debug
+            debug    : oDebug.active
          };
 
          // Build Modules.
@@ -249,7 +262,7 @@
 
       setup: function (oSetting) {
          if (oSetting.debug)
-            debug = oSetting.debug;
+            oDebug.set(oSetting.debug);
          if (oSetting.width)
             oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
          if (oSetting.height)

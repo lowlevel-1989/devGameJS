@@ -1,6 +1,6 @@
 window.onload = function(){
 
-   devGameJs.setup({width: 900, height: 400});
+   devGameJs.setup({width: 900, height: 400, debug: true});
    devGameJs.startGame();
    devGameJs.module('loading').load(['tileInMap.png']);
 
