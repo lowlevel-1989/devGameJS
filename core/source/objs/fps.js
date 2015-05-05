@@ -1,6 +1,6 @@
 (function(){
 
-   devGameJs.addGameObject('ftp', function () {
+   devGameJs.addGameObject('fps', function () {
 
       var sCurrent = '0';
       var nLayer   = 5;
@@ -10,7 +10,7 @@
          layer: nLayer,
 
          update : function() {
-            sCurrent = devGameJs.module('ftp').update().toString();
+            sCurrent = devGameJs.module('fps').update().toString();
          },
 
          draw : function () {

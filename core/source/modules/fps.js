@@ -1,6 +1,6 @@
 (function(){
 
-   devGameJs.addModule('ftp', function (oBinding) {
+   devGameJs.addModule('fps', function (oBinding) {
       
       var nMax        = oBinding.fps.max;
       var nInterval   = oBinding.fps.interval;
