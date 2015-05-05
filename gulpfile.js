@@ -70,7 +70,7 @@ gulp.task('libs-js', function(){
 });
 
 gulp.task('lint', function () {
-    gulp.src(_CORE)
+    gulp.src(_CORE.concat(_DEV))
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
