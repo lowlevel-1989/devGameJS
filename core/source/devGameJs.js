@@ -197,6 +197,7 @@
 
    //Metodos Publicos
    window.devGameJs = {
+
       addGameObject : function (sObjectId, fpObjectBuilder) {
          var oFinalObject = null;
          if (typeof sObjectId === 'string') {
@@ -208,6 +209,7 @@
             }
          }
       },
+
       removeGameObject : function (sObjectId) {
          if (typeof sObjectId === 'string') {
             var oCurrentGameObject = null;
@@ -222,6 +224,7 @@
             }
          }
       },
+
       addModule : function (sModuleId, fpBuilder) {
          if (typeof sModuleId === 'string') {
             if (typeof oModules[sModuleId] === 'undefined') {
@@ -232,13 +235,20 @@
             }
          }
       },
-      module: function(sModule){
+
+      module: function (sModule) {
          var oModule;
          if (oModules.hasOwnProperty(sModule)) {
             oModule = oModules[sModule];
             return oModule.oInstance;
          }
       },
+
+      setup: function (oSetting) {
+         oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
+         oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
+      },
+
       startGame : function () {
          oPreStart.buildModules();
          oPreStart.startGame();
