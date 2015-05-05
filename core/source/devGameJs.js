@@ -10,6 +10,8 @@
       bufferContext : null
    };
 
+   var debug = false;
+
    //objectos del juego
    var aGameObjects = [];
    var aToRemove    = [];
@@ -167,7 +169,8 @@
          var oBinding = {
             canvas   : oCanvas,
             state    : state,
-            fps      : oFps
+            fps      : oFps,
+            debug    : debug
          };
 
          // Build Modules.
@@ -245,8 +248,12 @@
       },
 
       setup: function (oSetting) {
-         oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
-         oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
+         if (oSetting.debug)
+            debug = oSetting.debug;
+         if (oSetting.width)
+            oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
+         if (oSetting.height)
+            oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
       },
 
       startGame : function () {
