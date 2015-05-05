@@ -13,8 +13,8 @@
             sCurrent = devGameJs.module('ftp').update().toString();
          },
 
-         draw : function (oCanvas) {
-            devGameJs.module('text').draw(oCanvas, 0, 10, sCurrent, 16);
+         draw : function () {
+            devGameJs.module('text').draw(0, 10, sCurrent, 16);
          }
 
       };

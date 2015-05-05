@@ -8,9 +8,9 @@
 
          layer : nLayer,
 
-         draw : function (canvas) {
+         draw : function () {
 
-            drawText(canvas, 0, 60, '0414#######', 16);
+            drawText(0, 60, '0414#######', 16);
 
          }
 
