@@ -1,5 +1,7 @@
 (function(){
 
+   'use strict';
+
    devGameJs.addGameObject('fps', function () {
 
       var sCurrent = '0';

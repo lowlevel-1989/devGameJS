@@ -1,4 +1,7 @@
 (function(){
+
+   'use strict';
+
    devGameJs.addModule('loading', function (oBinding) {
       
       var aImgs;       //Contenedor de imagenes.

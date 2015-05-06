@@ -1,5 +1,7 @@
 (function(){
 
+   'use strict';
+
    //Variables Privadas
 
    //manejo del canvas

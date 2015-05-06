@@ -1,5 +1,7 @@
 (function(){
 
+   'use strict';
+
    devGameJs.addModule('fps', function (oBinding) {
       
       var nMax        = oBinding.fps.max;

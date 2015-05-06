@@ -1,4 +1,7 @@
 (function(){
+
+   'use strict';
+   
    devGameJs.addModule('text', function (oBinding) {
 
       var oSpriteFont    = {};
