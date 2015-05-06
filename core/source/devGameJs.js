@@ -28,8 +28,10 @@
    };
 
    //objectos del juego
-   var aGameObjects = [];
-   var aToRemove    = [];
+   var sScene           = 'init';
+   var aGameObjects     = [];
+   aGameObjects[sScene] = [];
+   var aToRemove        = [];
 
    //estados del GameLoop
    var oState  = {
@@ -78,10 +80,10 @@
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject = null;
       var nObjectCount       = 0;
-      var nGameObjectsLength = aGameObjects.length;
+      var nGameObjectsLength = aGameObjects[sScene].length;
 
       for (nObjectCount = 0; nObjectCount < nGameObjectsLength; nObjectCount++) {
-         oCurrentGameObject = aGameObjects[nObjectCount];
+         oCurrentGameObject = aGameObjects[sScene][nObjectCount];
          if (oCurrentGameObject[sMethodName])
             oCurrentGameObject[sMethodName](oArgs);
       }
@@ -109,7 +111,7 @@
 
          for (nCount = 0; nCount < nRemoveLength; nCount++) {
             nCurrentObject = aToRemove[nCount];
-            aGameObjects.splice(nCurrentObject, 1);
+            aGameObjects[sScene].splice(nCurrentObject, 1);
          }
 
          aToRemove = [];
@@ -122,7 +124,7 @@
 
          fpCallGameObjectMethods('update', oCanvas);
          // Reordenamos los objetos por capas.
-         aGameObjects.sort(function(oObjA, oObjB) {
+         aGameObjects[sScene].sort(function(oObjA, oObjB) {
             return oObjA.layer - oObjB.layer;
          });
       },
@@ -223,7 +225,7 @@
 
             if (typeof oFinalObject === 'object') {
                oFinalObject.__id = sObjectId;
-               aGameObjects.push(oFinalObject);
+               aGameObjects[sScene].push(oFinalObject);
             }
          }
       },
@@ -232,10 +234,10 @@
          if (typeof sObjectId === 'string') {
             var oCurrentGameObject = null;
             var nObjectCount       = 0;
-            var nGameObjectsLength = aGameObjects.length;
+            var nGameObjectsLength = aGameObjects[sScene].length;
 
             for (nObjectCount = 0; nObjectCount < nGameObjectsLength; nObjectCount++) {
-               oCurrentGameObject = aGameObjects[nObjectCount];
+               oCurrentGameObject = aGameObjects[sScene][nObjectCount];
                if (oCurrentGameObject.__id === sObjectId) {
                   aToRemove.push(nObjectCount);
                }
