@@ -1,6 +1,5 @@
 (function(){
 
-
    devGameJs.addGameObject({
       scene: 'init',
       name : 'squere',

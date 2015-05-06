@@ -39,7 +39,8 @@
       loading : 1,
       remove  : 2,
       update  : 3,
-      draw    : 4
+      draw    : 4,
+      change  : 5
    };
    var nState = oState.init;
 
@@ -98,45 +99,57 @@
 
    };
 
+   var fpChangeState = function (state) {
+      if (nState === oState.change && state === oState.remove){
+         nState    = state;
+         aGameObjects[sScene] = [];
+         return;
+      }
+      nState = state;
+      return true;
+   };
 
    var oGameExecution = {
       remove : function () {
          
-         if (nState !== oState.remove)
-            nState = oState.remove;
+         if (fpChangeState(oState.remove)){
 
-         var nRemoveLength  = aToRemove.length;
-         var nCount         = 0;
-         var nCurrentObject = 0;
+            var nPos;
+            var nCurrentObject;
 
-         for (nCount = 0; nCount < nRemoveLength; nCount++) {
-            nCurrentObject = aToRemove[nCount];
-            aGameObjects[sScene].splice(nCurrentObject, 1);
+            for (nPos in aToRemove) {
+               nCurrentObject = aToRemove[nPos];
+               aGameObjects[sScene].splice(nCurrentObject, 1);
+            }
+
          }
 
          aToRemove = [];
+      
       },
       update : function () {
 
-         if (nState !== oState.update)
-            nState = oState.update;
+         if (fpChangeState(oState.update)){
 
+            fpCallGameObjectMethods('update', oCanvas);
+            // Reordenamos los objetos por capas.
+            aGameObjects[sScene].sort(function(oObjA, oObjB) {
+               return oObjA.layer - oObjB.layer;
+            });
 
-         fpCallGameObjectMethods('update', oCanvas);
-         // Reordenamos los objetos por capas.
-         aGameObjects[sScene].sort(function(oObjA, oObjB) {
-            return oObjA.layer - oObjB.layer;
-         });
+         }
+
       },
       draw : function () {
 
-         if (nState !== oState.draw)
-            nState = oState.draw;
+         if (fpChangeState(oState.draw)){
 
-         oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
-         fpCallGameObjectMethods('draw', oCanvas);
-         oCanvas.mainContext.clearRect(0, 0, oCanvas.main.width, oCanvas.main.height);
-         oCanvas.mainContext.drawImage(oCanvas.buffer, 0, 0);
+            oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
+            fpCallGameObjectMethods('draw', oCanvas);
+            oCanvas.mainContext.clearRect(0, 0, oCanvas.main.width, oCanvas.main.height);
+            oCanvas.mainContext.drawImage(oCanvas.buffer, 0, 0);
+         }
+
       },
       keyPush : function (eEvent) {
 
