@@ -4,34 +4,13 @@
 	.header_debug
 		width 100%
 		color text
-		text-align left
+		text-align right
 		span
-			margin-left 10px
+			padding-right 10px
 			font-size 0.9em
 	.content_debug
 		display flex
 		flex-flow row wrap
-		.articles
-			flex 1 1 28%
-			align-self stretch
-			border-right 1px solid border
-			background rgba(fondo,.6)
-			color      text
-			.header
-				border-top 1px solid border
-				padding 5px 5px
-				font-size 0.9em
-			.body
-				display flex
-				flex-flow row wrap
-				border-top 1px solid border
-				padding 0px 5px
-				font-size 0.8em
-				span
-					flex 1 1 100%
-					padding 5px 0px
-		.core
-			flex 16 1 auto
 		@media all and (max-width: 640px)
 			flex-flow column
 			
