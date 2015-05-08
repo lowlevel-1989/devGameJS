@@ -5,16 +5,20 @@
       name : 'squere',
       obj  : function () {
 
-         var nLayer  = 2;
-         var sColor  = '#007';
+         //Capas y color
+         var layer  = 2;
+         var color  = '#007';
 
-         var nAxisX  = 50;
-         var nAxisY  = 50;
-         var nWidth  = 25;
-         var nHeight = 25;
-         var nSpeed  = 5;
-
-
+         //tamaño y posicion
+         var x  = 50;
+         var y  = 50;
+         var width  = 25;
+         var height = 25;
+         
+         //velocidad
+         var speed  = 5;
+         
+         //botones de control
          var bMoveRight = false;
          var bMoveLeft  = false;
          var bMoveUp    = false;
@@ -22,27 +26,28 @@
 
          return {
          
-            layer : nLayer,
+            layer : layer,
 
             update : function (canvas) {
 
                if (bMoveRight)
-                  nAxisX += nSpeed;
+                  x += speed;
 
                if (bMoveLeft)
-                  nAxisX -= nSpeed;
+                  x -= speed;
 
-               if (bMoveUp)
-                  nAxisY -= nSpeed;
-               
                if (bMoveDown)
-                  nAxisY += nSpeed;
+                  y += speed;
+               
+               if (bMoveUp)
+                  y -= speed;
+               
             },
 
             draw : function (canvas) {
                
-               canvas.bufferContext.fillStyle = sColor;
-               canvas.bufferContext.fillRect(nAxisX, nAxisY, nWidth, nHeight);
+               canvas.bufferContext.fillStyle = color;
+               canvas.bufferContext.fillRect(x, y, width, height);
             },
 
             keydown : function (nKeyCode) {

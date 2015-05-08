@@ -87,6 +87,12 @@
          if (oCurrentGameObject[sMethodName])
             oCurrentGameObject[sMethodName](oArgs);
       }
+      var scene = 'global';
+      for (nObjectCount in aGameObjects[scene]) {
+         oCurrentGameObject = aGameObjects[scene][nObjectCount];
+         if (oCurrentGameObject[sMethodName])
+            oCurrentGameObject[sMethodName](oArgs);
+      }
    };
 
 
@@ -243,6 +249,8 @@
 
             if (typeof oFinalObject === 'object') {
                oFinalObject.__id = oEntities.name;
+               if (!aGameObjects[oEntities.scene])
+                  aGameObjects[oEntities.scene] = [];
                aGameObjects[oEntities.scene].push(oFinalObject);
             }
          }
