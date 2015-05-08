@@ -26,6 +26,7 @@
       current: 'init'
    };
 
+   var oPhysics = {};
    
    //objectos del juego
    var aGameObjects = [];
@@ -77,15 +78,36 @@
       oGameExecution.keyPush(eEvent);
    }, false);
 
+
+   var fpCollision = function (){
+      if ((oPhysics.x + oPhysics.width ) > oCanvas.main.width){
+         return true;
+      }
+      return;
+   };
+
+
    //ejecuta metodos de cada objeto por individual
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject;
       var nObjectCount;
+      var flag;
 
       for (nObjectCount in aGameObjects[oScene.current]) {
+         flag = false;
          oCurrentGameObject = aGameObjects[oScene.current][nObjectCount];
-         if (oCurrentGameObject[sMethodName])
-            oCurrentGameObject[sMethodName](oArgs);
+         
+         //Physics
+         if (oCurrentGameObject[sMethodName]){
+            if (sMethodName === 'update'){
+               oPhysics    = oCurrentGameObject.physics.get();
+               oPhysics.px = oPhysics.x;
+               oCurrentGameObject[sMethodName](oArgs);
+               if (fpCollision())
+                  oCurrentGameObject.physics.set({x: oPhysics.px});
+            }else
+               oCurrentGameObject[sMethodName](oArgs);
+         }
       }
       var scene = 'global';
       for (nObjectCount in aGameObjects[scene]) {
@@ -248,6 +270,7 @@
       addGameObject : function (oEntities) {
          var oFinalObject;
          if (typeof oEntities.name === 'string') {
+
             oFinalObject = oEntities.obj();
 
             if (typeof oFinalObject === 'object') {

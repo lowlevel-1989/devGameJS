@@ -14,7 +14,7 @@
          var y  = 50;
          var width  = 25;
          var height = 25;
-         
+
          //velocidad
          var speed  = 5;
          
@@ -24,9 +24,29 @@
          var bMoveUp    = false;
          var bMoveDown  = false;
 
+         //Activar fisica
+         var physics = {
+            get : function () {
+               return {
+                  x: x,
+                  y: y,
+                  speed: speed,
+                  width: width,
+                  height: height
+               };
+            },
+            set : function (oArgs) {
+               if (oArgs.x)
+                  x = oArgs.x;
+               if (oArgs.y)
+                  y = oArgs.y;
+            }
+         };
+
          return {
          
-            layer : layer,
+            layer   : layer,
+            physics : physics,
 
             update : function (canvas) {
 
