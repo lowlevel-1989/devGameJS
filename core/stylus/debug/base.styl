@@ -1,20 +1,16 @@
 #debug
-	text-align center
-	display    none
-	.articles
-		display    inline-block
-		width      28%
-		background rgba(fondo,.6)
-		color      text
-		text-align left
-		.header
-			padding 5px 5px
-			border  1px solid border
-		.body
-			padding       5px 5px
-			border-left   1px solid border
-			border-bottom 1px solid border
-			border-right  1px solid border
-	.core
-		width 16%
+	display none
+	border 1px solid border
+	.header_debug
+		width 100%
+		color text
+		text-align right
+		span
+			padding-right 10px
+			font-size 0.9em
+	.content_debug
+		display flex
+		flex-flow row wrap
+		@media all and (max-width: 640px)
+			flex-flow column
 			
