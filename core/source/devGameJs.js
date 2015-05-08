@@ -76,7 +76,6 @@
       oGameExecution.keyPush(eEvent);
    }, false);
 
-
    //ejecuta metodos de cada objeto por individual
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject = null;
@@ -95,6 +94,7 @@
 
       oGameExecution.remove();
       oGameExecution.update();
+      oGameExecution.debug();
       oGameExecution.draw();
 
    };
@@ -139,6 +139,9 @@
 
          }
 
+      },
+      debug : function () {
+         document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + aGameObjects[sScene].length;
       },
       draw : function () {
 
