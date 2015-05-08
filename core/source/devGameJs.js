@@ -266,8 +266,7 @@
          if (typeof sModuleId === 'string') {
             if (!oModules[sModuleId]) {
                oModules[sModuleId] = {
-                  fpBuilder : fpBuilder,
-                  oInstance : null
+                  fpBuilder : fpBuilder
                };
             }
          }
