@@ -5,12 +5,7 @@
    //Variables Privadas
 
    //manejo del canvas
-   var oCanvas = {
-      main          : null,
-      mainContext   : null,
-      buffer        : null,
-      bufferContext : null
-   };
+   var oCanvas = {};
 
    //Control de depuracion
 
@@ -27,11 +22,17 @@
       oDebug.show();
    };
 
+   var oScene = {
+      current: 'init'
+   };
+
+   
    //objectos del juego
-   var sScene           = 'init';
-   var aGameObjects     = [];
-   aGameObjects[sScene] = [];
-   var aToRemove        = [];
+   var aGameObjects = [];
+   var aToRemove    = [];
+
+   //asigno escena principal
+   aGameObjects[oScene.current] = [];
 
    //estados del GameLoop
    var oState  = {
@@ -57,7 +58,7 @@
    //Auto-Ajustar control de canvas
    (function () {
       oCanvas.main = document.getElementById('game');
-      if(oCanvas.main !== null) {
+      if(oCanvas.main) {
          oCanvas.mainContext   = oCanvas.main.getContext('2d');
          oCanvas.buffer        = document.createElement('canvas');
          oCanvas.buffer.width  = oCanvas.main.width;
@@ -78,12 +79,11 @@
 
    //ejecuta metodos de cada objeto por individual
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
-      var oCurrentGameObject = null;
-      var nObjectCount       = 0;
-      var nGameObjectsLength = aGameObjects[sScene].length;
+      var oCurrentGameObject;
+      var nObjectCount;
 
-      for (nObjectCount = 0; nObjectCount < nGameObjectsLength; nObjectCount++) {
-         oCurrentGameObject = aGameObjects[sScene][nObjectCount];
+      for (nObjectCount in aGameObjects[oScene.current]) {
+         oCurrentGameObject = aGameObjects[oScene.current][nObjectCount];
          if (oCurrentGameObject[sMethodName])
             oCurrentGameObject[sMethodName](oArgs);
       }
@@ -102,11 +102,12 @@
    var fpChangeState = function (state) {
       if (nState === oState.change && state === oState.remove){
          nState    = state;
-         aGameObjects[sScene] = [];
-         return;
+         aGameObjects[oScene.last] = [];
+      }else if (nState !== oState.change){
+         nState = state;
+         return true;
       }
-      nState = state;
-      return true;
+      return;
    };
 
    var oGameExecution = {
@@ -119,7 +120,7 @@
 
             for (nPos in aToRemove) {
                nCurrentObject = aToRemove[nPos];
-               aGameObjects[sScene].splice(nCurrentObject, 1);
+               aGameObjects[oScene.current].splice(nCurrentObject, 1);
             }
 
          }
@@ -133,7 +134,7 @@
 
             fpCallGameObjectMethods('update', oCanvas);
             // Reordenamos los objetos por capas.
-            aGameObjects[sScene].sort(function(oObjA, oObjB) {
+            aGameObjects[oScene.current].sort(function(oObjA, oObjB) {
                return oObjA.layer - oObjB.layer;
             });
 
@@ -141,7 +142,8 @@
 
       },
       debug : function () {
-         document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + aGameObjects[sScene].length;
+         if (oDebug.active)
+            document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + aGameObjects[oScene.current].length;
       },
       draw : function () {
 
@@ -210,7 +212,7 @@
          for (sModule in oModules) {
             if (oModules.hasOwnProperty(sModule)) {
                oModule = oModules[sModule];
-               if (typeof oModule !== 'undefined') {
+               if (oModule) {
                   oModule.oInstance = oModule.fpBuilder(oBinding);
                   if (oModule.oInstance.init)
                      oModule.oInstance.init();
@@ -235,7 +237,7 @@
    window.devGameJs = {
 
       addGameObject : function (oEntities) {
-         var oFinalObject = null;
+         var oFinalObject;
          if (typeof oEntities.name === 'string') {
             oFinalObject = oEntities.obj();
 
@@ -248,12 +250,11 @@
 
       removeGameObject : function (sObjectId) {
          if (typeof sObjectId === 'string') {
-            var oCurrentGameObject = null;
+            var oCurrentGameObject;
             var nObjectCount       = 0;
-            var nGameObjectsLength = aGameObjects[sScene].length;
 
-            for (nObjectCount = 0; nObjectCount < nGameObjectsLength; nObjectCount++) {
-               oCurrentGameObject = aGameObjects[sScene][nObjectCount];
+            for (nObjectCount in aGameObjects[oScene.current]) {
+               oCurrentGameObject = aGameObjects[oScene.current][nObjectCount];
                if (oCurrentGameObject.__id === sObjectId) {
                   aToRemove.push(nObjectCount);
                }
@@ -263,7 +264,7 @@
 
       addModule : function (sModuleId, fpBuilder) {
          if (typeof sModuleId === 'string') {
-            if (typeof oModules[sModuleId] === 'undefined') {
+            if (!oModules[sModuleId]) {
                oModules[sModuleId] = {
                   fpBuilder : fpBuilder,
                   oInstance : null
