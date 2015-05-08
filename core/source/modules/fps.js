@@ -34,4 +34,29 @@
 
    });
 
+   //Renderizar modulo
+   devGameJs.addGameObject({
+      scene: 'global',
+      name : 'fps',
+      obj  : function () {
+
+         var sCurrent = '0';
+
+         return {
+
+            update : function() {
+               sCurrent = devGameJs.module('fps').update().toString();
+            },
+
+            draw : function () {
+               devGameJs.module('text').draw(0, 10, sCurrent, 16);
+            }
+
+         };
+      }
+
+   });
+
+
+
 })();

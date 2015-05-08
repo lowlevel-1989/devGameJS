@@ -148,8 +148,11 @@
 
       },
       debug : function () {
+         var scene = 'global';
+         var objA  = aGameObjects[oScene.current].length;
+         var objB  = aGameObjects[scene].length;
          if (oDebug.active)
-            document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + aGameObjects[oScene.current].length;
+            document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + (objA + objB);
       },
       draw : function () {
 
