@@ -36,6 +36,7 @@
 
    //Renderizar modulo
    devGameJs.addGameObject({
+      //objectos en escenario global no soporta capas.
       scene: 'global',
       name : 'fps',
       obj  : function () {
