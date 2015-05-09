@@ -24,29 +24,9 @@
          var bMoveUp    = false;
          var bMoveDown  = false;
 
-         //Activar fisica
-         var physics = {
-            get : function () {
-               return {
-                  x: x,
-                  y: y,
-                  speed: speed,
-                  width: width,
-                  height: height
-               };
-            },
-            set : function (oArgs) {
-               if (oArgs.x)
-                  x = oArgs.x;
-               if (oArgs.y)
-                  y = oArgs.y;
-            }
-         };
-
          return {
          
             layer   : layer,
-            physics : physics,
 
             update : function (canvas) {
 

@@ -26,8 +26,6 @@
       current: 'init'
    };
 
-   var oPhysics = {};
-   
    //objectos del juego
    var aGameObjects = [];
    var aToRemove    = [];
@@ -91,23 +89,12 @@
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject;
       var nObjectCount;
-      var flag;
 
       for (nObjectCount in aGameObjects[oScene.current]) {
-         flag = false;
          oCurrentGameObject = aGameObjects[oScene.current][nObjectCount];
          
-         //Physics
-         if (oCurrentGameObject[sMethodName]){
-            if (sMethodName === 'update'){
-               oPhysics    = oCurrentGameObject.physics.get();
-               oPhysics.px = oPhysics.x;
-               oCurrentGameObject[sMethodName](oArgs);
-               if (fpCollision())
-                  oCurrentGameObject.physics.set({x: oPhysics.px});
-            }else
-               oCurrentGameObject[sMethodName](oArgs);
-         }
+         if (oCurrentGameObject[sMethodName])
+            oCurrentGameObject[sMethodName](oArgs);
       }
       var scene = 'global';
       for (nObjectCount in aGameObjects[scene]) {
