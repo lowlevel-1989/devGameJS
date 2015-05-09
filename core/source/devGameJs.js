@@ -220,10 +220,11 @@
          };
 
          var oBinding = {
-            canvas   : oCanvas,
-            state    : state,
-            fps      : oFps,
-            debug    : oDebug.active
+            canvas      : oCanvas,
+            state       : state,
+            fps         : oFps,
+            debug       : oDebug.active,
+            gameObjects : aGameObjects[oScene.current]
          };
 
          // Build Modules.

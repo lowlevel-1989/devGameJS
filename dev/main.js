@@ -1,6 +1,5 @@
 window.onload = function(){
 
-
    //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
    devGameJs.setup({width: 900, height: 400, debug: true});
 
