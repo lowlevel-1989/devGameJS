@@ -30,19 +30,19 @@ devGameJs.addGameObject({
 
          update : function (canvas) {
 
-            devGameJs.module('physics').active(x, y, width, height); //Activar modulo fisico.
+            Physics.active(x, y, width, height); //Activar modulo fisico.
 
             if (bMoveRight)
-               x = devGameJs.module('physics').move('x', +speed);
+               x = Physics.move('x', +speed);
 
             if (bMoveLeft)
-               x = devGameJs.module('physics').move('x', -speed);
+               x = Physics.move('x', -speed);
 
             if (bMoveDown)
-               y = devGameJs.module('physics').move('y', +speed);
+               y = Physics.move('y', +speed);
             
             if (bMoveUp)
-               y = devGameJs.module('physics').move('y', -speed);
+               y = Physics.move('y', -speed);
             
          },
 

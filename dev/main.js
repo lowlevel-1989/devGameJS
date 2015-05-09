@@ -7,6 +7,8 @@ window.onload = function(){
    devGameJs.module('loading').load(['tileInMap.png']);
 
    //se crea variable global para un manejo mas facil del modulo text
-   window.drawText = devGameJs.module('text').draw;
+   window.DrawText = devGameJs.module('text').draw;
+
+   window.Physics  = devGameJs.module('physics');
 
 };
