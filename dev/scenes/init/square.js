@@ -21,8 +21,12 @@ devGameJs.addGameObject({
       var bMoveLeft  = false;
       var bMoveUp    = false;
       var bMoveDown  = false;
+      //Matar objB
+      var bDelete    = false;  // tecla Barra Espaciadora
 
-
+      var fpKill = function (sObjectId){
+         devGameJs.removeGameObject(sObjectId);
+      };
 
       return {
       
@@ -44,8 +48,11 @@ devGameJs.addGameObject({
             if (bMoveUp)
                y = Physics.move('y', -speed);
             
-            window.objB = Physics.is_collision();
-
+            if (bDelete){
+               var obj__id = Physics.is_collision();
+               if (obj__id)
+                  fpKill(obj__id);
+            }
 
          },
 
@@ -68,6 +75,9 @@ devGameJs.addGameObject({
 
             if (nKeyCode === 40)
                bMoveDown  = true;
+
+            if (nKeyCode === 32)
+               bDelete    = true;
          },
 
          keyup : function (nKeyCode) {
@@ -83,6 +93,9 @@ devGameJs.addGameObject({
 
             if (nKeyCode === 40)
                bMoveDown  = false;
+
+            if (nKeyCode === 32)
+               bDelete    = false;
          }
 
       };
