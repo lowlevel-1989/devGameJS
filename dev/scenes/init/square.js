@@ -44,6 +44,9 @@ devGameJs.addGameObject({
             if (bMoveUp)
                y = Physics.move('y', -speed);
             
+            window.objB = Physics.is_collision();
+
+
          },
 
          draw : function (canvas) {
