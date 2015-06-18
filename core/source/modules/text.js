@@ -4,14 +4,21 @@
    
    devGameJs.addModule('text', function (oBinding) {
 
-      var oSpriteFont    = {};
-      oSpriteFont.image  = new Image();
-      oSpriteFont.row    = 4;
-      oSpriteFont.column = 3;
+      var oSpriteFont     = {};
+      oSpriteFont.image   = new Image();
+      oSpriteFont.row     = 8;
+      oSpriteFont.column  = 8;
+      oSpriteFont.auto    = true;
+      oSpriteFont.color   = 'white';
+      oSpriteFont.assets  = 'assets/imgs/';
+
+      oSpriteFont.default = function () {
+         return oSpriteFont.assets + 'SPRITE-'+oSpriteFont.color+'.png';
+      };
 
       var nLoading = true;
 
-      oSpriteFont.image.src = 'assets/imgs/spriteFont.png';
+      oSpriteFont.image.src = oSpriteFont.default();
 
       var oMapper = {}; //Contiene las direcciones del spriteFont.
       var sMapper;      //String con el mapper.
@@ -53,7 +60,7 @@
       return {
 
          init : function () {
-            pfLoad('123456789*0#');
+            pfLoad('abcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_#"\'&()[]\\/@+=$*<>');
          },
 
          draw : function (nAxisX, nAxisY, sText, nSize) {
