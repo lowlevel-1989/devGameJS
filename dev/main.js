@@ -6,6 +6,9 @@ window.onload = function(){
    devGameJs.startGame();
    devGameJs.module('loading').load(['tileInMap.png']);
 
+   //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
+   devGameJs.module('text').setup({color: 'red'});
+
    //se crea variable global para un manejo mas facil del modulo text
    window.DrawText = devGameJs.module('text').draw;
 

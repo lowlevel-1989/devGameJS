@@ -76,15 +76,6 @@
       oGameExecution.keyPush(eEvent);
    }, false);
 
-
-   var fpCollision = function (){
-      if ((oPhysics.x + oPhysics.width ) > oCanvas.main.width){
-         return true;
-      }
-      return;
-   };
-
-
    //ejecuta metodos de cada objeto por individual
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject;

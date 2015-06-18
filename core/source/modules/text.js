@@ -8,7 +8,6 @@
       oSpriteFont.image   = new Image();
       oSpriteFont.row     = 8;
       oSpriteFont.column  = 8;
-      oSpriteFont.auto    = true;
       oSpriteFont.color   = 'white';
       oSpriteFont.assets  = 'assets/imgs/';
 
@@ -23,11 +22,8 @@
       var oMapper = {}; //Contiene las direcciones del spriteFont.
       var sMapper;      //String con el mapper.
 
-      var pfLoad = function(mapper){
-         
+      var pfLoading = function(mapper) {
          oSpriteFont.image.onload = function (event) {
-            sMapper = mapper; 
-            
             nLoading = false;
 
             oSpriteFont.width  = oSpriteFont.image.width  / oSpriteFont.column;
@@ -35,7 +31,27 @@
 
             pfSetMapper();
          };
-      
+      };
+
+      var pfInit = function(mapper){
+         sMapper = mapper;
+         pfLoading(sMapper);
+      };
+
+      var pfSetup = function (oSetting) {
+         if (oSetting.customize){
+            nLoading = true;
+            oSpriteFont.image.src = oSpriteFont.assets + oSetting.image;
+            pfLoading(oSetting.mapper);
+         }else{
+            if (oSetting.color){
+               nLoading = true;
+               oSpriteFont.color     = oSetting.color;
+               oSpriteFont.image.src = oSpriteFont.default();
+               pfLoading(sMapper);
+            }
+         }
+         
       };
 
       var pfSetMapper = function () {
@@ -60,7 +76,11 @@
       return {
 
          init : function () {
-            pfLoad('abcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_#"\'&()[]\\/@+=$*<>');
+            pfInit('abcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_#"\'&()[]\\/@+=$*<>');
+         },
+
+         setup : function (oSetting) {
+            pfSetup(oSetting);
          },
 
          draw : function (nAxisX, nAxisY, sText, nSize) {
