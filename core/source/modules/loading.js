@@ -99,11 +99,22 @@
          image.src = sDir + imageLocation;
       };
 
+      var pfAutoStart = function (){
+         if (nState  === oState.PENDING){
+            console.log('test');
+            oBinding.state.set(0);
+         }
+      };
+
       //Metodos Publicos
       return {
 
          init : function () {
             oBinding.state.set(1); //cambia estado a loading en el framework
+         },
+
+         off : function () {
+            oBinding.state.set(0);
          },
 
          load : function (aImgs) {
