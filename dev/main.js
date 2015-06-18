@@ -23,6 +23,4 @@ window.onload = function(){
    //se crea variable global para un manejo mas facil del modulo text
    window.DrawText = devGameJs.module('text').draw;
 
-   window.Physics  = devGameJs.module('physics');
-
 };

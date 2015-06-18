@@ -1,5 +1,4 @@
 devGameJs.addGameObject({
-   scene: 'init',
    name : 'squere',
    obj  : function () {
 
@@ -9,7 +8,7 @@ devGameJs.addGameObject({
 
       //tamaño y posicion
       var x  = 50;
-      var y  = 50;
+      var y  = 400-25;
       var width  = 25;
       var height = 25;
 
@@ -21,12 +20,6 @@ devGameJs.addGameObject({
       var bMoveLeft  = false;
       var bMoveUp    = false;
       var bMoveDown  = false;
-      //Matar objB
-      var bDelete    = false;  // tecla Barra Espaciadora
-
-      var fpKill = function (sObjectId){
-         devGameJs.removeGameObject(sObjectId);
-      };
 
       return {
       
@@ -34,25 +27,10 @@ devGameJs.addGameObject({
 
          update : function (canvas) {
 
-            Physics.active(x, y, width, height); //Activar modulo fisico.
-
             if (bMoveRight)
-               x = Physics.move('x', +speed);
-
+               x += speed;
             if (bMoveLeft)
-               x = Physics.move('x', -speed);
-
-            if (bMoveDown)
-               y = Physics.move('y', +speed);
-            
-            if (bMoveUp)
-               y = Physics.move('y', -speed);
-            
-            if (bDelete){
-               var obj__id = Physics.is_collision();
-               if (obj__id)
-                  fpKill(obj__id);
-            }
+               x -= speed;
 
          },
 
@@ -75,9 +53,6 @@ devGameJs.addGameObject({
 
             if (nKeyCode === 40)
                bMoveDown  = true;
-
-            if (nKeyCode === 32)
-               bDelete    = true;
          },
 
          keyup : function (nKeyCode) {
@@ -93,9 +68,6 @@ devGameJs.addGameObject({
 
             if (nKeyCode === 40)
                bMoveDown  = false;
-
-            if (nKeyCode === 32)
-               bDelete    = false;
          }
 
       };
