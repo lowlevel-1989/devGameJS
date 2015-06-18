@@ -28,7 +28,6 @@
 
             oSpriteFont.width  = oSpriteFont.image.width  / oSpriteFont.column;
             oSpriteFont.height = oSpriteFont.image.height / oSpriteFont.row;
-
             pfSetMapper();
          };
       };
@@ -41,8 +40,10 @@
       var pfSetup = function (oSetting) {
          if (oSetting.customize){
             nLoading = true;
+            oSpriteFont.row       = oSetting.row;
+            oSpriteFont.column    = oSetting.column;
             oSpriteFont.image.src = oSpriteFont.assets + oSetting.image;
-            pfLoading(oSetting.mapper);
+            pfLoading(sMapper = oSetting.mapper);
          }else{
             if (oSetting.color){
                nLoading = true;
@@ -60,7 +61,6 @@
          var nLetter  = 0;
          var nRow     = 0;
          var nColumn  = 0;
-
          for (nRow = 0; nRow < oSpriteFont.row; nRow++){
             for (nColumn = 0; nColumn < oSpriteFont.column; nColumn++){
                nCurrent = sMapper[nLetter];
@@ -84,7 +84,6 @@
          },
 
          draw : function (nAxisX, nAxisY, sText, nSize) {
-            
             if (!nLoading){
                var nLetter;
                var nPos = 0;

@@ -7,7 +7,12 @@ window.onload = function(){
    devGameJs.module('loading').load(['tileInMap.png']);
 
    //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
-   devGameJs.module('text').setup({color: 'red'});
+   devGameJs.module('text').setup(
+                                    {
+                                       customize: true, image: 'spriteFont.png', 
+                                       mapper: '123456789*0#', row: 4, column: 3
+                                    }
+                                 );
 
    //se crea variable global para un manejo mas facil del modulo text
    window.DrawText = devGameJs.module('text').draw;
