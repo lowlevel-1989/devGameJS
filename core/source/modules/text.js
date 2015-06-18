@@ -56,7 +56,6 @@
       };
 
       var pfSetMapper = function () {
-         console.log(sMapper);
          var nCurrent;
          var nLetter  = 0;
          var nRow     = 0;
