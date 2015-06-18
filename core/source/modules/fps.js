@@ -50,7 +50,7 @@
             },
 
             draw : function () {
-               devGameJs.module('text').draw(0, 10, sCurrent, 16);
+               devGameJs.module('text').draw(0, 10, 'ftp>' + sCurrent + '/60'  , 16);
             }
 
          };

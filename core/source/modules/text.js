@@ -56,7 +56,7 @@
       };
 
       var pfSetMapper = function () {
-         
+         console.log(sMapper);
          var nCurrent;
          var nLetter  = 0;
          var nRow     = 0;
@@ -76,7 +76,7 @@
       return {
 
          init : function () {
-            pfInit('abcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_#"\'&()[]\\/@+=$*<>');
+            pfInit('abcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_#"\'&()[]|\\/@+=$*<> ');
          },
 
          setup : function (oSetting) {
