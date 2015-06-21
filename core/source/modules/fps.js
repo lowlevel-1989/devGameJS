@@ -35,13 +35,8 @@
    });
 
    //Renderizar modulo
-   devGameJs.addGameObject({
-      //objectos en escenario global no soporta capas.
-      name : 'fps',
-      obj  : function () {
-
+   devGameJs.addGameObject((function () {
          var sCurrent = '0';
-
          return {
 
             update : function() {
@@ -54,9 +49,6 @@
 
          };
       }
-
-   });
-
-
+   )());
 
 })();

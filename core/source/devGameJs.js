@@ -216,31 +216,14 @@
    //Metodos Publicos
    window.devGameJs = {
 
-      addGameObject : function (oEntities) {
+      addGameObject : function (fpObjectBuilder) {
          var oFinalObject;
-         if (typeof oEntities.name === 'string') {
-            oFinalObject = oEntities.obj();
-
-            if (typeof oFinalObject === 'object') {
-               oFinalObject.__id = oEntities.name;
-               aGameObjects.push(oFinalObject);
-            }
+         oFinalObject = fpObjectBuilder;
+         if (typeof oFinalObject === 'object') {
+            aGameObjects.push(oFinalObject);
          }
       },
 
-      removeGameObject : function (sObjectId) {
-         if (typeof sObjectId === 'string') {
-            var oCurrentGameObject;
-            var nObjectCount       = 0;
-
-            for (nObjectCount in aGameObjects) {
-               oCurrentGameObject = aGameObjects[nObjectCount];
-               if (oCurrentGameObject.__id === sObjectId) {
-                  aToRemove.push(nObjectCount);
-               }
-            }
-         }
-      },
 
       addModule : function (sModuleId, fpBuilder) {
          if (typeof sModuleId === 'string') {
