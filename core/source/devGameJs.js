@@ -159,11 +159,23 @@
       this.y = 0;
       this.width = 25;
       this.height = 25;
+      this.vx = 0;
+      this.vy = 0;
+      this.gravity = 0.98;
+      this.onAir = true;
+   }
+
+   function $applyGravity() {
+      if (this.onAir){
+         this.vy += this.gravity;
+         this.y  += this.vy;
+      }
    }
 
    var objects = {
       new: $new,
       init: $init,
+      applyGravity: $applyGravity,
       layer: 9
    };
 
