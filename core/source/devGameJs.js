@@ -9,8 +9,8 @@
    var oCanvas = {};
 
    //objetos del juego
+   var id = 0;
    var aGameObjects = [];
-   var aToRemove    = [];
 
    //Modulos externos
    var oModules = {};
@@ -54,13 +54,9 @@
    var oGameExecution = {
       //Elimina objetos del juego
       remove : function () {
-         var nPos;
-         var nCurrentObject;
-         for (nPos in aToRemove) {
-            nCurrentObject = aToRemove[nPos];
-            aGameObjects.splice(nCurrentObject, 1);
-         }
-         aToRemove = [];
+         aGameObjects = aGameObjects.filter(function(item){
+            return item.dead !== true;
+         });
       },
       //Actualiza objetos del juego
       update : function () {
@@ -172,10 +168,15 @@
       }
    }
 
+   function $delete() {
+      this.dead = true;
+   }
+
    var objects = {
       new: $new,
       init: $init,
       applyGravity: $applyGravity,
+      delete: $delete,
       layer: 9
    };
 
@@ -204,6 +205,7 @@
       addGameObject : function (fpObjectBuilder) {
          var oFinalObject;
          oFinalObject = fpObjectBuilder;
+         oFinalObject.id = id++;
          aGameObjects.push(oFinalObject);
       },
       setup: function (oSetting) {
