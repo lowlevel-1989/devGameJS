@@ -35,20 +35,14 @@
    });
 
    //Renderizar modulo
-   devGameJs.addGameObject((function () {
-         var sCurrent = '0';
-         return {
+   var fps = devGameJs.objects.new();
+   fps.update = function() {
+      this.current = devGameJs.module('fps').update().toString();
+   };
+   fps.draw = function () {
+      devGameJs.module('text').draw(0, 10, 'fps>' + this.current + '/60'  , 16);
+   };
 
-            update : function() {
-               sCurrent = devGameJs.module('fps').update().toString();
-            },
-
-            draw : function () {
-               devGameJs.module('text').draw(0, 10, 'fps>' + sCurrent + '/60'  , 16);
-            }
-
-         };
-      }
-   )());
+   devGameJs.addGameObject(fps);
 
 })();

@@ -2,64 +2,34 @@
 
    'use strict';
 
-   //==========================Variables Privadas=================================
+   //====================Variables Privadas========================
 
-   //manejo del canvas
+   
+   //Manejo del canvas
    var oCanvas = {};
 
-   //Control de depuracion
-
-   var oDebug = {};
-   oDebug.active = false;
-
-   oDebug.show = function (){
-      if (oDebug.active)
-         document.getElementById('debug').style.display = 'block';
-   };
-
-   oDebug.set = function (debug) {
-      oDebug.active = debug;
-      oDebug.show();
-   };
-
-   //objectos del juego
+   //objetos del juego
    var aGameObjects = [];
    var aToRemove    = [];
-
-   //estados del GameLoop
-   var oState  = {
-      init    : 0,
-      loading : 1,
-      remove  : 2,
-      update  : 3,
-      draw    : 4,
-      change  : 5
-   };
-   var nState = oState.init;
 
    //Modulos externos
    var oModules = {};
 
-   //variables del control FPS
+   //Variables del control FPS
    var oFps      = {};
    oFps.max      = 60;
    oFps.interval = 1000/oFps.max;
 
-   //============================Metodos Privados===========================
-
    //Auto-Ajustar control de canvas
-   (function () {
-      oCanvas.main = document.getElementById('game');
-      if(oCanvas.main) {
-         oCanvas.mainContext   = oCanvas.main.getContext('2d');
-         oCanvas.buffer        = document.createElement('canvas');
-         oCanvas.buffer.width  = oCanvas.main.width;
-         oCanvas.buffer.height = oCanvas.main.height;
-         oCanvas.bufferContext = oCanvas.buffer.getContext('2d');
-      }
-   })();
-
-
+   oCanvas.main          = document.getElementById('game');
+   oCanvas.mainContext   = oCanvas.main.getContext('2d');
+   oCanvas.buffer        = document.createElement('canvas');
+   oCanvas.buffer.width  = oCanvas.main.width;
+   oCanvas.buffer.height = oCanvas.main.height;
+   oCanvas.bufferContext = oCanvas.buffer.getContext('2d');
+      
+   //============================Metodos Privados===========================
+   
    //Manejo de evento del teclado 
    window.addEventListener('keydown', function (eEvent) {
       oGameExecution.keyPush(eEvent);
@@ -68,12 +38,11 @@
    window.addEventListener('keyup', function (eEvent) {
       oGameExecution.keyPush(eEvent);
    }, false);
-
-   //ejecuta metodos de cada objeto por individual
+   
+   //Ejecuta los metodos de los objeto del juego
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
       var oCurrentGameObject;
       var nObjectCount;
-
       for (nObjectCount in aGameObjects) {
          oCurrentGameObject = aGameObjects[nObjectCount];
          
@@ -82,73 +51,54 @@
       }
    };
 
-
-   var fpGameInterval = function () {
-
-      oGameExecution.remove();
-      oGameExecution.update();
-      oGameExecution.debug();
-      oGameExecution.draw();
-
-   };
-
-
    var oGameExecution = {
+      //Elimina objetos del juego
       remove : function () {
-         
-         nState = oState.remove;
-
          var nPos;
          var nCurrentObject;
-
          for (nPos in aToRemove) {
             nCurrentObject = aToRemove[nPos];
             aGameObjects.splice(nCurrentObject, 1);
          }
          aToRemove = [];
-      
       },
+      //Actualiza objetos del juego
       update : function () {
-
-         nState = oState.update;
-
          fpCallGameObjectMethods('update', oCanvas);
-         // Reordenamos los objetos por capas.
+         //Reordenamos los objetos por capas.
          aGameObjects.sort(function(oObjA, oObjB) {
             return oObjA.layer - oObjB.layer;
          });
 
       },
-
-      debug : function () {
-         if (oDebug.active)
-            document.getElementById('objs').innerHTML = 'Cant.Obj.: ' + aGameObjects.length;
-      
-      },
+      //Dibuja objetos en el juego
       draw : function () {
-
-         nState = oState.draw;
-
          oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
          fpCallGameObjectMethods('draw', oCanvas);
          oCanvas.mainContext.clearRect(0, 0, oCanvas.main.width, oCanvas.main.height);
          oCanvas.mainContext.drawImage(oCanvas.buffer, 0, 0);
 
       },
+      //Controla los eventos del teclado
       keyPush : function (eEvent) {
-
          var sEventType = eEvent.type;
          var nKeyCode   = eEvent.keyCode;
-
          // Control and F5 keys.
          if (nKeyCode !== 17 && nKeyCode !== 116) {
             eEvent.preventDefault();
          }
-
          fpCallGameObjectMethods(sEventType, nKeyCode);
       }
    };
 
+   //Metodo privado que controla la ejecucion del juego
+   var fpGameInterval = function () {
+      oGameExecution.remove();
+      oGameExecution.update();
+      oGameExecution.draw();
+   };
+
+   //Metodo que genera el gameLoop
    var fpGetRequestAnimationFrame = function () {
       return   window.requestAnimationFrame ||
                window.webkitRequestAnimationFrame ||
@@ -160,35 +110,20 @@
                };
    };
 
-
-   var setState = function(state){
-      nState = state;
-   };
-
-   var getState = function(){
-      return nState;
-   };
-
+   //Metodo privado para cargar modulos e inicializar juego
    var oPreStart = {
-      
+      //Construye los modulos externos
       buildModules : function () {
          var sModule;
          var oModule;
 
-         var state = {
-            get : getState,
-            set : setState
-         };
-
+         //Objeto publico dentro del modulo
          var oBinding = {
             canvas      : oCanvas,
-            state       : state,
             fps         : oFps,
-            debug       : oDebug.active,
             gameObjects : aGameObjects
          };
 
-         // Build Modules.
          for (sModule in oModules) {
             if (oModules.hasOwnProperty(sModule)) {
                oModule = oModules[sModule];
@@ -200,12 +135,11 @@
             }
          }
       },
-
+      //Inicia el gameLoop
       startGame : function () {
          var fpAnimationFrame = fpGetRequestAnimationFrame();
          var gameLoop = function(){
-            if (nState !== oState.loading)
-               fpGameInterval();
+            fpGameInterval();
             fpAnimationFrame(gameLoop);
          };
          fpAnimationFrame(gameLoop);
@@ -213,18 +147,32 @@
 
    };
 
-   //Metodos Publicos
+   //Metodo privado para instanciar clases 
+   function $new() {
+      var obj = Object.create(this);
+      obj.init.apply(obj, arguments);
+      return obj;
+   }
+
+   function $init() {
+      this.x = 0;
+      this.y = 0;
+      this.width = 25;
+      this.height = 25;
+   }
+
+   var objects = {
+      new: $new,
+      init: $init,
+      layer: 9
+   };
+
    window.devGameJs = {
-
-      addGameObject : function (fpObjectBuilder) {
-         var oFinalObject;
-         oFinalObject = fpObjectBuilder;
-         if (typeof oFinalObject === 'object') {
-            aGameObjects.push(oFinalObject);
-         }
+      objects: objects,
+      startGame : function () {
+         oPreStart.buildModules();
+         oPreStart.startGame();
       },
-
-
       addModule : function (sModuleId, fpBuilder) {
          if (typeof sModuleId === 'string') {
             if (!oModules[sModuleId]) {
@@ -234,7 +182,6 @@
             }
          }
       },
-
       module: function (sModule) {
          var oModule;
          if (oModules.hasOwnProperty(sModule)) {
@@ -242,20 +189,17 @@
             return oModule.oInstance;
          }
       },
-
+      addGameObject : function (fpObjectBuilder) {
+         var oFinalObject;
+         oFinalObject = fpObjectBuilder;
+         aGameObjects.push(oFinalObject);
+      },
       setup: function (oSetting) {
-         if (oSetting.debug)
-            oDebug.set(oSetting.debug);
          if (oSetting.width)
             oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
          if (oSetting.height)
             oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
-      },
-
-      startGame : function () {
-         oPreStart.buildModules();
-         oPreStart.startGame();
       }
-   };
+   };  
 
 })();

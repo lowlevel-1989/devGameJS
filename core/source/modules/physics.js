@@ -1,12 +1,12 @@
-(function(){
+// (function(){
 
-   'use strict';
+//    'use strict';
 
-   devGameJs.addModule('physics', function (oBinding) {
+//    devGameJs.addModule('physics', function (oBinding) {
 
-      return {};
+//       return {};
 
-   });
+//    });
 
 
-})();
+// })();
