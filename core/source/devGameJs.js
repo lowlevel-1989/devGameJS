@@ -20,6 +20,13 @@
    oFps.max      = 60;
    oFps.interval = 1000/oFps.max;
 
+   //Estado del core
+   var oState  = {
+      init  : 0,
+      pause : 1
+   };
+   var nState = oState.init;
+
    //Auto-Ajustar control de canvas
    oCanvas.main          = document.getElementById('game');
    oCanvas.mainContext   = oCanvas.main.getContext('2d');
@@ -113,11 +120,20 @@
          var sModule;
          var oModule;
 
+
+         function $state(state){
+            if (typeof state === 'undefined')
+               return state;
+            else
+               nState = state;
+         }
+
          //Objeto publico dentro del modulo
          var oBinding = {
             canvas      : oCanvas,
             fps         : oFps,
-            gameObjects : aGameObjects
+            gameObjects : aGameObjects,
+            state       : $state
          };
 
          for (sModule in oModules) {
@@ -135,7 +151,8 @@
       startGame : function () {
          var fpAnimationFrame = fpGetRequestAnimationFrame();
          var gameLoop = function(){
-            fpGameInterval();
+            if (nState !== oState.pause)
+               fpGameInterval();
             fpAnimationFrame(gameLoop);
          };
          fpAnimationFrame(gameLoop);

@@ -7,7 +7,7 @@ window.onload = function(){
    devGameJs.startGame();
 
    //desactivar modulo loading
-   // devGameJs.module('loading').off();
+   devGameJs.module('loading').off();
 
    //Como agragar imaganes al loading, Nota: solo soporta *.png
    // devGameJs.module('loading').load(['tileInMap.png']);
