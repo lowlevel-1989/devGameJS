@@ -1,4 +1,5 @@
 (function (){
+
    var hero = devGameJs.objects.new();
    hero.layer = 1;
    hero.vx    = 5;
