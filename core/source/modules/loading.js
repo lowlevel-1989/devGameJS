@@ -4,7 +4,7 @@
 
    devGameJs.addModule('loading', function (oBinding) {
       
-      var aImgs;       //Contenedor de imagenes.
+      var aImgs = [];       //Contenedor de imagenes.
       var nImgCount;   //Numero total de imagenes.
       var nLoadCount;  //Numero de imagenes cargadas.
       var nErrorCount; //Numero de imagenes que lanzaron error.
@@ -85,19 +85,20 @@
          return ( nState === oState.RESOLVED );
       };
 
-      var fpLoadImageLocation = function (imageLocation) {
-         
-         var image    = new Image();
+      var fpLoadImageLocation = function (image) {
          image.onload = function (event) {
             fpHandleImageLoad(event.target.src);
-            image = event = null;
          };
          image.onerror = function(event){
             fpHandleImageError(event.target.src);
-            image = event = null;
          };
-         image.src = sDir + imageLocation;
       };
+
+
+      function pfValidateURL(url) {
+         var regex=/^(ht|f)tps?:\/\/\w+([\.\-\w]+)?\.([a-z]{2,4}|travel)(:\d{2,5})?(\/.*)?$/i;
+         return regex.test(url);
+      }
 
       //Metodos Publicos
       return {
@@ -110,19 +111,29 @@
             oBinding.state(0);
          },
 
-         load : function (aImgs) {
-            
-            aImgs       = aImgs;
-            nImgCount   = aImgs.length;
-
+         load : function (Imgs) {
+            var key;
+            var Img = Imgs;
+            nImgCount   = Img.length;
             if (fpIsInitiated())
                return;
 
             nState  = oState.LOADING;
 
             for (var i = 0 ; i < nImgCount ; i++) {
-               fpLoadImageLocation(aImgs[i]);
+               key = Img[i][0];
+               aImgs[key]     = new Image();
+               if (pfValidateURL(Img[i][1]))
+                  aImgs[key].src = Img[i][1];
+               else
+                  aImgs[key].src = sDir + Img[i][1];
+
+               fpLoadImageLocation(aImgs[key]);
             }
+         },
+
+         get : function (key) {
+            return aImgs[key];
          }
 
       };

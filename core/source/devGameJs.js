@@ -199,6 +199,7 @@
 
    window.devGameJs = {
       objects: objects,
+      ext : {},
       startGame : function () {
          oPreStart.buildModules();
          oPreStart.startGame();

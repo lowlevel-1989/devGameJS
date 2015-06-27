@@ -26,8 +26,8 @@ var _HTML = [
 ];
 
 var _IMGS = [
-    'core/media/**/*.png',
-    'media/**/*.png'
+    'core/resource/**/*.png',
+    'resource/**/*.png'
 ];
 
 var _LIBS = [
