@@ -1,5 +1,7 @@
 window.onload = function(){
 
+   'use strict';
+
    //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
    devGameJs.setup({width: 900, height: 400});
 
@@ -21,5 +23,5 @@ window.onload = function(){
                                  );*/
 
    //se crea variable global para un manejo mas facil del modulo text
-   DrawText = devGameJs.module('text').draw;
+   window.DrawText = devGameJs.module('text').draw;
 };
