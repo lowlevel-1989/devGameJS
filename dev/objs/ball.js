@@ -10,7 +10,7 @@
    ball.height   = 64;
    ball.layer    = 1;
    ball.vx       = 5;
-   ball.elastic  = 0.8; 
+   ball.elastic  = 1; 
 
    ball.update = function(canvas){
          
@@ -20,6 +20,8 @@
             this.y  = canvas.buffer.height - this.height;
             if (this.vy > 1)
                this.rebound = true;
+            else
+               this.vy = 0;
          }
    };
 
