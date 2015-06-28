@@ -9,8 +9,10 @@
    background.layer    = 0;
 
    background.draw = function(canvas){
-      canvas.bufferContext.fillStyle = '#000';
+      //Cuadricula de fondo
       canvas.bufferContext.drawImage(this.sprite, 0, 0, this.width, this.height);
+      //Area para el fps
+      canvas.bufferContext.fillStyle = '#000';
       canvas.bufferContext.fillRect(0, 0, 150, 40);
       
    };
