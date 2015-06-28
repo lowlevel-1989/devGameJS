@@ -29,6 +29,6 @@
 
    //Extender framework con los modulos
    devGameJs.ext.resource = devGameJs.module('loading');
-   devGameJs.ext.draw = devGameJs.module('loading');
+   devGameJs.ext.drawText = devGameJs.module('text').draw;
 
 })();
