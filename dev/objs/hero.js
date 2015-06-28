@@ -41,8 +41,7 @@
          this.applyGravity();
 
          if (this.y >= canvas.buffer.height - this.height){
-            this.y  = canvas.buffer.height - this.height;
-            this.vy = 0;
+            this.y = canvas.buffer.height - this.height;
             if (!this.bUp)
                this.onAir = false;
          }

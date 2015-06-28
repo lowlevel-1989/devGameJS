@@ -176,13 +176,17 @@
       this.vy = 0;
       this.gravity = 0.98;
       this.onAir = true;
+      this.rebound = false;
+      this.elastic = 0;
    }
 
    function $applyGravity() {
-      if (this.onAir){
-         this.vy += this.gravity;
-         this.y  += this.vy;
+      if (this.rebound){
+         this.vy = -this.vy * this.elastic;
+         this.rebound = false;
       }
+      this.vy += this.gravity;
+      this.y  += this.vy;
    }
 
    function $delete() {

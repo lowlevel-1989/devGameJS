@@ -6,8 +6,8 @@
       
       var aImgs = [];       //Contenedor de imagenes.
       var nImgCount;   //Numero total de imagenes.
-      var nLoadCount;  //Numero de imagenes cargadas.
-      var nErrorCount; //Numero de imagenes que lanzaron error.
+      var nLoadCount  = 0;  //Numero de imagenes cargadas.
+      var nErrorCount = 0; //Numero de imagenes que lanzaron error.
       
       var sDir = 'assets/imgs/'; //Direccion de imagenes.
 
@@ -34,6 +34,8 @@
         
          if (nImgCount === (nErrorCount+nLoadCount))
             return false;
+         else
+            return true;
 
       };
 
@@ -46,9 +48,7 @@
             return;
 
          nPercentLoaded = (Math.ceil( nLoadCount / nImgCount * 100 )); //Se calcula el porcentaje de carga.
-
          if (!fpIsLoading()){ //Verifica si ya cargaron todas las imagenes.
-
             nState       = oState.RESOLVED; //Se cambia el estado a RESOLVED.
             isLoading    = false;            //Se finaliza el loading.
             isSuccessful = true;             //Se indica que se cargaron los datos exitosamente.

@@ -1,4 +1,4 @@
-window.onload = function(){
+(function (){
 
    'use strict';
 
@@ -9,13 +9,12 @@ window.onload = function(){
    devGameJs.startGame();
 
    //desactivar modulo loading
-   devGameJs.module('loading').off();
+   // devGameJs.module('loading').off();
 
    //Como agragar imaganes al loading, Nota: solo soporta *.png
-   // devGameJs.module('loading').load([
-   //    ['tile', 'tileInMap.png'], 
-   //    ['sprite', 'http://spritedatabase.net/files/pc/2203/Sprite/Tim.png']
-   // ]);
+   devGameJs.module('loading').load([
+      ['ball', 'ball.png']
+   ]);
 
    //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
    /*devGameJs.module('text').setup(
@@ -27,6 +26,6 @@ window.onload = function(){
 
    //Extender framework con los modulos
    devGameJs.ext.resource = devGameJs.module('loading');
-   devGameJs.ext.drawText = devGameJs.module('text').draw;
+   devGameJs.ext.draw = devGameJs.module('loading');
 
-};
+})();
