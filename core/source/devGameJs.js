@@ -163,7 +163,7 @@
    //Metodo privado para instanciar clases 
    function $new() {
       var obj = Object.create(this);
-      obj.init.apply(obj, arguments);
+      $init.apply(obj, arguments);
       return obj;
    }
 
@@ -195,7 +195,6 @@
 
    var objects = {
       new: $new,
-      init: $init,
       applyGravity: $applyGravity,
       delete: $delete,
       layer: 9
@@ -228,6 +227,8 @@
          var oFinalObject;
          oFinalObject = fpObjectBuilder;
          oFinalObject.id = id++;
+         if (oFinalObject.init)
+            oFinalObject.init();
          aGameObjects.push(oFinalObject);
       },
       setup: function (oSetting) {
