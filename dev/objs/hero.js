@@ -3,9 +3,17 @@
    'use strict';
 
    var hero = devGameJs.objects.new();
-   hero.layer = 1;
-   hero.vx    = 5;
-   hero.color = '#007';
+   
+   hero.init = function (){
+
+      this.layer  = 1;
+      this.vx     = 5;
+      this.width  = 60;
+      this.height = 60;
+      this.color  = '#007';
+
+      this.applyGravity();
+   };
 
    hero.keydown = function(nKeyCode){
       if (nKeyCode === 39)
@@ -31,6 +39,7 @@
    };
 
    hero.update = function(canvas){
+
          if (this.bRight)
             this.x += this.vx;
          if (this.bLeft)
@@ -38,7 +47,6 @@
          if (this.bUp && !this.onAir)
             this.jump();
 
-         this.applyGravity();
 
          if (this.y >= canvas.buffer.height - this.height){
             this.y = canvas.buffer.height - this.height;

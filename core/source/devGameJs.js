@@ -65,6 +65,11 @@
             return item.dead !== true;
          });
       },
+
+      preUpdate: function() {
+         fpCallGameObjectMethods('preUpdate', oCanvas);
+      },
+
       //Actualiza objetos del juego
       update : function () {
          fpCallGameObjectMethods('update', oCanvas);
@@ -74,6 +79,11 @@
          });
 
       },
+
+      postUpdate: function() {
+         fpCallGameObjectMethods('postUpdate', oCanvas);
+      },
+      
       //Dibuja objetos en el juego
       draw : function () {
          oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
@@ -97,7 +107,9 @@
    //Metodo privado que controla la ejecucion del juego
    var fpGameInterval = function () {
       oGameExecution.remove();
+      oGameExecution.preUpdate();
       oGameExecution.update();
+      oGameExecution.postUpdate();
       oGameExecution.draw();
    };
 
@@ -174,8 +186,9 @@
       this.height = 25;
       this.vx = 0;
       this.vy = 0;
+      this.aPreUpdate  = [];
+      this.aPostUpdate = [];
       this.gravity = 0.98;
-      this.onAir = true;
       this.rebound = false;
       this.elastic = 0;
    }
@@ -193,10 +206,27 @@
       this.dead = true;
    }
 
+   function $preUpdate() {
+      for (var i in this.aPreUpdate){
+         this.aPreUpdate[i].apply(this);
+      }
+   }
+
+   function $postUpdate() {
+      for (var i in this.aPostUpdate){
+         this.aPostUpdate[i].apply(this);
+      }
+   }
+
    var objects = {
       new: $new,
-      applyGravity: $applyGravity,
       delete: $delete,
+      applyGravity: function(){
+         var key = 'gravity';
+         this.aPreUpdate[key] = $applyGravity;
+      },
+      preUpdate: $preUpdate,
+      postUpdate: $postUpdate,
       layer: 9
    };
 
