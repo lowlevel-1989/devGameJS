@@ -11,10 +11,7 @@
    ball.layer    = 1;
    ball.vx       = 5;
    ball.elastic  = 1; 
-
-   ball.init = function (){
-      this.applyGravity();
-   };
+   ball.applyGravity();
 
    ball.update = function(canvas){
          
