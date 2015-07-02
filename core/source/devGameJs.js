@@ -248,11 +248,11 @@
       var key = 'animation';
       this.aPostUpdate[key] = function(){
          this.tickCount++;
-         if (this.tickCount > this.ticksPerFrame){
+         if (this.ticksPerFrame && this.tickCount > this.ticksPerFrame){
             this.tickCount = 0;
             this.frameIndex = ++this.frameIndex % this.sprite.column;
          }
-         if (this.frameIndex === (this.sprite.column-1)){
+         if (this.ticksPerFrame && this.frameIndex === (this.sprite.column-1)){
             var callback = this.animationsCallback[this.animation];
             if(callback)
                callback.apply(this, arguments);
@@ -272,6 +272,11 @@
             this.width,
             this.height
          );
+      };
+
+      this.setFrameDelay = function(frameDelay){
+         this.tickCount = 0;
+         this.ticksPerFrame = frameDelay;
       };
 
       this.setAnimation = function (name, callback){

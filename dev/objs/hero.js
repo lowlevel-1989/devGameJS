@@ -2,6 +2,12 @@
 
    'use strict';
 
+
+   var jump = {
+      left: 1,
+      right: 0
+   };
+
    var hero = devGameJs.objects.new();
    
    hero.init = function (){
@@ -14,7 +20,6 @@
 
       this.applyGravity();
 
-
       this.setAnimations({
 
          name: ['intro1', 'intro2', 'right', 'left', 'run-right', 'run-left', 'jump'],
@@ -22,7 +27,7 @@
          sprite: devGameJs.ext.resource.get('hero'),
          width: 96,
          height: 224,
-         frameDelay: 7
+         frameDelay: 10
 
       });
 
@@ -53,24 +58,37 @@
 
    hero.update = function(canvas){
 
-         if (this.bRight){
+         if (this.bRight && !this.intro){
             //animacion
-            if (this.getAnimation() != 'run-right')
-               this.setAnimation('run-right');
+            if (this.getAnimation() != 'run-right'){
+               if (!this.onAir){
+                  this.setAnimation('run-right');
+                  this.setFrameDelay(7);
+               }else
+                  this.frameIndex = jump.right;
+            }
             //accion
             this.x += this.vx;
          }
-         if (this.bLeft){
+         if (this.bLeft && !this.intro){
             //animacion
-            if (this.getAnimation() != 'run-left')
-               this.setAnimation('run-left');
+            if (this.getAnimation() != 'run-left'){
+               if (!this.onAir){
+                  this.setAnimation('run-left');
+                  this.setFrameDelay(7);
+               }else
+                  this.frameIndex = jump.left;
+               
+            }
             //accion
             this.x -= this.vx;
          }
-         if (this.bUp && !this.onAir){
+         if (this.bUp && !this.onAir && !this.intro){
             //animacion
-            if (this.getAnimation() != 'jump')
+            if (this.getAnimation() != 'jump'){
                this.setAnimation('jump');
+               this.setFrameDelay(0);
+            }
             //accion
             this.jump();
          }
@@ -84,22 +102,23 @@
             
             //animacion
             if(this.intro){
-               var self = this;
                this.intro = false;
                this.setAnimation('intro2', function(){
-                  self.setAnimation('right');
+                  this.setAnimation('right');
                });
             }
 
          }
+
    };
 
 
    hero.draw = function(canvas){
-
+      //testing de area
       // canvas.bufferContext.fillStyle = '#060';
       // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
 
+      //pintar animacion
       this.renderAnimation(canvas);
    };
 
