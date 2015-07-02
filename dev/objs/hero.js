@@ -114,7 +114,7 @@
                this.setAnimation('intro2', function(){
                   this.setAnimation('right');
                });
-            }else if(!this.bRight && !this.bLeft){
+            }else if(!this.bRight && !this.bLeft && this.getAnimation('intro2') != 'intro2'){
                if(this.getAnimation(direction.current) != direction.current){
                   this.setFrameDelay(10);
                   this.setAnimation(direction.current);
