@@ -179,6 +179,18 @@
       return obj;
    }
 
+   function $preUpdate() {
+      for (var i in this.aPreUpdate){
+         this.aPreUpdate[i].apply(this);
+      }
+   }
+
+   function $postUpdate() {
+      for (var i in this.aPostUpdate){
+         this.aPostUpdate[i].apply(this);
+      }
+   }
+
    function $init() {
       this.x = 0;
       this.y = 0;
@@ -202,20 +214,81 @@
       this.y  += this.vy;
    }
 
+   function $setAnimations(oSetting) {
+   
+      this.sprite = {};
+      this.animations = [];
+      this.animationsCallback = [];
+      this.animation  = oSetting.name[0];
+
+      this.sprite.row    = oSetting.name.length;
+      this.sprite.column = oSetting.frame;
+      this.sprite.sheets = oSetting.sprite;
+      this.sprite.width  = oSetting.width;
+      this.sprite.height = oSetting.height;
+      this.sw            = this.sprite.width/this.sprite.column;
+      this.sh            = this.sprite.height/this.sprite.row;
+
+      this.frameIndex = 0;
+      this.tickCount  = 0;
+      this.ticksPerFrame = oSetting.frameDelay;
+
+      var name;
+      for (var row = 0; row < this.sprite.row; row++ ){
+         name = oSetting.name[row];
+         this.animations[name] = [];
+         for (var column = 0; column < this.sprite.column; column++){
+            this.animations[name].push({
+               sx: column*this.sw,
+               sy: row*this.sh
+            }); 
+         }
+      }
+
+      var key = 'animation';
+      this.aPostUpdate[key] = function(){
+         this.tickCount++;
+         if (this.tickCount > this.ticksPerFrame){
+            this.tickCount = 0;
+            this.frameIndex = ++this.frameIndex % this.sprite.column;
+         }
+         if (this.frameIndex === (this.sprite.column-1)){
+            var callback = this.animationsCallback[this.animation];
+            if(callback)
+               callback.apply(this, arguments);
+         }
+      };
+
+
+      this.renderAnimation = function(canvas){
+         canvas.bufferContext.drawImage(
+            this.sprite.sheets, 
+            this.animations[this.animation][this.frameIndex].sx, 
+            this.animations[this.animation][this.frameIndex].sy,
+            this.sw,
+            this.sh,
+            this.x, 
+            this.y,
+            this.width,
+            this.height
+         );
+      };
+
+      this.setAnimation = function (name, callback){
+         this.animation  = name;
+         this.tickCount  = 0;
+         this.frameIndex = 0;
+         if (typeof callback === 'function')
+            this.animationsCallback[name] = callback;
+      };
+
+      this.getAnimation = function (){
+         return this.animation;
+      };
+   }
+
    function $delete() {
       this.dead = true;
-   }
-
-   function $preUpdate() {
-      for (var i in this.aPreUpdate){
-         this.aPreUpdate[i].apply(this);
-      }
-   }
-
-   function $postUpdate() {
-      for (var i in this.aPostUpdate){
-         this.aPostUpdate[i].apply(this);
-      }
    }
 
    var objects = {
@@ -225,6 +298,7 @@
          var key = 'gravity';
          this.aPreUpdate[key] = $applyGravity;
       },
+      setAnimations: $setAnimations,
       preUpdate: $preUpdate,
       postUpdate: $postUpdate,
       layer: 9
