@@ -3,6 +3,11 @@
    'use strict';
 
 
+   //variables privadas para controlar el estado de animacion
+   var direction = {
+      current: 'right'
+   };
+
    var jump = {
       left: 1,
       right: 0
@@ -67,6 +72,8 @@
                }else
                   this.frameIndex = jump.right;
             }
+            direction.current = 'right';
+
             //accion
             this.x += this.vx;
          }
@@ -78,8 +85,9 @@
                   this.setFrameDelay(7);
                }else
                   this.frameIndex = jump.left;
-               
             }
+            direction.current = 'left';
+
             //accion
             this.x -= this.vx;
          }
@@ -106,6 +114,11 @@
                this.setAnimation('intro2', function(){
                   this.setAnimation('right');
                });
+            }else if(!this.bRight && !this.bLeft){
+               if(this.getAnimation(direction.current) != direction.current){
+                  this.setFrameDelay(10);
+                  this.setAnimation(direction.current);
+               }
             }
 
          }
@@ -114,6 +127,7 @@
 
 
    hero.draw = function(canvas){
+      
       //testing de area
       // canvas.bufferContext.fillStyle = '#060';
       // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
