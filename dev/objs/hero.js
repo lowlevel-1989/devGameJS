@@ -24,6 +24,7 @@
       this.intro  = true;
 
       this.applyGravity();
+      this.applyCollision();
 
       this.setAnimations({
 
@@ -129,8 +130,8 @@
    hero.draw = function(canvas){
       
       //testing de area
-      // canvas.bufferContext.fillStyle = '#060';
-      // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      canvas.bufferContext.fillStyle = '#060';
+      canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
 
       //pintar animacion
       this.renderAnimation(canvas);

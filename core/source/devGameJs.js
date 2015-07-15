@@ -1,3 +1,5 @@
+/* global devGameJs */
+
 (function(){
 
    'use strict';
@@ -292,6 +294,36 @@
       };
    }
 
+   function collision(objA, objB){
+
+      var w1 = objA.width;
+      var h1 = objA.height;
+      var x1 = objA.x;
+      var y1 = objA.y;
+
+      var w2 = objB.width;
+      var h2 = objB.height;
+      var x2 = objB.x;
+      var y2 = objB.y;
+
+      if (((x1+w1)>x2)&&((y1+h1)>y2)&&((x2+w2)>x1)&&((y2+h2)>y1))
+         return true;
+      else
+         return false;
+   }
+
+   function $collision(){
+      var self = this;
+      var search = aGameObjects.filter(function(item){
+         return item.id != self.id && typeof item.applyReaction === 'function';
+      });
+      for (var i in search){
+         if (collision(self, search[i])){
+            search[i].applyReaction(self);
+         }
+      }
+   }
+
    function $delete() {
       this.dead = true;
    }
@@ -299,6 +331,10 @@
    var objects = {
       new: $new,
       delete: $delete,
+      applyCollision: function(){
+         var key = 'collision';
+         this.aPostUpdate[key] = $collision;
+      },
       applyGravity: function(){
          var key = 'gravity';
          this.aPreUpdate[key] = $applyGravity;
