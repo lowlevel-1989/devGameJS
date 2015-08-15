@@ -1,4 +1,4 @@
-var browserSync = require('browser-sync');
+﻿var browserSync = require('browser-sync');
 var concat      = require('gulp-concat');
 var del         = require('del');
 var gulp        = require('gulp');
@@ -10,6 +10,7 @@ var rename      = require('gulp-rename');
 var stylus      = require('gulp-stylus');
 var nib         = require('nib');
 var jshint      = require('gulp-jshint');
+var stripDebug  = require('gulp-strip-debug');
 
 // WARNING CORE
 
@@ -64,6 +65,7 @@ gulp.task('dev-minify-js', function () {
 gulp.task('libs-js', function(){
 	gulp.src(_LIBS)
     .pipe(concat('libs.min.js'))
+    .pipe(stripDebug())
     .pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));

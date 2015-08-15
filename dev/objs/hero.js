@@ -1,4 +1,4 @@
-(function (){
+﻿(function (){
 
    'use strict';
 
@@ -46,6 +46,8 @@
          this.bLeft  = true;
       if (nKeyCode === 32)
          this.bUp    = true;
+      if (nKeyCode === 13)
+         this.bEnter = true;
    };
 
    hero.keyup = function(nKeyCode){
@@ -55,6 +57,8 @@
          this.bLeft  = false;
       if (nKeyCode === 32)
          this.bUp    = false;
+      if (nKeyCode === 13)
+         this.bEnter = false;
    };
 
    hero.jump = function(){
@@ -102,6 +106,11 @@
             this.jump();
          }
 
+         if (this.bEnter)
+            hero.emit('activeSquare', [{active: true}]);
+         else
+            hero.emit('activeSquare', [{active: false}]);
+
 
          if (this.y >= canvas.buffer.height - this.height){
             this.y = canvas.buffer.height - this.height;
@@ -130,8 +139,8 @@
    hero.draw = function(canvas){
       
       //testing de area
-      canvas.bufferContext.fillStyle = '#060';
-      canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      // canvas.bufferContext.fillStyle = '#060';
+      // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
 
       //pintar animacion
       this.renderAnimation(canvas);

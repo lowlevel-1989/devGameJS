@@ -1,4 +1,4 @@
-/* global devGameJs */
+﻿/* global devGameJs */
 
 (function(){
 
@@ -6,7 +6,6 @@
 
    //====================Variables Privadas========================
 
-   
    //Manejo del canvas
    var oCanvas = {};
 
@@ -29,13 +28,17 @@
    };
    var nState = oState.init;
 
+   var typeScale  = 'absolute';
+
    //Auto-Ajustar control de canvas
-   oCanvas.main          = document.getElementById('game');
+   oCanvas.main          = document.createElement('canvas');
    oCanvas.mainContext   = oCanvas.main.getContext('2d');
    oCanvas.buffer        = document.createElement('canvas');
    oCanvas.buffer.width  = oCanvas.main.width;
    oCanvas.buffer.height = oCanvas.main.height;
    oCanvas.bufferContext = oCanvas.buffer.getContext('2d');
+
+   document.body.appendChild(oCanvas.main);
       
    //============================Metodos Privados===========================
    
@@ -47,6 +50,19 @@
    window.addEventListener('keyup', function (eEvent) {
       oGameExecution.keyPush(eEvent);
    }, false);
+
+   //Manejo de las rotaciones
+   var orientation;
+
+   window.addEventListener('resize', function (eEvent) {
+      
+      if (orientation !== window.orientation){
+
+         orientation = window.orientation;
+         
+         pfSetScale();
+      }
+   }, true);
    
    //Ejecuta los metodos de los objeto del juego
    var fpCallGameObjectMethods = function (sMethodName, oArgs) {
@@ -328,9 +344,29 @@
       this.dead = true;
    }
 
+   function $on(args){
+      this.listen[args.id] = args.callback;
+   }
+
+   function $emit(id, args){
+      var search = aGameObjects.filter(function(item){
+         return item.listen && typeof item.listen[id] === 'function';
+      });
+
+      for (var i in search){
+         search[i].listen[id].apply(search[i], args);
+      }
+   }
+
    var objects = {
       new: $new,
       delete: $delete,
+      on: function(id, callback){
+         if (Object.keys(this.listen ? this.listen : {}).length < 1)
+            this.listen = {};
+         $on.apply(this, [{id: id, callback: callback}]);
+      },
+      emit: $emit,
       applyCollision: function(){
          var key = 'collision';
          this.aPostUpdate[key] = $collision;
@@ -344,6 +380,48 @@
       postUpdate: $postUpdate,
       layer: 9
    };
+
+   var pfSetScale = function(type){
+
+      typeScale = type ? type : typeScale;
+
+      var dpr   = window.devicePixelRatio;
+      var w     = oCanvas.main.width;
+      var h     = oCanvas.main.height;
+      var scale = Math.min(window.innerHeight / h, window.innerWidth / w);
+
+      oCanvas.main.style.position   = 'absolute';
+
+      typeScale = typeScale.toLowerCase();
+      
+      switch(typeScale) {
+         case 'to fill':
+            oCanvas.main.style.width      = '100%';
+            oCanvas.main.style.height     = '100%';
+            break;
+         case 'aspect fit':
+            oCanvas.main.style.width      = (w * scale) + 'px';
+            oCanvas.main.style.height     = (h * scale) + 'px';
+            oCanvas.main.style.left       = (window.innerWidth  * 0.5  - w * scale * 0.5) + 'px';
+            oCanvas.main.style.top        = (window.innerHeight * 0.5  - h * scale * 0.5) + 'px';
+            break;
+         case 'aspect fill':
+            console.log('Trabajando...');
+      }
+   };
+
+   var pfSetup = function (oSetting) {
+      if (oSetting.title)
+         document.title = oSetting.title;
+      if (oSetting.width)
+         oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
+      if (oSetting.height)
+         oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
+      if (oSetting.scale)
+         pfSetScale(oSetting.scale);
+
+   };
+
 
    window.devGameJs = {
       objects: objects,
@@ -376,12 +454,7 @@
             oFinalObject.init();
          aGameObjects.push(oFinalObject);
       },
-      setup: function (oSetting) {
-         if (oSetting.width)
-            oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
-         if (oSetting.height)
-            oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
-      }
+      setup: pfSetup
    };  
 
 })();

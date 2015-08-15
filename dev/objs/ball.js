@@ -1,4 +1,4 @@
-(function (){
+﻿(function (){
 
    'use strict';
 
@@ -32,8 +32,8 @@
 
    ball.draw = function(canvas){
       //testing de area
-      canvas.bufferContext.fillStyle = '#060';
-      canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      // canvas.bufferContext.fillStyle = '#060';
+      // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
       
       canvas.bufferContext.drawImage(this.sprite, this.x, this.y, this.width, this.height);
    };
