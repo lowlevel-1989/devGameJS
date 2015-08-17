@@ -117,7 +117,7 @@ gulp.task('dist', ['clean'], function() {
 });
 
 gulp.task('server', function() {
-    gulp.start('lint', 'server-start', 'watch');
+    gulp.start('server-start', 'watch');
 });
 
 gulp.task('clean', function(cb) {

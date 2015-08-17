@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
 
    'use strict';
 
@@ -123,9 +123,10 @@
             for (var i = 0 ; i < nImgCount ; i++) {
                key = Img[i][0];
                aImgs[key]     = new Image();
-               if (pfValidateURL(Img[i][1]))
+               if (pfValidateURL(Img[i][1])){
                   aImgs[key].src = Img[i][1];
-               else
+                  aImgs[key].crossOrigin = '';
+               }else
                   aImgs[key].src = sDir + Img[i][1];
 
                fpLoadImageLocation(aImgs[key]);

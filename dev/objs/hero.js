@@ -112,8 +112,8 @@
             hero.emit('activeSquare', [{active: false}]);
 
 
-         if (this.y >= canvas.buffer.height - this.height){
-            this.y = canvas.buffer.height - this.height;
+         if (this.y >= canvas.entities.height - this.height){
+            this.y = canvas.entities.height - this.height;
                
             if (!this.bUp)
                this.onAir = false;
@@ -139,8 +139,8 @@
    hero.draw = function(canvas){
       
       //testing de area
-      // canvas.bufferContext.fillStyle = '#060';
-      // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      // canvas.entities.fillStyle = '#060';
+      // canvas.entities.fillRect(this.x, this.y, this.width, this.height);
 
       //pintar animacion
       this.renderAnimation(canvas);

@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
 
    'use strict';
    
@@ -92,7 +92,7 @@
                   
                   nLetter = sText[i];
                   
-                  oBinding.canvas.bufferContext.drawImage(
+                  oBinding.canvas.entities.drawImage(
                      oSpriteFont.image, 
                      oMapper[nLetter].sx, 
                      oMapper[nLetter].sy,

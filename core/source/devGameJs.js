@@ -31,14 +31,15 @@
    var typeScale  = 'absolute';
 
    //Auto-Ajustar control de canvas
-   oCanvas.main          = document.createElement('canvas');
-   oCanvas.mainContext   = oCanvas.main.getContext('2d');
-   oCanvas.buffer        = document.createElement('canvas');
-   oCanvas.buffer.width  = oCanvas.main.width;
-   oCanvas.buffer.height = oCanvas.main.height;
-   oCanvas.bufferContext = oCanvas.buffer.getContext('2d');
+   oCanvas.background        = document.createElement('canvas');
+   oCanvas.backgroundContext = oCanvas.background.getContext('2d');
+   oCanvas.entities          = document.createElement('canvas');
+   oCanvas.entitiesContext   = oCanvas.entities.getContext('2d');
+   oCanvas.buffer            = document.createElement('canvas');
+   oCanvas.ctx               = oCanvas.buffer.getContext('2d');
 
-   document.body.appendChild(oCanvas.main);
+   document.body.appendChild(oCanvas.background);
+   document.body.appendChild(oCanvas.entities);
       
    //============================Metodos Privados===========================
    
@@ -104,10 +105,13 @@
       
       //Dibuja objetos en el juego
       draw : function () {
-         oCanvas.bufferContext.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
-         fpCallGameObjectMethods('draw', oCanvas);
-         oCanvas.mainContext.clearRect(0, 0, oCanvas.main.width, oCanvas.main.height);
-         oCanvas.mainContext.drawImage(oCanvas.buffer, 0, 0);
+         oCanvas.entitiesContext.clearRect  (0, 0, oCanvas.entities.width, oCanvas.entities.height);
+         fpCallGameObjectMethods('draw', {
+
+            background: oCanvas.backgroundContext,
+            entities: oCanvas.entitiesContext
+
+         });
 
       },
       //Controla los eventos del teclado
@@ -160,7 +164,10 @@
 
          //Objeto publico dentro del modulo
          var oBinding = {
-            canvas      : oCanvas,
+            canvas      : {
+                              background: oCanvas.backgroundContext,
+                              entities: oCanvas.entitiesContext
+                           },
             fps         : oFps,
             gameObjects : aGameObjects,
             state       : $state
@@ -279,7 +286,7 @@
 
 
       this.renderAnimation = function(canvas){
-         canvas.bufferContext.drawImage(
+         canvas.entities.drawImage(
             this.sprite.sheets, 
             this.animations[this.animation][this.frameIndex].sx, 
             this.animations[this.animation][this.frameIndex].sy,
@@ -310,22 +317,130 @@
       };
    }
 
-   function collision(objA, objB){
+   function collision(obj1, obj2){
+      
+      var x1 = Math.round( obj1.x );
+      var y1 = Math.round( obj1.y );
+      var x2 = Math.round( obj2.x );
+      var y2 = Math.round( obj2.y );
 
-      var w1 = objA.width;
-      var h1 = objA.height;
-      var x1 = objA.x;
-      var y1 = objA.y;
+      var w1 = obj1.width;
+      var h1 = obj1.height;
+      var w2 = obj2.width;
+      var h2 = obj2.height;
 
-      var w2 = objB.width;
-      var h2 = objB.height;
-      var x2 = objB.x;
-      var y2 = objB.y;
+      var xMin = Math.max( x1, x2 );
+      var yMin = Math.max( y1, y2 );
+      var xMax = Math.min( x1+w1, x2+w2 );
+      var yMax = Math.min( y1+h1, y2+h2 );
 
-      if (((x1+w1)>x2)&&((y1+h1)>y2)&&((x2+w2)>x1)&&((y2+h2)>y1))
-         return true;
-      else
+      if ( xMin >= xMax || yMin >= yMax ) {
          return false;
+      }
+
+      var xDiff = xMax - xMin;
+      var yDiff = yMax - yMin;
+
+      oCanvas.buffer.width  = obj1.width;
+      oCanvas.buffer.height = obj1.height;
+
+      var ctx = oCanvas.ctx;
+
+      ctx.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
+
+      if (obj1.animation){
+         ctx.drawImage(
+            obj1.sprite.sheets, 
+            obj1.animations[obj1.animation][obj1.frameIndex].sx, 
+            obj1.animations[obj1.animation][obj1.frameIndex].sy,
+            obj1.sw,
+            obj1.sh,
+            0, 
+            0,
+            obj1.width,
+            obj1.height
+         );
+      }else if (obj1.sprite){
+         ctx.drawImage(obj1.sprite, 0, 0, obj1.width, obj1.height);
+      }else{
+         ctx.fillStyle = '#000';
+         ctx.fillRect(0, 0, obj1.width, obj1.height);
+      }
+
+
+      var pixels1 = ctx.getImageData(0, 0, oCanvas.buffer.width, oCanvas.buffer.height).data;
+
+      oCanvas.buffer.width  = obj2.width;
+      oCanvas.buffer.height = obj2.height;
+
+      ctx.clearRect(0, 0, oCanvas.buffer.width, oCanvas.buffer.height);
+
+
+      if (obj2.animation){
+         ctx.drawImage(
+            obj2.sprite.sheets, 
+            obj2.animations[obj2.animation][obj2.frameIndex].sx, 
+            obj2.animations[obj2.animation][obj2.frameIndex].sy,
+            obj2.sw,
+            obj2.sh,
+            0, 
+            0,
+            obj2.width,
+            obj2.height
+         );
+      }else if (obj2.sprite){
+         ctx.drawImage(obj2.sprite, 0, 0, obj2.width, obj2.height);
+      }else{
+         ctx.fillStyle = '#000';
+         ctx.fillRect(0, 0, obj2.width, obj2.height);
+      }
+      var pixels2 = ctx.getImageData(0, 0, oCanvas.buffer.width, oCanvas.buffer.height).data;
+
+      var pixelX;
+      var pixelY;
+
+      if ( xDiff < 4 && yDiff < 4 ) {
+   
+         for ( pixelX = xMin; pixelX < xMax; pixelX++ ) {
+            
+            for ( pixelY = yMin; pixelY < yMax; pixelY++ ) {
+   
+               if (
+                  ( pixels1[ ((pixelX-x1) + (pixelY-y1)*w1)*4 + 3 ] !== 0 ) &&
+                  ( pixels2[ ((pixelX-x2) + (pixelY-y2)*w2)*4 + 3 ] !== 0 )
+               ) {
+                  return true;
+               }
+            }
+         }
+      }else{
+      
+         
+         // slither of an area for the last iteration (using fast ceil).
+         var incX = xDiff / 3.0;
+         var incY = yDiff / 3.0;
+   
+         incX = (~~incX === incX) ? incX : (incX+1 | 0);
+         incY = (~~incY === incY) ? incY : (incY+1 | 0);
+
+         for ( var offsetY = 0; offsetY < incY; offsetY++ ) {
+            for ( var offsetX = 0; offsetX < incX; offsetX++ ) {
+               for ( pixelY = yMin+offsetY; pixelY < yMax; pixelY += incY ) {
+                  for ( pixelX = xMin+offsetX; pixelX < xMax; pixelX += incX ) {
+      
+                     if (
+                        ( pixels1[ ((pixelX-x1) + (pixelY-y1)*w1)*4 + 3 ] !== 0 ) &&
+                        ( pixels2[ ((pixelX-x2) + (pixelY-y2)*w2)*4 + 3 ] !== 0 )
+                     ) {
+                        return true;
+                     }
+                  }
+               }
+            }
+         }
+      }
+
+      return false;
    }
 
    function $collision(){
@@ -386,24 +501,25 @@
       typeScale = type ? type : typeScale;
 
       var dpr   = window.devicePixelRatio;
-      var w     = oCanvas.main.width;
-      var h     = oCanvas.main.height;
+      var w     = oCanvas.entities.width;
+      var h     = oCanvas.entities.height;
       var scale = Math.min(window.innerHeight / h, window.innerWidth / w);
 
-      oCanvas.main.style.position   = 'absolute';
+      oCanvas.background.style.position = 'absolute';
+      oCanvas.entities.style.position   = 'absolute';
 
       typeScale = typeScale.toLowerCase();
       
       switch(typeScale) {
          case 'to fill':
-            oCanvas.main.style.width      = '100%';
-            oCanvas.main.style.height     = '100%';
+            oCanvas.background.style.width  = oCanvas.entities.style.width  = '100%';
+            oCanvas.background.style.height = oCanvas.entities.style.height = '100%';
             break;
          case 'aspect fit':
-            oCanvas.main.style.width      = (w * scale) + 'px';
-            oCanvas.main.style.height     = (h * scale) + 'px';
-            oCanvas.main.style.left       = (window.innerWidth  * 0.5  - w * scale * 0.5) + 'px';
-            oCanvas.main.style.top        = (window.innerHeight * 0.5  - h * scale * 0.5) + 'px';
+            oCanvas.background.style.width  = oCanvas.entities.style.width  = (w * scale) + 'px';
+            oCanvas.background.style.height = oCanvas.entities.style.height = (h * scale) + 'px';
+            oCanvas.background.style.left   = oCanvas.entities.style.left   = (window.innerWidth  * 0.5  - w * scale * 0.5) + 'px';
+            oCanvas.background.style.top    = oCanvas.entities.style.top    = (window.innerHeight * 0.5  - h * scale * 0.5) + 'px';
             break;
          case 'aspect fill':
             console.log('Trabajando...');
@@ -414,9 +530,9 @@
       if (oSetting.title)
          document.title = oSetting.title;
       if (oSetting.width)
-         oCanvas.buffer.width  = oCanvas.main.width  = oSetting.width;
+         oCanvas.background.width  = oCanvas.entities.width  = oSetting.width;
       if (oSetting.height)
-         oCanvas.buffer.height = oCanvas.main.height = oSetting.height;
+         oCanvas.background.height = oCanvas.entities.height = oSetting.height;
       if (oSetting.scale)
          pfSetScale(oSetting.scale);
 

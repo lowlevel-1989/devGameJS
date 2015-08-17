@@ -21,8 +21,8 @@
 
    square.draw = function(canvas){
       //Area para el fps
-      canvas.bufferContext.fillStyle = this.active ? this.colors.on : this.colors.off;
-      canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      canvas.entities.fillStyle = this.active ? this.colors.on : this.colors.off;
+      canvas.entities.fillRect(this.x, this.y, this.width, this.height);
       
    };
 

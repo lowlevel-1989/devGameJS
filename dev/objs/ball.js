@@ -21,8 +21,8 @@
 
    ball.update = function(canvas){
          
-         if (this.y >= canvas.buffer.height - this.height){
-            this.y  = canvas.buffer.height - this.height;
+         if (this.y >= canvas.entities.height - this.height){
+            this.y  = canvas.entities.height - this.height;
             if (this.vy > 1)
                this.rebound = true;
             else
@@ -32,10 +32,10 @@
 
    ball.draw = function(canvas){
       //testing de area
-      // canvas.bufferContext.fillStyle = '#060';
-      // canvas.bufferContext.fillRect(this.x, this.y, this.width, this.height);
+      // canvas.entities.fillStyle = '#060';
+      // canvas.entities.fillRect(this.x, this.y, this.width, this.height);
       
-      canvas.bufferContext.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+      canvas.entities.drawImage(this.sprite, this.x, this.y, this.width, this.height);
    };
 
    devGameJs.addGameObject(ball);
