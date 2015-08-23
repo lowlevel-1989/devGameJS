@@ -1,4 +1,4 @@
-﻿/* global devGameJs */
+/* global devGameJs */
 
 (function(){
 

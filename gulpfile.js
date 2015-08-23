@@ -1,4 +1,5 @@
 ﻿var browserSync = require('browser-sync');
+var browserify  = require('gulp-browserify');
 var concat      = require('gulp-concat');
 var del         = require('del');
 var gulp        = require('gulp');
@@ -13,28 +14,15 @@ var jshint      = require('gulp-jshint');
 var stripDebug  = require('gulp-strip-debug');
 
 // WARNING CORE
-
-var _CORE = [
-    'core/source/**/*.js'
+var _CORE   = [
+                'core/source/index.js',
+                'core/source/**/*.js',
 ];
-
-var _DEV = [
-    'dev/**/*.js'
-];
-
-var _HTML = [
-    'core/static/**/*.html'
-];
-
-var _IMGS = [
-    'core/resource/**/*.png',
-    'resource/**/*.png'
-];
-
-var _LIBS = [
-    'libs/**/*.js'
-];
-
+var _MOD    = 'modules/**/*.js';
+var _DEV    = 'dev/**/*.js';
+var _HTML   = 'core/static/**/*.html';
+var _IMGS   = 'resource/**/*.png';
+var _LIBS   = 'libs/**/*.js';
 var _STYLUS = 'core/stylus/**/*.styl';
 
 gulp.task('minify-css', function () {
@@ -47,8 +35,17 @@ gulp.task('minify-css', function () {
 });
 
 gulp.task('core-minify-js', function () {
-    gulp.src(_CORE)
-    .pipe(concat('devGameJs.min.js'))
+    gulp.src(_CORE[0])
+    .pipe(browserify())
+    .pipe(rename('devGameJs.min.js'))
+    .pipe(minifyJS())
+    .pipe(gulp.dest('game/assets/js'))
+    .pipe(reload({stream: true, once: true}));
+});
+
+gulp.task('mod-minify-js', function () {
+    gulp.src(_MOD)
+    .pipe(concat('mod.min.js'))
     .pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
@@ -89,13 +86,12 @@ gulp.task('copyImgs', function(){
     .pipe(gulp.dest('game/assets/imgs'));
 });
 
-
 gulp.task('watch', function() {
-    // Cambios principales
-    gulp.watch(_CORE, ['lint', 'core-minify-js']);
-    gulp.watch(_DEV, ['lint', 'dev-minify-js']);
-    gulp.watch(_STYLUS,      ['minify-css']);
-    gulp.watch(_HTML,       ['minify-html']);
+    gulp.watch(_CORE[1], ['lint', 'core-minify-js']);
+    gulp.watch(_MOD,     ['lint',  'mod-minify-js']);
+    gulp.watch(_DEV,     ['lint',  'dev-minify-js']);
+    gulp.watch(_STYLUS,              ['minify-css']);
+    gulp.watch(_HTML,               ['minify-html']);
 });
 
 gulp.task('server-start', function () {
@@ -105,15 +101,12 @@ gulp.task('server-start', function () {
     });
 });
 
-
-//Tareas IMPORTANTES
-
 gulp.task('debug', function() {
     gulp.start('lint');
 });
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'core-minify-js', 'dev-minify-js', 'lint');
+    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'core-minify-js', 'mod-minify-js', 'dev-minify-js', 'lint');
 });
 
 gulp.task('server', function() {

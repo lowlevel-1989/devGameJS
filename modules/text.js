@@ -9,7 +9,7 @@
       oSpriteFont.row     = 8;
       oSpriteFont.column  = 8;
       oSpriteFont.color   = 'white';
-      oSpriteFont.assets  = 'assets/imgs/';
+      oSpriteFont.assets  = 'assets/imgs/spriteFonts/';
 
       oSpriteFont.default = function () {
          return oSpriteFont.assets + 'SPRITE-'+oSpriteFont.color+'.png';
@@ -87,6 +87,7 @@
                var nLetter;
                var nPos = 0;
                oSpriteFont.Size = nSize;
+               sText = sText.toString().toLowerCase();
 
                for (var i = 0; i < sText.length; i++){
                   
