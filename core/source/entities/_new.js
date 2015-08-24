@@ -20,5 +20,6 @@ function init(){
 module.exports = function _new(){
    var obj = Object.create(this);
    init.apply(obj, arguments);
+   console.log('Obj id: '+obj.id);
    return obj;
 };

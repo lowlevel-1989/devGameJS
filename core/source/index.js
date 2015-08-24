@@ -1,12 +1,10 @@
-/* global devGameJs */
+var canvas      = require('./_canvas')();
+var gameObjects = require('./_gameObjects')();
+var objects     = require('./entities/objects')();
+var scale       = require('./_scale');
+var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
-//====================Variables Privadas========================
-
-//Manejo del canvas
-var canvas = require('./_canvas.js')();
-
-//objetos del juego
-var gameObjects = [];
+require('./_console');
 
 //Modulos externos
 var oModules = {};
@@ -46,18 +44,18 @@ window.addEventListener('resize', function (eEvent) {
 
       orientation = window.orientation;
       
-      pfSetScale();
+      scale();
    }
 }, true);
 
 //Ejecuta los metodos de los objeto del juego
-var fpCallGameObjectMethods = function(sMethodName, canvas, gameObjs){
+var callGameObjectMethods = function(name, canvas){
    var oCurrentGameObject;
-   var nObjectCount;
-   for (nObjectCount in gameObjects) {
-      oCurrentGameObject = gameObjects[nObjectCount];
-      if (typeof oCurrentGameObject[sMethodName] === 'function')
-         oCurrentGameObject[sMethodName](canvas, gameObjs);
+   var index;
+   for (index in gameObjects) {
+      oCurrentGameObject = gameObjects[index];
+      if (typeof oCurrentGameObject[name] === 'function')
+         oCurrentGameObject[name](canvas);
    }
 };
 
@@ -70,12 +68,12 @@ var oGameExecution = {
    },
 
    preUpdate: function() {
-      fpCallGameObjectMethods('preUpdate', canvas, gameObjects);
+      callGameObjectMethods('preUpdate', canvas);
    },
 
    //Actualiza objetos del juego
    update : function () {
-      fpCallGameObjectMethods('update', canvas);
+      callGameObjectMethods('update', canvas);
       //Reordenamos los objetos por capas.
       gameObjects.sort(function(oObjA, oObjB) {
          return oObjA.layer - oObjB.layer;
@@ -84,13 +82,13 @@ var oGameExecution = {
    },
 
    postUpdate: function() {
-      fpCallGameObjectMethods('postUpdate', canvas, gameObjects);
+      callGameObjectMethods('postUpdate', canvas);
    },
    
    //Dibuja objetos en el juego
    draw : function () {
       canvas.entitiesContext.clearRect  (0, 0, canvas.entities.width, canvas.entities.height);
-      fpCallGameObjectMethods('draw', {
+      callGameObjectMethods('draw', {
 
          background: canvas.backgroundContext,
          entities: canvas.entitiesContext
@@ -106,7 +104,7 @@ var oGameExecution = {
       if (nKeyCode !== 17 && nKeyCode !== 116) {
          eEvent.preventDefault();
       }
-      fpCallGameObjectMethods(sEventType, nKeyCode);
+      callGameObjectMethods(sEventType, nKeyCode);
    }
 };
 
@@ -120,7 +118,6 @@ var fpGameInterval = function () {
 };
 
 //Metodo que genera el gameLoop
-var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
 //Metodo privado para cargar modulos e inicializar juego
 var oPreStart = {
@@ -172,34 +169,6 @@ var oPreStart = {
 
 };
 
-var objects = require('./entities/objects')(gameObjects);
-
-var pfSetScale = function(type){
-
-   typeScale = type ? type : typeScale;
-
-   var dpr   = window.devicePixelRatio;
-   var w     = canvas.entities.width;
-   var h     = canvas.entities.height;
-   var scale = Math.min(window.innerHeight / h, window.innerWidth / w);
-
-   typeScale = typeScale.toLowerCase();
-   
-   switch(typeScale) {
-      case 'to fill':
-         canvas.background.style.width  = canvas.entities.style.width  = '100%';
-         canvas.background.style.height = canvas.entities.style.height = '100%';
-         break;
-      case 'aspect fit':
-         canvas.background.style.width  = canvas.entities.style.width  = (w * scale) + 'px';
-         canvas.background.style.height = canvas.entities.style.height = (h * scale) + 'px';
-         canvas.background.style.left   = canvas.entities.style.left   = (window.innerWidth  * 0.5  - w * scale * 0.5) + 'px';
-         canvas.background.style.top    = canvas.entities.style.top    = (window.innerHeight * 0.5  - h * scale * 0.5) + 'px';
-         break;
-      case 'aspect fill':
-         console.log('Trabajando...');
-   }
-};
 
 var pfSetup = function (oSetting) {
    if (oSetting.title)
@@ -209,7 +178,7 @@ var pfSetup = function (oSetting) {
    if (oSetting.height)
       canvas.background.height = canvas.entities.height = oSetting.height;
    if (oSetting.scale)
-      pfSetScale(oSetting.scale);
+      scale(oSetting.scale);
 
 };
 

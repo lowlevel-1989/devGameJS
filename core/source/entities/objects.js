@@ -8,7 +8,7 @@ var _postUpdate     = require('./_postUpdate');
 var _on             = require('./_on');
 var _emit           = require('./_emit');
 
-module.exports = function objects(gameObjects){
+module.exports = function objects(){
    return {
       new:            _new,
       delete:         _delete,
@@ -18,6 +18,6 @@ module.exports = function objects(gameObjects){
       preUpdate:      _preUpdate,
       postUpdate:     _postUpdate,
       on:             _on,
-      emit:           _emit(gameObjects),
+      emit:           _emit,
    };
 };

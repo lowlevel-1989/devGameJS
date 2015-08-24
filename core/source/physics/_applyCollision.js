@@ -1,3 +1,6 @@
+var canvas      = require('../_canvas')();
+var gameObjects = require('../_gameObjects')();
+
 var key = 'collision';
 
 function draw(obj, width, height, ctx){
@@ -29,7 +32,7 @@ function draw(obj, width, height, ctx){
    return ctx.getImageData(0, 0, width, height).data;
 }
 
-function isPixelCollision(obj1, obj2, canvas){
+function isPixelCollision(obj1, obj2){
    var x1 = Math.round(obj1.x);
    var y1 = Math.round(obj1.y);
    var x2 = Math.round(obj2.x);
@@ -99,12 +102,12 @@ function isPixelCollision(obj1, obj2, canvas){
    return false;
 }
 
-function collision(canvas, gameObjects){
+function collision(){
    var self = this;
    for (var index in gameObjects){
       var gameObject = gameObjects[index]; 
       if (gameObject.id != self.id && typeof gameObject.applyReaction === 'function'){
-         if (isPixelCollision(self, gameObject, canvas))
+         if (isPixelCollision(self, gameObject))
             gameObject.applyReaction(self);
       }
    }   
