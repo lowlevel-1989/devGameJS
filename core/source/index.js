@@ -130,16 +130,7 @@ var fpGameInterval = function () {
 };
 
 //Metodo que genera el gameLoop
-var fpGetRequestAnimationFrame = function () {
-   return   window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback){
-               window.setTimeout(callback, oFps.interval);
-            };
-};
+var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
 //Metodo privado para cargar modulos e inicializar juego
 var oPreStart = {
@@ -180,7 +171,7 @@ var oPreStart = {
    },
    //Inicia el gameLoop
    startGame : function () {
-      var fpAnimationFrame = fpGetRequestAnimationFrame();
+      var fpAnimationFrame = getRequestAnimationFrame();
       var gameLoop = function(){
          if (nState !== oState.pause)
             fpGameInterval();
