@@ -1,5 +1,5 @@
 ﻿//Ningunos de los atributos son obligatorios ni la ejecucion del mismo
-devGameJs.setup({title: 'DevGameJS', width: 900, height: 400, scale: 'aspect fit'});
+devGameJs.setup({title: 'DevGameJS', width: 900, height: 400, scale: 'aspect fit', debug: true});
 
 //Inica el juego
 devGameJs.startGame();

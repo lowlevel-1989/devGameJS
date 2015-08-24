@@ -2,9 +2,8 @@ var canvas      = require('./_canvas')();
 var gameObjects = require('./_gameObjects')();
 var objects     = require('./entities/objects')();
 var scale       = require('./_scale');
+var debug       = require('./_console');
 var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
-
-require('./_console');
 
 //Modulos externos
 var oModules = {};
@@ -20,8 +19,6 @@ var oState  = {
    pause : 1
 };
 var nState = oState.init;
-
-var typeScale  = 'absolute';
 
    
 //============================Metodos Privados===========================
@@ -39,11 +36,8 @@ window.addEventListener('keyup', function (eEvent) {
 var orientation;
 
 window.addEventListener('resize', function (eEvent) {
-   
    if (orientation !== window.orientation){
-
       orientation = window.orientation;
-      
       scale();
    }
 }, true);
@@ -54,6 +48,7 @@ var callGameObjectMethods = function(name, canvas){
    var index;
    for (index in gameObjects) {
       oCurrentGameObject = gameObjects[index];
+      console.log(name);
       if (typeof oCurrentGameObject[name] === 'function')
          oCurrentGameObject[name](canvas);
    }
@@ -179,7 +174,8 @@ var pfSetup = function (oSetting) {
       canvas.background.height = canvas.entities.height = oSetting.height;
    if (oSetting.scale)
       scale(oSetting.scale);
-
+   if (oSetting.debug)
+      debug();
 };
 
 
