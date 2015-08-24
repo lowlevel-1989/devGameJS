@@ -3,7 +3,7 @@
 //====================Variables Privadas========================
 
 //Manejo del canvas
-var canvas = {};
+var canvas = require('./_canvas.js')();
 
 //objetos del juego
 var gameObjects = [];
@@ -25,16 +25,6 @@ var nState = oState.init;
 
 var typeScale  = 'absolute';
 
-//Auto-Ajustar control de canvas
-canvas.background        = document.createElement('canvas');
-canvas.backgroundContext = canvas.background.getContext('2d');
-canvas.entities          = document.createElement('canvas');
-canvas.entitiesContext   = canvas.entities.getContext('2d');
-canvas.buffer            = document.createElement('canvas');
-canvas.ctx               = canvas.buffer.getContext('2d');
-
-document.body.appendChild(canvas.background);
-document.body.appendChild(canvas.entities);
    
 //============================Metodos Privados===========================
 
@@ -171,7 +161,7 @@ var oPreStart = {
    },
    //Inicia el gameLoop
    startGame : function () {
-      var fpAnimationFrame = getRequestAnimationFrame();
+      var fpAnimationFrame = getRequestAnimationFrame(oFps.interval);
       var gameLoop = function(){
          if (nState !== oState.pause)
             fpGameInterval();
@@ -192,9 +182,6 @@ var pfSetScale = function(type){
    var w     = canvas.entities.width;
    var h     = canvas.entities.height;
    var scale = Math.min(window.innerHeight / h, window.innerWidth / w);
-
-   canvas.background.style.position = 'absolute';
-   canvas.entities.style.position   = 'absolute';
 
    typeScale = typeScale.toLowerCase();
    
