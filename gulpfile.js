@@ -38,7 +38,7 @@ gulp.task('core-minify-js', function () {
     gulp.src(_CORE[0])
     .pipe(browserify())
     .pipe(rename('devGameJs.min.js'))
-    .pipe(minifyJS())
+    //.pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
@@ -54,7 +54,7 @@ gulp.task('mod-minify-js', function () {
 gulp.task('dev-minify-js', function () {
     gulp.src(_DEV)
     .pipe(concat('dev.min.js'))
-    .pipe(minifyJS())
+    //.pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
