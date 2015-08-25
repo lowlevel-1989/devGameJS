@@ -1,7 +1,7 @@
 var debug = document.createElement('div');
 
-debug.style.width      = '300px';
-debug.style.height     = '500px';
+debug.style.width      = '400px';
+debug.style.height     = '200px';
 debug.style.position   = 'absolute';
 debug.style.right      = '0px';
 debug.style.padding    = '10px';
@@ -12,7 +12,7 @@ debug.style.overflow   = 'hidden';
 var count = 0;
 
 window.console.log = function(log, clear){
-   if (++count > 27){
+   if (++count > 10){
       count = 0;
       clear = true;
    }

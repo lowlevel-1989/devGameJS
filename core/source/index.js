@@ -48,7 +48,6 @@ var callGameObjectMethods = function(name, canvas){
    var index;
    for (index in gameObjects) {
       oCurrentGameObject = gameObjects[index];
-      console.log(name);
       if (typeof oCurrentGameObject[name] === 'function')
          oCurrentGameObject[name](canvas);
    }
