@@ -5,6 +5,8 @@ var scale       = require('./_scale');
 var debug       = require('./_console');
 var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
+var gameObjs = gameObjects.all();
+
 //Modulos externos
 var oModules = {};
 
@@ -34,22 +36,12 @@ window.addEventListener('keyup', function (eEvent) {
 
 
 //Ejecuta los metodos de los objeto del juego
-var callGameObjectMethods = function(name, canvas){
-   var oCurrentGameObject;
-   var index;
-   for (index in gameObjects) {
-      oCurrentGameObject = gameObjects[index];
-      if (typeof oCurrentGameObject[name] === 'function')
-         oCurrentGameObject[name](canvas);
-   }
-};
+var callGameObjectMethods = require('./_callGameObjectMethods');
 
 var oGameExecution = {
    //Elimina objetos del juego
    remove : function () {
-      gameObjects = gameObjects.filter(function(item){
-         return item.dead !== true;
-      });
+      gameObjects.remove();
    },
 
    preUpdate: function() {
@@ -60,9 +52,7 @@ var oGameExecution = {
    update : function () {
       callGameObjectMethods('update', canvas);
       //Reordenamos los objetos por capas.
-      gameObjects.sort(function(oObjA, oObjB) {
-         return oObjA.layer - oObjB.layer;
-      });
+      gameObjects.layer();
 
    },
 
@@ -126,7 +116,7 @@ var oPreStart = {
                            entities: canvas.entitiesContext
                         },
          fps         : oFps,
-         gameObjects : gameObjects,
+         gameObjects : gameObjs,
          state       : $state
       };
 
@@ -197,7 +187,7 @@ window.devGameJs = {
       oFinalObject = fpObjectBuilder;
       if (oFinalObject.init)
          oFinalObject.init();
-      gameObjects.push(oFinalObject);
+      gameObjects.add(oFinalObject);
    },
    setup: pfSetup
 };  

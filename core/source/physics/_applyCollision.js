@@ -1,5 +1,5 @@
 var canvas      = require('../_canvas');
-var gameObjects = require('../_gameObjects');
+var gameObjects = require('../_gameObjects').all();
 
 var key = 'collision';
 
@@ -64,6 +64,7 @@ function isPixelCollision(obj1, obj2){
 
    var pixelX;
    var pixelY;
+
 
    if ( xDiff < 4 && yDiff < 4 ) {
       for ( pixelX = xMin; pixelX < xMax; pixelX++ ) {
