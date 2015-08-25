@@ -113,6 +113,6 @@ function collision(){
    }   
 }
 
-module.exports = function _applyCollision(){
+module.exports = function(){
    this.aPostUpdate[key] = collision;
 };

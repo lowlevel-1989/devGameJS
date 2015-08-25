@@ -1,6 +1,6 @@
 var key = 'animation';
 
-module.exports = function _setAnimations(oSetting){
+module.exports = function(oSetting){
    this.sprite             = {};
    this.animations         = [];
    this.animationsCallback = [];

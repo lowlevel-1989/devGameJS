@@ -9,6 +9,6 @@ function gravity(){
    this.y  += this.vy;
 }
 
-module.exports = function _applyGravity(){
+module.exports = function(){
    this.aPreUpdate[key] = gravity;
 };

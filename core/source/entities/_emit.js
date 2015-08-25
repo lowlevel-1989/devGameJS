@@ -1,6 +1,6 @@
 var gameObjects = require('../_gameObjects');
 
-module.exports = function _emit(id, args){
+module.exports = function(id, args){
    for (var index in gameObjects){
       var gameObject = gameObjects[index];
       if (typeof gameObject.listen[id] === 'function')

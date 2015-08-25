@@ -1,3 +1,3 @@
-module.exports = function _delete() {
+module.exports = function() {
    this.dead = true;
 };

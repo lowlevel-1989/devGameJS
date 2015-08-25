@@ -1,4 +1,4 @@
-module.exports = function _getRequestAnimationFrame(interval){
+module.exports = function(interval){
    return   window.requestAnimationFrame       ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame    ||

@@ -17,7 +17,7 @@ function init(){
    this.layer       = 9;
 }
 
-module.exports = function _new(){
+module.exports = function(){
    var obj = Object.create(this);
    init.apply(obj, arguments);
    console.log('Obj id: '+obj.id);

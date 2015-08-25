@@ -1,6 +1,6 @@
 var gameObjects = require('./_gameObjects');
 
-module.exports = function _callGameObjectMethods(name, canvas){
+module.exports = function(name, canvas){
    var oCurrentGameObject;
    var index;
    for (index in gameObjects) {

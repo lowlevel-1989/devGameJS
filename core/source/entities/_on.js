@@ -1,3 +1,3 @@
-module.exports = function _on(id, callback){
+module.exports = function(id, callback){
    this.listen[id] = callback;
 };

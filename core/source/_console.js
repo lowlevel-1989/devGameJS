@@ -25,6 +25,6 @@ if (!navigator.isCocoonJS){
 }else
    window.console.log = function(){};
 
-module.exports = function _console(){
+module.exports = function(){
    document.body.appendChild(debug);
 };
