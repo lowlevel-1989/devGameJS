@@ -32,15 +32,6 @@ window.addEventListener('keyup', function (eEvent) {
    oGameExecution.keyPush(eEvent);
 }, false);
 
-//Manejo de las rotaciones
-var orientation;
-
-window.addEventListener('resize', function (eEvent) {
-   if (orientation !== window.orientation){
-      orientation = window.orientation;
-      scale();
-   }
-}, true);
 
 //Ejecuta los metodos de los objeto del juego
 var callGameObjectMethods = function(name, canvas){

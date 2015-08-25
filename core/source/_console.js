@@ -11,16 +11,19 @@ debug.style.overflow   = 'hidden';
 
 var count = 0;
 
-window.console.log = function(log, clear){
-   if (++count > 10){
-      count = 0;
-      clear = true;
-   }
-   if (clear)
-      debug.innerHTML = log;
-   else
-      debug.innerHTML = log + '<br/>' + debug.innerHTML;
-};
+if (!navigator.isCocoonJS){
+   window.console.log = function(log, clear){
+      if (++count > 10){
+         count = 0;
+         clear = true;
+      }
+      if (clear)
+         debug.innerHTML = log;
+      else
+         debug.innerHTML = log + '<br/>' + debug.innerHTML;
+   };
+}else
+   window.console.log = function(){};
 
 module.exports = function _console(){
    document.body.appendChild(debug);

@@ -2,7 +2,16 @@ var canvas = require('./_canvas')();
 
 var current = 'absolute';
 
-module.exports = function _scale(){
+var orientation;
+
+window.addEventListener('resize', function (eEvent) {
+   if (orientation !== window.orientation){
+      orientation = window.orientation;
+      _scale();
+   }
+}, true);
+
+function _scale(){
    var arg = arguments[0];
    current = arg ? arg : current;
 
@@ -27,4 +36,6 @@ module.exports = function _scale(){
       case 'aspect fill':
          console.log('Trabajando...');
    }
-};
+}
+
+module.exports = _scale;
