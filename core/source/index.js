@@ -1,5 +1,5 @@
-var canvas      = require('./_canvas')();
-var gameObjects = require('./_gameObjects')();
+var canvas      = require('./_canvas');
+var gameObjects = require('./_gameObjects');
 var objects     = require('./entities/objects')();
 var scale       = require('./_scale');
 var debug       = require('./_console');

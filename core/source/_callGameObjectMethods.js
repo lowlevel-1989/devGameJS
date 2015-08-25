@@ -1,4 +1,4 @@
-var gameObjects = require('./_gameObjects')();
+var gameObjects = require('./_gameObjects');
 
 module.exports = function _callGameObjectMethods(name, canvas){
    var oCurrentGameObject;

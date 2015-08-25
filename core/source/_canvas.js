@@ -11,6 +11,4 @@ canvas.background.style.position = canvas.entities.style.position = 'absolute';
 document.body.appendChild(canvas.background);
 document.body.appendChild(canvas.entities);
 
-module.exports = function _canvas(){
-   return canvas;
-};
+module.exports = canvas;

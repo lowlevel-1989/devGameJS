@@ -1,4 +1,4 @@
-var gameObjects = require('../_gameObjects')();
+var gameObjects = require('../_gameObjects');
 
 module.exports = function _emit(id, args){
    for (var index in gameObjects){

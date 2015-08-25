@@ -1,4 +1,4 @@
-var canvas = require('./_canvas')();
+var canvas = require('./_canvas');
 
 var current = 'absolute';
 
