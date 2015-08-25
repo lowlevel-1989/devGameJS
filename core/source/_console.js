@@ -8,6 +8,7 @@ debug.style.padding    = '10px';
 debug.style.background = 'rgba(0,50,0,.9)';
 debug.style.color      = '#FFF';
 debug.style.overflow   = 'hidden';
+debug.style.cursor     = 'default';
 
 var count = 0;
 
