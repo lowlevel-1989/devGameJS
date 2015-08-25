@@ -3,10 +3,10 @@
 
    var square = devGameJs.objects.new();
 
-   square.x      = 800;
-   square.y      = 50;
-   square.width  = 50;
-   square.height = 50;
+   square.x      = 600;
+   square.y      = 200;
+   square.width  = 35;
+   square.height = 35;
    square.layer  = 1;
    square.active = false;
 

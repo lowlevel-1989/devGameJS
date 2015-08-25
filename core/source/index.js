@@ -4,6 +4,7 @@ var objects     = require('./entities/objects');
 var scale       = require('./_scale');
 var debug       = require('./_console');
 var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
+var callGameObjectMethods    = require('./_callGameObjectMethods');
 
 var gameObjs = gameObjects.all();
 
@@ -35,8 +36,6 @@ window.addEventListener('keyup', function (eEvent) {
 }, false);
 
 
-//Ejecuta los metodos de los objeto del juego
-var callGameObjectMethods = require('./_callGameObjectMethods');
 
 var oGameExecution = {
    //Elimina objetos del juego
@@ -182,12 +181,12 @@ window.devGameJs = {
          return oModule.oInstance;
       }
    },
-   addGameObject : function (fpObjectBuilder) {
-      var oFinalObject;
-      oFinalObject = fpObjectBuilder;
-      if (oFinalObject.init)
-         oFinalObject.init();
-      gameObjects.add(oFinalObject);
+   addGameObject : function (objectBuilder) {
+      var obj;
+      obj = objectBuilder;
+      if (obj.init)
+         obj.init();
+      gameObjects.add(obj);
    },
    setup: pfSetup
 };  
