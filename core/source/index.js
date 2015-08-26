@@ -1,8 +1,7 @@
 var canvas      = require('./_canvas');
 var gameObjects = require('./_gameObjects');
 var objects     = require('./entities/objects');
-var scale       = require('./_scale');
-var debug       = require('./_console');
+var setup       = require('./_config');
 var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 var callGameObjectMethods    = require('./_callGameObjectMethods');
 
@@ -143,21 +142,6 @@ var oPreStart = {
 
 };
 
-
-var pfSetup = function (oSetting) {
-   if (oSetting.title)
-      document.title = oSetting.title;
-   if (oSetting.width)
-      canvas.background.width  = canvas.entities.width  = oSetting.width;
-   if (oSetting.height)
-      canvas.background.height = canvas.entities.height = oSetting.height;
-   if (oSetting.scale)
-      scale(oSetting.scale);
-   if (oSetting.debug)
-      debug();
-};
-
-
 window.devGameJs = {
    objects: objects,
    ext : {},
@@ -188,5 +172,5 @@ window.devGameJs = {
          obj.init();
       gameObjects.add(obj);
    },
-   setup: pfSetup
+   setup: setup
 };  
