@@ -1,7 +1,10 @@
+var _clone = require('./_clone');
+
 var gameObjects = [];
 
 function add(obj){
-   gameObjects.push(obj);
+   var clone = _clone(obj);
+   gameObjects.push(clone);
 }
 
 function remove(){

@@ -1,7 +1,8 @@
 var _canvas      = require('./_canvas');
 var _gameObjects = require('./_gameObjects');
-var _objects     = require('./entities/objects');
+var _objects     = require('./objects');
 var _setup       = require('./_config');
+var _random      = require('./_random');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 var _callGameObjectMethods    = require('./_callGameObjectMethods');
 
@@ -170,5 +171,6 @@ window.devGameJs = {
          obj.init();
       _gameObjects.add(obj);
    },
+   random: _random,
    setup: _setup
 };  

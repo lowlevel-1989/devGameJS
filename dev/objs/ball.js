@@ -3,7 +3,6 @@
    'use strict';
 
    var ball = devGameJs.objects.new();
-   ball.x        = 500;
    ball.y        = -100;
    ball.sprite   = devGameJs.ext.resource.get('ball');
    ball.width    = 32;
@@ -36,13 +35,13 @@
    };
 
    ball.draw = function(canvas){
-      //testing de area
-      // canvas.entities.fillStyle = '#060';
-      // canvas.entities.fillRect(this.x, this.y, this.width, this.height);
-      
       canvas.entities.drawImage(this.sprite, this.x, this.y, this.width, this.height);
    };
 
-   devGameJs.addGameObject(ball);
+   for (var add = 0; add < 5; add++){
+      ball.x = devGameJs.random(0, 900-ball.width);
+      devGameJs.addGameObject(ball);
+   }
+
 
 })();

@@ -141,11 +141,6 @@
 
 
    hero.draw = function(canvas){
-      
-      //testing de area
-      // canvas.entities.fillStyle = '#060';
-      // canvas.entities.fillRect(this.x, this.y, this.width, this.height);
-
       //pintar animacion
       this.renderAnimation(canvas);
    };
