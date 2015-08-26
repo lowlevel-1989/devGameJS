@@ -40,6 +40,7 @@
 
    for (var add = 0; add < 5; add++){
       ball.x = devGameJs.random(0, 900-ball.width);
+      ball.y = devGameJs.random(-500, -100);
       devGameJs.addGameObject(ball);
    }
 
