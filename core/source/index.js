@@ -1,11 +1,11 @@
-var canvas      = require('./_canvas');
-var gameObjects = require('./_gameObjects');
-var objects     = require('./entities/objects');
-var setup       = require('./_config');
-var getRequestAnimationFrame = require('./_getRequestAnimationFrame');
-var callGameObjectMethods    = require('./_callGameObjectMethods');
+var _canvas      = require('./_canvas');
+var _gameObjects = require('./_gameObjects');
+var _objects     = require('./entities/objects');
+var _setup       = require('./_config');
+var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
+var _callGameObjectMethods    = require('./_callGameObjectMethods');
 
-var gameObjs = gameObjects.all();
+var gameObjs = _gameObjects.all();
 
 //Modulos externos
 var oModules = {};
@@ -39,33 +39,31 @@ window.addEventListener('keyup', function (eEvent) {
 var oGameExecution = {
    //Elimina objetos del juego
    remove : function () {
-      gameObjects.remove();
+      _gameObjects.remove();
    },
 
    preUpdate: function() {
-      callGameObjectMethods('preUpdate', canvas);
+      _callGameObjectMethods('preUpdate',  _canvas);
    },
 
    //Actualiza objetos del juego
    update : function () {
-      callGameObjectMethods('update', canvas);
+      _callGameObjectMethods('update',     _canvas);
       //Reordenamos los objetos por capas.
-      gameObjects.layer();
+      _gameObjects.layer();
 
    },
 
    postUpdate: function() {
-      callGameObjectMethods('postUpdate', canvas);
+      _callGameObjectMethods('postUpdate', _canvas);
    },
    
    //Dibuja objetos en el juego
    draw : function () {
-      canvas.entitiesContext.clearRect  (0, 0, canvas.entities.width, canvas.entities.height);
-      callGameObjectMethods('draw', {
-
-         background: canvas.backgroundContext,
-         entities: canvas.entitiesContext
-
+      _canvas.entitiesContext.clearRect(0, 0, _canvas.entities.width, _canvas.entities.height);
+      _callGameObjectMethods('draw', {
+                                          background: _canvas.backgroundContext,
+                                          entities:   _canvas.entitiesContext
       });
 
    },
@@ -77,7 +75,7 @@ var oGameExecution = {
       if (nKeyCode !== 17 && nKeyCode !== 116) {
          eEvent.preventDefault();
       }
-      callGameObjectMethods(sEventType, nKeyCode);
+      _callGameObjectMethods(sEventType, nKeyCode);
    }
 };
 
@@ -110,8 +108,8 @@ var oPreStart = {
       //Objeto publico dentro del modulo
       var oBinding = {
          canvas      : {
-                           background: canvas.backgroundContext,
-                           entities: canvas.entitiesContext
+                           background: _canvas.backgroundContext,
+                           entities:   _canvas.entitiesContext
                         },
          fps         : oFps,
          gameObjects : gameObjs,
@@ -131,7 +129,7 @@ var oPreStart = {
    },
    //Inicia el gameLoop
    startGame : function () {
-      var fpAnimationFrame = getRequestAnimationFrame(oFps.interval);
+      var fpAnimationFrame = _getRequestAnimationFrame(oFps.interval);
       var gameLoop = function(){
          if (nState !== oState.pause)
             fpGameInterval();
@@ -143,7 +141,7 @@ var oPreStart = {
 };
 
 window.devGameJs = {
-   objects: objects,
+   objects: _objects,
    ext : {},
    startGame : function () {
       oPreStart.buildModules();
@@ -170,7 +168,7 @@ window.devGameJs = {
       obj = objectBuilder;
       if (obj.init)
          obj.init();
-      gameObjects.add(obj);
+      _gameObjects.add(obj);
    },
-   setup: setup
+   setup: _setup
 };  

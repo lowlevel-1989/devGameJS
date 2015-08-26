@@ -1,5 +1,5 @@
-var canvas      = require('../_canvas');
-var gameObjects = require('../_gameObjects').all();
+var _canvas      = require('../_canvas');
+var _gameObjects = require('../_gameObjects').all();
 
 var key = 'collision';
 
@@ -52,9 +52,9 @@ function isPixelCollision(obj1, obj2){
    if ( xMin >= xMax || yMin >= yMax )
       return false;
 
-   var width  = canvas.buffer.width;
-   var height = canvas.buffer.height;
-   var ctx    = canvas.ctx;
+   var width  = _canvas.buffer.width;
+   var height = _canvas.buffer.height;
+   var ctx    = _canvas.ctx;
 
    var xDiff = xMax - xMin;
    var yDiff = yMax - yMin;
@@ -105,8 +105,8 @@ function isPixelCollision(obj1, obj2){
 
 function collision(){
    var self = this;
-   for (var index in gameObjects){
-      var gameObject = gameObjects[index]; 
+   for (var index in _gameObjects){
+      var gameObject = _gameObjects[index]; 
       if (gameObject.id != self.id && typeof gameObject.applyReaction === 'function'){
          if (isPixelCollision(self, gameObject))
             gameObject.applyReaction(self);

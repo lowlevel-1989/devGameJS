@@ -1,7 +1,7 @@
-var gameObjects = require('./_gameObjects');
+var _gameObjects = require('./_gameObjects');
 
 module.exports = function(name, canvas){
-   var gameObjs = gameObjects.all();
+   var gameObjs = _gameObjects.all();
    var oCurrentGameObject;
    var index;
    for (index in gameObjs) {
