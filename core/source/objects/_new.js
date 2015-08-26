@@ -1,7 +1,4 @@
-var id = 0;
-
 function init(){
-   this.id          = id++;
    this.x           = 0;
    this.y           = 0;
    this.width       = 25;
