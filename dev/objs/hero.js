@@ -145,6 +145,6 @@
       this.renderAnimation(canvas);
    };
 
-   devGameJs.addGameObject(hero);
+   devGameJs.addObject(hero);
 
 })();

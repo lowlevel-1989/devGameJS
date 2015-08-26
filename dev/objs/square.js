@@ -26,6 +26,6 @@
       
    };
 
-   devGameJs.addGameObject(square);
+   devGameJs.addObject(square);
 
 })();

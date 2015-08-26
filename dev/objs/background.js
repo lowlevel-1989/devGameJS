@@ -16,6 +16,6 @@ background.draw = function(canvas){
    canvas.background.strokeRect(0, 0, this.width, this.height);
 };
 
-devGameJs.addGameObject(background);
+devGameJs.addObject(background);
 
 background = undefined;

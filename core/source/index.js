@@ -164,7 +164,7 @@ window.devGameJs = {
          return oModule.oInstance;
       }
    },
-   addGameObject : function (objectBuilder) {
+   addObject : function (objectBuilder) {
       var obj;
       obj = objectBuilder;
       if (obj.init)

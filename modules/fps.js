@@ -43,6 +43,6 @@
       devGameJs.module('text').draw(0, 10, 'fps>' + this.current + '/60'  , 16);
    };
 
-   devGameJs.addGameObject(fps);
+   devGameJs.addObject(fps);
 
 })();

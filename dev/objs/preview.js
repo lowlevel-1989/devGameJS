@@ -5,4 +5,4 @@ preview.draw = function(canvas){
    devGameJs.ext.drawText(80, 200, 'vinicio valbuena',  32);    
 };
 
-devGameJs.addGameObject(preview);
+devGameJs.addObject(preview);
