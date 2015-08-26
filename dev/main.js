@@ -10,8 +10,7 @@ devGameJs.startGame();
 //Como agragar imaganes al loading, Nota: solo soporta *.png
 devGameJs.module('loading').load([
    ['ball', 'ball.png'],
-   ['hero', 'hero.png'],
-   ['grid', 'http://2.bp.blogspot.com/-g1mJ9Km5PoQ/TtAe5x5Ju2I/AAAAAAAAATY/gnbzTvldBP8/s1600/cuadr%25C3%25ADcula.PNG']
+   ['hero', 'hero.png']
 ]);
 
 devGameJs.module('text').setup({color: 'green'});
