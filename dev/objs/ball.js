@@ -3,7 +3,6 @@
    'use strict';
 
    var ball = devGameJs.objects.new();
-   ball.y        = -100;
    ball.sprite   = devGameJs.ext.resource.get('ball');
    ball.width    = 32;
    ball.height   = 32;
