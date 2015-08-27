@@ -38,6 +38,7 @@
    var fps = devGameJs.objects.new();
    fps.update = function() {
       this.current = devGameJs.module('fps').update();
+      console.info(this.current);
    };
    fps.draw = function () {
       devGameJs.module('text').draw(0, 10, 'fps>' + this.current + '/60'  , 16);

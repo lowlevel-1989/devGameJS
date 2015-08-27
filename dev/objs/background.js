@@ -13,7 +13,7 @@ background.draw = function(canvas){
    //Cuadricula de fondo
    canvas.background.clearRect(0, 0, canvas.background.width, canvas.background.height);
    canvas.background.strokeStyle = '#FFF';
-   canvas.background.strokeRect(0, 0, this.width, this.height);
+   canvas.background.strokeRect(1, 1, this.width-1, this.height-1);
 };
 
 devGameJs.addObject(background);

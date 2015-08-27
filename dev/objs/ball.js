@@ -27,10 +27,8 @@
                this.vy = 0;
          }
 
-         console.log('y: '+this.y+' vy: '+this.y);
-         console.log('x: '+this.x+' vx: '+this.x);
-         console.log('id: '+this.id);
-         console.log('ball');
+         console.log(this);
+         console.log('Ball');
    };
 
    ball.draw = function(canvas){
