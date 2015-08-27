@@ -113,10 +113,12 @@
 
 
          if (this.y >= canvas.entities.height - this.height){
-            this.y = canvas.entities.height - this.height;
+            this.y  = canvas.entities.height - this.height;
                
-            if (!this.bUp)
+            if (!this.bUp){
                this.onAir = false;
+               this.vy = 0;
+            }
             
             //animacion
             if(this.intro){
