@@ -4,15 +4,11 @@
    devGameJs.addModule('console', function (oBinding) {
       
       var debug  = [];
-      var limit  = 10;
       var active = false;
 
       return {
          init : function(){
             window.console.log = function(log, clear){
-               if (clear)
-                  debug = [];
-
                debug.push(log);
             };
          },
@@ -20,7 +16,9 @@
             active = is;
          },
          update : function () {
-            return debug;
+            var logs = debug;
+            debug = [];
+            return logs;
          },
          isActive : function(){
             return active;
@@ -50,26 +48,26 @@
       canvas.entities.fillStyle = 'rgba(0,50,0,.7)';
       canvas.entities.fillRect(this.x, this.y, this.width, this.height);
       var br = 1;
-      for (var line = 15; line >= 0; line--){
-         if (this.debug[line]){
-            
-            var currentLine = this.debug[line];
+      for (var line = 14; line >= 0; line--){
+         var currentLine = this.debug[line];
+
+         if (currentLine){
             var isObject  = typeof currentLine === 'object';
             if (isObject){
-               var debug = 'width: ' + currentLine.width  + ' height: ' + currentLine.height;
+               var debug = 'id: '+ currentLine.id;
                devGameJs.module('text').draw(this.x, br*10, debug, 10);
-               debug = 'y: ' + currentLine.y  + ' vy: ' + currentLine.vy;
-               devGameJs.module('text').draw(this.x, br*20, debug, 10);
-               debug = 'y: ' + currentLine.x  + ' vy: ' + currentLine.vx;
-               devGameJs.module('text').draw(this.x, br*30, debug, 10);
-               debug = 'id: '+ currentLine.id;
-               devGameJs.module('text').draw(this.x, br*40, debug, 10);
-               br+=4;
-            }else{
-               devGameJs.module('text').draw(this.x, br*10, currentLine, 10);
                br++;
-            }
-
+               debug = 'x: ' + currentLine.x  + ' vx: ' + currentLine.vx;
+               devGameJs.module('text').draw(this.x, br*10, debug, 10);
+               br++;
+               debug = 'y: ' + currentLine.y  + ' vy: ' + currentLine.vy;
+               devGameJs.module('text').draw(this.x, br*10, debug, 10);
+               br++;
+               debug = 'width: ' + currentLine.width  + ' height: ' + currentLine.height;
+               devGameJs.module('text').draw(this.x, br*10, debug, 10);
+            }else
+               devGameJs.module('text').draw(this.x, br*10, currentLine, 10);
+            br++;
          }
       }
    };
