@@ -5,8 +5,8 @@
       
       var debug  = [];
       var active = false;
+      var count  = 0;
       var max    = 100;
-      var count  = max-2;
 
       return {
          init : function(){
@@ -14,7 +14,7 @@
                if (!active)
                   return;
                debug = debug.filter(function(item){
-                  return item.id !== log.id;
+                  return item.id !== log.id || typeof item === 'string';
                });
                debug.push(log);
             };
@@ -64,6 +64,12 @@
       canvas.entities.fillStyle = 'rgba(0,50,0,.7)';
       canvas.entities.fillRect(this.x, this.y, this.width, this.height);
       var br = 1;
+
+      if (!this.debug[0]){
+         devGameJs.module('text').draw(this.x, this.y,    'DevGameJS', 16);
+         devGameJs.module('text').draw(this.x, this.y+16, 'Loading objects...', 8);
+      }
+
       for (var line = 14; line >= 0; line--){
          var currentLine = this.debug[line];
 
