@@ -169,7 +169,7 @@ window.devGameJs = {
       var obj;
       obj = objectBuilder;
       if (obj.init)
-         obj.init();
+         obj.init(_canvas);
       _gameObjects.add(obj);
    },
    random: _random,

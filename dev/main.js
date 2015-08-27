@@ -1,5 +1,5 @@
 ﻿//Ningunos de los atributos son obligatorios ni la ejecucion del mismo
-devGameJs.setup({title: 'DevGameJS', width: 900, height: 400, scale: 'absolute', debug: true});
+devGameJs.setup({title: 'DevGameJS', width: 900, height: 400, scale: 'absolute'});
 
 //Inica el juego
 devGameJs.startGame();
@@ -13,7 +13,7 @@ devGameJs.module('loading').load([
    ['hero', 'hero.png']
 ]);
 
-devGameJs.module('text').setup({color: 'green'});
+devGameJs.module('text').setup({color: 'white'});
 
 //Ningunos de los atributos son obligatorios ni la ejecucion del mismo
 /*devGameJs.module('text').setup(
@@ -22,6 +22,8 @@ devGameJs.module('text').setup({color: 'green'});
                                     mapper: '123456789*0#', row: 4, column: 3
                                  }
                               );*/
+
+devGameJs.module('console').active(true);
 
 //Extender framework con los modulos
 devGameJs.ext.resource = devGameJs.module('loading');
