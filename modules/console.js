@@ -5,10 +5,17 @@
       
       var debug  = [];
       var active = false;
+      var max    = 100;
+      var count  = max-2;
 
       return {
          init : function(){
             window.console.log = function(log, clear){
+               if (!active)
+                  return;
+               debug = debug.filter(function(item){
+                  return item.id !== log.id;
+               });
                debug.push(log);
             };
          },
@@ -16,9 +23,16 @@
             active = is;
          },
          update : function () {
-            var logs = debug;
+            count++;
+
+            if (count >= max) {
+               var logs = debug;
+               count    = 0;
+               return logs;
+            }
+            
             debug = [];
-            return logs;
+            return false;
          },
          isActive : function(){
             return active;
@@ -34,17 +48,19 @@
       this.height = 400;
       this.x      = 500;
       this.layer  = 100;
+      this.debug  = [];
    };
 
    modConsole.update = function(canvas){
-      this.debug = devGameJs.module('console').update();
+      
+      if (!devGameJs.module('console').isActive())
+         this.delete();
+
+      var debug = devGameJs.module('console').update();
+      this.debug = debug ? debug : this.debug;
    };
 
    modConsole.draw = function(canvas){
-      var isActive = devGameJs.module('console').isActive();
-      if (!isActive)
-         return;
-
       canvas.entities.fillStyle = 'rgba(0,50,0,.7)';
       canvas.entities.fillRect(this.x, this.y, this.width, this.height);
       var br = 1;
