@@ -27,8 +27,8 @@
                this.vy = 0;
          }
 
-         console.log('Ball');
          console.log(this);
+         console.log('Ball');
    };
 
    ball.draw = function(canvas){

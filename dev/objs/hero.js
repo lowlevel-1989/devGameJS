@@ -132,8 +132,8 @@
             }
 
          }
-         console.log('Hero');
          console.log(this);
+         console.log('Hero');
    };
 
 
