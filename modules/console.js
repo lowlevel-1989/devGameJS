@@ -49,6 +49,7 @@
       this.x      = 500;
       this.layer  = 100;
       this.debug  = [];
+      this.center = (this.width/2)+this.width;
    };
 
    modConsole.update = function(canvas){
@@ -63,11 +64,15 @@
    modConsole.draw = function(canvas){
       canvas.entities.fillStyle = 'rgba(0,50,0,.7)';
       canvas.entities.fillRect(this.x, this.y, this.width, this.height);
-      var br = 1;
+      var br = 2;
 
       if (!this.debug[0]){
-         devGameJs.module('text').draw(this.x, this.y,    'DevGameJS', 16);
+         devGameJs.module('text').draw(this.x, this.y,    'DevGameJS Console', 16);
          devGameJs.module('text').draw(this.x, this.y+16, 'Loading objects...', 8);
+      }else{
+         canvas.entities.fillStyle = '#00F';
+         canvas.entities.fillRect(this.x, this.y, this.width, 20);
+         devGameJs.module('text').draw(this.center, this.y+5, 'DevGameJS Console', 10);
       }
 
       for (var line = 14; line >= 0; line--){
