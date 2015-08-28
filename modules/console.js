@@ -6,7 +6,7 @@
       var debug  = [];
       var active = false;
       var count  = 0;
-      var max    = 100;
+      var max    = 10;
 
       return {
          init : function(){
