@@ -19,11 +19,8 @@ module.exports = {
       _callGameObjectMethods('postUpdate', _canvas);
    },
    draw : function(){
-      _canvas.entitiesContext.clearRect(0, 0, _canvas.entities.width, _canvas.entities.height);
-      _callGameObjectMethods('draw', {
-                                          background: _canvas.backgroundContext,
-                                          entities:   _canvas.entitiesContext
-      });
+      _canvas.entitiesContext.clearRect(0, 0, _canvas.main.width, _canvas.main.height);
+      _callGameObjectMethods('draw', _canvas.ctx);
    },
    keyPush : function(event){
       var sEventType = event.type;

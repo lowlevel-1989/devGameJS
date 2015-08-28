@@ -19,10 +19,10 @@
       this.active = args.active;
    });
 
-   square.draw = function(canvas){
+   square.draw = function(ctx){
       //Area para el fps
-      canvas.entities.fillStyle = this.active ? this.colors.on : this.colors.off;
-      canvas.entities.fillRect(this.x, this.y, this.width, this.height);
+      ctx.fillStyle = this.active ? this.colors.on : this.colors.off;
+      ctx.fillRect(this.x, this.y, this.width, this.height);
       
    };
 

@@ -112,8 +112,8 @@
             hero.emit('activeSquare', [{active: false}]);
 
 
-         if (this.y >= canvas.entities.height - this.height){
-            this.y  = canvas.entities.height - this.height;
+         if (this.y >= canvas.main.height - this.height){
+            this.y  = canvas.main.height - this.height;
                
             if (!this.bUp){
                this.onAir = false;
@@ -138,10 +138,9 @@
          console.log('Hero');
    };
 
-
-   hero.draw = function(canvas){
+   hero.draw = function(ctx){
       //pintar animacion
-      this.renderAnimation(canvas);
+      this.renderAnimation(ctx);
    };
 
    devGameJs.addObject(hero);

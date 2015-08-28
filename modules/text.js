@@ -93,7 +93,7 @@
                   
                   nLetter = sText[i];
                   
-                  oBinding.canvas.entities.drawImage(
+                  oBinding.canvas.ctx.drawImage(
                      oSpriteFont.image, 
                      oMapper[nLetter].sx, 
                      oMapper[nLetter].sy,

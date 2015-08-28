@@ -43,9 +43,9 @@ module.exports = function(oSetting){
       }
    };
 
-   this.renderAnimation = function(canvas){
+   this.renderAnimation = function(ctx){
       var animation = this.animations[this.animation][this.frameIndex];
-      canvas.entities.drawImage(
+      ctx.drawImage(
          this.sprite.sheets, 
          animation.sx, 
          animation.sy,

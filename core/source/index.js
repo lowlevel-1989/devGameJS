@@ -50,7 +50,7 @@ var oGameExecution = {
 
    //Actualiza objetos del juego
    update : function () {
-      _callGameObjectMethods('update',     _canvas);
+      _callGameObjectMethods('update', _canvas);
       //Reordenamos los objetos por capas.
       _gameObjects.layer();
 
@@ -62,11 +62,8 @@ var oGameExecution = {
    
    //Dibuja objetos en el juego
    draw : function () {
-      _canvas.entitiesContext.clearRect(0, 0, _canvas.entities.width, _canvas.entities.height);
-      _callGameObjectMethods('draw', {
-                                          background: _canvas.backgroundContext,
-                                          entities:   _canvas.entitiesContext
-      });
+      _canvas.ctx.clearRect(0, 0, _canvas.main.width, _canvas.main.height);
+      _callGameObjectMethods('draw', _canvas.ctx);
 
    },
    //Controla los eventos del teclado
@@ -109,10 +106,7 @@ var oPreStart = {
 
       //Objeto publico dentro del modulo
       var oBinding = {
-         canvas      : {
-                           background: _canvas.backgroundContext,
-                           entities:   _canvas.entitiesContext
-                        },
+         canvas      : {ctx: _canvas.ctx},
          fps         : oFps,
          gameObjects : gameObjs,
          state       : $state

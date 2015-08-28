@@ -54,7 +54,7 @@ function isPixelCollision(obj1, obj2){
 
    var width  = _canvas.buffer.width;
    var height = _canvas.buffer.height;
-   var ctx    = _canvas.ctx;
+   var ctx    = _canvas.bufferContext;
 
    var xDiff = xMax - xMin;
    var yDiff = yMax - yMin;

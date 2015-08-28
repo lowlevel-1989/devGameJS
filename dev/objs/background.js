@@ -2,18 +2,12 @@
 background.width    = 900;
 background.height   = 400;
 background.layer    = 0;
-background.change   = true;
 
-background.draw = function(canvas){
-   
-   if (!this.change)
-      return;
-   
-   this.change = false;
+background.draw = function(ctx){
+
    //Cuadricula de fondo
-   canvas.background.clearRect(0, 0, canvas.background.width, canvas.background.height);
-   canvas.background.strokeStyle = '#FFF';
-   canvas.background.strokeRect(1, 1, this.width-1, this.height-1);
+   ctx.strokeStyle = '#FFF';
+   ctx.strokeRect(1, 1, this.width-1, this.height-1);
 };
 
 devGameJs.addObject(background);

@@ -5,9 +5,9 @@ module.exports = function(oSetting) {
    if (oSetting.title)
       document.title = oSetting.title;
    if (oSetting.width)
-      _canvas.background.width  = _canvas.entities.width  = oSetting.width;
+      _canvas.main.width  = oSetting.width;
    if (oSetting.height)
-      _canvas.background.height = _canvas.entities.height = oSetting.height;
+      _canvas.main.height = oSetting.height;
    if (oSetting.scale)
       _scale(oSetting.scale);
 };

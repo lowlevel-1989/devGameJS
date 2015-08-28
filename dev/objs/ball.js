@@ -18,9 +18,8 @@
    };
 
    ball.update = function(canvas){
-         
-         if (this.y >= canvas.entities.height - this.height){
-            this.y  = canvas.entities.height - this.height;
+         if (this.y >= canvas.main.height - this.height){
+            this.y  = canvas.main.height - this.height;
             if (this.vy > 1)
                this.rebound = true;
             else
@@ -31,8 +30,8 @@
          console.log('Ball');
    };
 
-   ball.draw = function(canvas){
-      canvas.entities.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+   ball.draw = function(ctx){
+      ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
    };
 
    for (var add = 0; add < 5; add++){
