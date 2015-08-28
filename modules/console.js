@@ -84,10 +84,10 @@
                var debug = 'id: '+ currentLine.id;
                devGameJs.module('text').draw(this.x, br*10, debug, 10);
                br++;
-               debug = 'x: ' + currentLine.x  + ' vx: ' + currentLine.vx;
+               debug = 'x: ' + currentLine.x.toFixed(2)  + ' vx: ' + currentLine.vx.toFixed(2);
                devGameJs.module('text').draw(this.x, br*10, debug, 10);
                br++;
-               debug = 'y: ' + currentLine.y  + ' vy: ' + currentLine.vy;
+               debug = 'y: ' + currentLine.y.toFixed(2)  + ' vy: ' + currentLine.vy.toFixed(2);
                devGameJs.module('text').draw(this.x, br*10, debug, 10);
                br++;
                debug = 'width: ' + currentLine.width  + ' height: ' + currentLine.height;
