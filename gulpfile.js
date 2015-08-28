@@ -63,7 +63,7 @@ gulp.task('libs-js', function(){
 	gulp.src(_LIBS)
     .pipe(concat('libs.min.js'))
     .pipe(stripDebug())
-    //.pipe(minifyJS())
+    .pipe(minifyJS())
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
