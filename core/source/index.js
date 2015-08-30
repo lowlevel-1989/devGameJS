@@ -2,11 +2,11 @@ var _canvas      = require('./_canvas');
 var _gameObjects = require('./_gameObjects');
 var _objects     = require('./objects');
 var _setup       = require('./_config');
-var _random      = require('./_random');
 var _version     = require('./_version');
 var _fps         = require('./_fps');
 var _state       = require('./_state');
-var _module      = require('./_module');
+var _random      = require('./plus/_random');
+var _module      = require('./plus/_module');
 var _gameExecution            = require('./_gameExecution');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 

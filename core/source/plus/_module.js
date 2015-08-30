@@ -1,7 +1,7 @@
-var _canvas      = require('./_canvas');
-var _fps         = require('./_fps');
-var _state       = require('./_state');
-var _gameObjects = require('./_gameObjects').all();
+var _canvas      = require('../_canvas');
+var _fps         = require('../_fps');
+var _state       = require('../_state');
+var _gameObjects = require('../_gameObjects').all();
 
 var modules = {};
 

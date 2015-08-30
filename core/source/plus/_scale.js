@@ -1,4 +1,4 @@
-var _canvas = require('./_canvas');
+var _canvas = require('../_canvas');
 
 var current = 'absolute';
 var orientation;

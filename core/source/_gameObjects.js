@@ -1,4 +1,4 @@
-var _clone = require('./_clone');
+var _clone = require('./plus/_clone');
 
 var gameObjects = [];
 var id = 0;

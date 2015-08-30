@@ -1,5 +1,5 @@
 var _canvas = require('./_canvas');
-var _scale  = require('./_scale');
+var _scale  = require('./plus/_scale');
 
 module.exports = function(oSetting) {
    if (oSetting.title)
