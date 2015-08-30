@@ -1,12 +1,13 @@
-var _canvas      = require('./_canvas');
-var _gameObjects = require('./_gameObjects');
-var _objects     = require('./objects');
-var _setup       = require('./_config');
-var _version     = require('./_version');
-var _fps         = require('./_fps');
-var _state       = require('./_state');
-var _random      = require('./plus/_random');
-var _module      = require('./plus/_module');
+var _canvas       = require('./_canvas');
+var _gameObjects  = require('./_gameObjects');
+var _objects      = require('./objects');
+var _setup        = require('./_config');
+var _version      = require('./_version');
+var _fps          = require('./_fps');
+var _state        = require('./_state');
+var _random       = require('./plus/_random');
+var _module       = require('./plus/_module');
+var _gameInterval = require('./_gameInterval');
 var _gameExecution            = require('./_gameExecution');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
@@ -21,18 +22,6 @@ window.addEventListener('keyup', function (eEvent) {
    _gameExecution.keyPush(eEvent);
 }, false);
 
-
-//Metodo privado que controla la ejecucion del juego
-var fpGameInterval = function () {
-   _gameExecution.remove();
-   _gameExecution.preUpdate();
-   _gameExecution.update();
-   _gameExecution.postUpdate();
-   _gameExecution.draw();
-};
-
-//Metodo que genera el gameLoop
-
 //Metodo privado para cargar modulos e inicializar juego
 var oPreStart = {
    //Construye los modulos externos
@@ -44,7 +33,7 @@ var oPreStart = {
       var STATE = _state.get;
       var gameLoop = function(){
          if (STATE() !== PAUSE)
-            fpGameInterval();
+            _gameInterval();
          fpAnimationFrame(gameLoop);
       };
       fpAnimationFrame(gameLoop);
