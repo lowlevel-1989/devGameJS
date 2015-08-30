@@ -52,7 +52,7 @@
             nState       = oState.RESOLVED; //Se cambia el estado a RESOLVED.
             isLoading    = false;            //Se finaliza el loading.
             isSuccessful = true;             //Se indica que se cargaron los datos exitosamente.
-            oBinding.state(0);           //cambia estado a init en el framework.
+            oBinding.state.set(0);           //cambia estado a init en el framework.
          }
 
       };
@@ -104,11 +104,11 @@
       return {
 
          init : function () {
-            oBinding.state(1); //cambia estado a loading en el framework
+            oBinding.state.set(1); //cambia estado a loading en el framework
          },
 
          off : function () {
-            oBinding.state(0);
+            oBinding.state.set(0);
          },
 
          load : function (Imgs) {

@@ -1,21 +1,22 @@
 var _canvas      = require('./_canvas');
+var _fps         = require('./_fps');
 var _gameObjects = require('../_gameObjects').all();
 
 
-var modules = {}
+var modules = {};
 
 function build(){
    var sModule, oModule;
 
    var oBinding = {
       canvas      : {ctx: _canvas.ctx},
-      fps         : oFps,
+      fps         : _fps,
       gameObjects : _gameObjects,
       state       : $state
    };
 }
 
-
+/*
 buildModules : function () {
       var sModule;
       var oModule;
@@ -46,4 +47,4 @@ buildModules : function () {
             }
          }
       }
-   }
+   }*/
