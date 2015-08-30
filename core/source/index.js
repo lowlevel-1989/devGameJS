@@ -4,6 +4,7 @@ var _objects     = require('./objects');
 var _setup       = require('./_config');
 var _random      = require('./_random');
 var _version     = require('./_version');
+var _fps         = require('./_fps');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 var _callGameObjectMethods    = require('./_callGameObjectMethods');
 
@@ -11,11 +12,6 @@ var gameObjs = _gameObjects.all();
 
 //Modulos externos
 var oModules = {};
-
-//Variables del control FPS
-var oFps      = {};
-oFps.max      = 60;
-oFps.interval = 1000/oFps.max;
 
 //Estado del core
 var oState  = {
@@ -107,7 +103,7 @@ var oPreStart = {
       //Objeto publico dentro del modulo
       var oBinding = {
          canvas      : {ctx: _canvas.ctx},
-         fps         : oFps,
+         fps         : _fps,
          gameObjects : gameObjs,
          state       : $state
       };
@@ -125,7 +121,7 @@ var oPreStart = {
    },
    //Inicia el gameLoop
    startGame : function () {
-      var fpAnimationFrame = _getRequestAnimationFrame(oFps.interval);
+      var fpAnimationFrame = _getRequestAnimationFrame(_fps.interval);
       var gameLoop = function(){
          if (nState !== oState.pause)
             fpGameInterval();
