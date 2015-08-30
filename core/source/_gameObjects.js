@@ -1,10 +1,13 @@
-var _clone = require('./plus/_clone');
+var _canvas = require('./_canvas');
+var _clone  = require('./plus/_clone');
 
 var gameObjects = [];
 var id = 0;
 
 function add(obj){
    obj.id = ++id;
+   if (obj.init)
+      obj.init(_canvas);
    var clone = _clone(obj);
    gameObjects.push(clone);
 }
