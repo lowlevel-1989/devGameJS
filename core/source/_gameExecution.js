@@ -4,31 +4,39 @@ var _callGameObjectMethods = require('./_callGameObjectMethods');
 
 
 module.exports = {
-   remove : function(){
-      _gameObjects.remove();
-   },
-   preUpdate : function(){
+   
+   remove : _gameObjects.remove,
+
+   preUpdate: function() {
       _callGameObjectMethods('preUpdate',  _canvas);
    },
-   update : function(){
-      _callGameObjectMethods('preUpdate',  _canvas);
+
+   //Actualiza objetos del juego
+   update : function () {
+      _callGameObjectMethods('update', _canvas);
       //Reordenamos los objetos por capas.
       _gameObjects.layer();
+
    },
-   postUpdate : function(){
+
+   postUpdate: function() {
       _callGameObjectMethods('postUpdate', _canvas);
    },
-   draw : function(){
-      _canvas.entitiesContext.clearRect(0, 0, _canvas.main.width, _canvas.main.height);
+   
+   //Dibuja objetos en el juego
+   draw : function () {
+      _canvas.ctx.clearRect(0, 0, _canvas.main.width, _canvas.main.height);
       _callGameObjectMethods('draw', _canvas.ctx);
-   },
-   keyPush : function(event){
-      var sEventType = event.type;
-      var nKeyCode   = event.keyCode;
-      // Control and F5 keys.
-      if (nKeyCode !== 17 && nKeyCode !== 116)
-         event.preventDefault();
 
+   },
+   //Controla los eventos del teclado
+   keyPush : function (eEvent) {
+      var sEventType = eEvent.type;
+      var nKeyCode   = eEvent.keyCode;
+      // Control and F5 keys.
+      if (nKeyCode !== 17 && nKeyCode !== 116) {
+         eEvent.preventDefault();
+      }
       _callGameObjectMethods(sEventType, nKeyCode);
    }
 };
