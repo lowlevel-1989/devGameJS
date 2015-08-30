@@ -1,50 +1,52 @@
 var _canvas      = require('./_canvas');
 var _fps         = require('./_fps');
+var _state       = require('./_state');
 var _gameObjects = require('../_gameObjects').all();
-
 
 var modules = {};
 
+function add(name, builder){
+   if (typeof name === 'string') {
+      if (!modules[name]) {
+         modules[name] = {
+            builder : builder
+         };
+      }
+   }
+}
+
+function get(name){
+   var oModule;
+   if (modules.hasOwnProperty(name)) {
+      oModule = modules[name];
+      return oModule.instance;
+   }
+}
+
 function build(){
-   var sModule, oModule;
+   var name, oModule;
 
    var oBinding = {
       canvas      : {ctx: _canvas.ctx},
       fps         : _fps,
       gameObjects : _gameObjects,
-      state       : $state
+      state       : _state
    };
-}
 
-/*
-buildModules : function () {
-      var sModule;
-      var oModule;
-
-
-      function $state(state){
-         if (typeof state === 'undefined')
-            return state;
-         else
-            nState = state;
-      }
-
-      //Objeto publico dentro del modulo
-      var oBinding = {
-         canvas      : {ctx: _canvas.ctx},
-         fps         : oFps,
-         gameObjects : gameObjs,
-         state       : $state
-      };
-
-      for (sModule in oModules) {
-         if (oModules.hasOwnProperty(sModule)) {
-            oModule = oModules[sModule];
-            if (oModule) {
-               oModule.oInstance = oModule.fpBuilder(oBinding);
-               if (oModule.oInstance.init)
-                  oModule.oInstance.init();
-            }
+   for (name in modules) {
+      if (modules.hasOwnProperty(name)) {
+         oModule = modules[name];
+         if (oModule) {
+            oModule.instance = oModule.builder(oBinding);
+            if (oModule.instance.init)
+               oModule.instance.init();
          }
       }
-   }*/
+   }
+}
+
+module.exports = {
+   add: add,
+   get: get,
+   build: build
+};

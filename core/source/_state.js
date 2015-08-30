@@ -5,20 +5,20 @@ var oState  = {
 
 var state = oState.INIT;
 
-function setState(nState){
+function set(nState){
    state = nState;
 }
 
-function getState(){
+function get(){
    return state;
 }
 
-function getStateAll(){
+function getAll(){
    return oState;
 }
 
 module.exports = {
-   set: setState,
-   get: getState,
-   getAll: getStateAll
+   set: set,
+   get: get,
+   getAll: getAll
 };

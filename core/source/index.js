@@ -6,13 +6,11 @@ var _random      = require('./_random');
 var _version     = require('./_version');
 var _fps         = require('./_fps');
 var _state       = require('./_state');
+var _module      = require('./_module');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 var _callGameObjectMethods    = require('./_callGameObjectMethods');
 
 var gameObjs = _gameObjects.all();
-
-//Modulos externos
-var oModules = {};
    
 //============================Metodos Privados===========================
 
@@ -81,29 +79,7 @@ var fpGameInterval = function () {
 //Metodo privado para cargar modulos e inicializar juego
 var oPreStart = {
    //Construye los modulos externos
-   buildModules : function () {
-      var sModule;
-      var oModule;
-
-      //Objeto publico dentro del modulo
-      var oBinding = {
-         canvas      : {ctx: _canvas.ctx},
-         fps         : _fps,
-         gameObjects : gameObjs,
-         state       : _state
-      };
-
-      for (sModule in oModules) {
-         if (oModules.hasOwnProperty(sModule)) {
-            oModule = oModules[sModule];
-            if (oModule) {
-               oModule.oInstance = oModule.fpBuilder(oBinding);
-               if (oModule.oInstance.init)
-                  oModule.oInstance.init();
-            }
-         }
-      }
-   },
+   buildModules : _module.build,
    //Inicia el gameLoop
    startGame : function () {
       var fpAnimationFrame = _getRequestAnimationFrame(_fps.interval);
@@ -126,22 +102,8 @@ window.devGameJs = {
       oPreStart.buildModules();
       oPreStart.startGame();
    },
-   addModule : function (sModuleId, fpBuilder) {
-      if (typeof sModuleId === 'string') {
-         if (!oModules[sModuleId]) {
-            oModules[sModuleId] = {
-               fpBuilder : fpBuilder
-            };
-         }
-      }
-   },
-   module: function (sModule) {
-      var oModule;
-      if (oModules.hasOwnProperty(sModule)) {
-         oModule = oModules[sModule];
-         return oModule.oInstance;
-      }
-   },
+   addModule : _module.add,
+   module: _module.get,
    addObject : function (objectBuilder) {
       var obj;
       obj = objectBuilder;
