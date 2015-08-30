@@ -1,3 +1,5 @@
+require('./events/_keyboard');
+
 var _canvas       = require('./_canvas');
 var _gameObjects  = require('./_gameObjects');
 var _objects      = require('./objects');
@@ -12,15 +14,6 @@ var _gameExecution            = require('./_gameExecution');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
 var gameObjs = _gameObjects.all();
-   
-//Manejo de evento del teclado 
-window.addEventListener('keydown', function (eEvent) {
-   _gameExecution.keyPush(eEvent);
-}, false);
-
-window.addEventListener('keyup', function (eEvent) {
-   _gameExecution.keyPush(eEvent);
-}, false);
 
 //Metodo privado para cargar modulos e inicializar juego
 var oPreStart = {
