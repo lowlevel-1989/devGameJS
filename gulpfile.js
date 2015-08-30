@@ -3,6 +3,7 @@ var browserify  = require('gulp-browserify');
 var concat      = require('gulp-concat');
 var del         = require('del');
 var gulp        = require('gulp');
+var gulpif      = require('gulp-if');
 var minifyCSS   = require('gulp-minify-css');
 var minifyHTML  = require('gulp-minify-html');
 var minifyJS    = require('gulp-uglify');
@@ -12,6 +13,10 @@ var stylus      = require('gulp-stylus');
 var nib         = require('nib');
 var jshint      = require('gulp-jshint');
 var stripDebug  = require('gulp-strip-debug');
+
+
+var _DEBUG = true;
+
 
 // WARNING CORE
 var _CORE   = [
@@ -38,7 +43,7 @@ gulp.task('core-minify-js', function () {
     gulp.src(_CORE[0])
     .pipe(browserify())
     .pipe(rename('devGameJs.min.js'))
-    .pipe(minifyJS())
+    .pipe(gulpif(!_DEBUG, minifyJS()))
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
@@ -46,7 +51,7 @@ gulp.task('core-minify-js', function () {
 gulp.task('mod-minify-js', function () {
     gulp.src(_MOD)
     .pipe(concat('mod.min.js'))
-    .pipe(minifyJS())
+    .pipe(gulpif(!_DEBUG, minifyJS()))
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
@@ -54,7 +59,7 @@ gulp.task('mod-minify-js', function () {
 gulp.task('dev-minify-js', function () {
     gulp.src(_DEV)
     .pipe(concat('dev.min.js'))
-    .pipe(minifyJS())
+    .pipe(gulpif(!_DEBUG, minifyJS()))
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
@@ -63,7 +68,7 @@ gulp.task('libs-js', function(){
 	gulp.src(_LIBS)
     .pipe(concat('libs.min.js'))
     .pipe(stripDebug())
-    .pipe(minifyJS())
+    .pipe(gulpif(!_DEBUG, minifyJS()))
     .pipe(gulp.dest('game/assets/js'))
     .pipe(reload({stream: true, once: true}));
 });
