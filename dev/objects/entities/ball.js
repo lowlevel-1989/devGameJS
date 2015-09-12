@@ -10,6 +10,34 @@
    ball.elastic  = 1; 
    ball.applyGravity();
 
+   ball.touchStart(function(event){
+      this.vy = 0;
+      this.gravity = 0;
+   });
+
+   ball.touchMove(function(event){
+      this.x = event.x+(event.width/4);
+      this.y = event.y+(event.height/4);
+   });
+
+   ball.touchEnd(function(event){
+      this.gravity = 0.98;
+   });
+
+   ball.mouseDown(function(event){
+      this.vy = 0;
+      this.gravity = 0;
+   });
+
+   ball.mouseMove(function(event){
+      this.x = event.x+(event.width/4);
+      this.y = event.y+(event.height/4);
+   });
+
+   ball.mouseUp(function(event){
+      this.gravity = 0.98;
+   });
+
    ball.applyReaction = function(other){
       // eliminarte a ti mismo
       this.delete();

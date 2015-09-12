@@ -1,4 +1,4 @@
-require('./events/_keyboard');
+require('./events');
 
 var _gameObjects  = require('./_gameObjects');
 var _objects      = require('./objects');

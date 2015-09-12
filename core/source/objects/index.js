@@ -6,6 +6,8 @@ var _preUpdate      = require('./_preUpdate');
 var _postUpdate     = require('./_postUpdate');
 var _on             = require('./_on');
 var _emit           = require('./_emit');
+var _touch          = require('../events/_touch');
+var _mouse          = require('../events/_mouse');
 
 module.exports = {
    new:            _new,
@@ -17,4 +19,10 @@ module.exports = {
    postUpdate:     _postUpdate,
    on:             _on,
    emit:           _emit,
+   touchStart:     _touch.start,
+   touchEnd:       _touch.end,
+   touchMove:      _touch.move,
+   mouseDown:      _mouse.down,
+   mouseUp:        _mouse.up,
+   mouseMove:      _mouse.move
 };

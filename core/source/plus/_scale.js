@@ -21,10 +21,15 @@ function setScale(){
    var h     = _canvas.main.height;
    var scale = Math.min(window.innerHeight / h, window.innerWidth / w);
 
+   _canvas.main.style.width  = w + 'px';
+   _canvas.main.style.height = h + 'px';
+   _canvas.main.style.left   = 0 + 'px';
+   _canvas.main.style.top    = 0 + 'px';
+
    switch(current) {
       case 'to fill':
-         _canvas.main.style.width  = '100%';
-         _canvas.main.style.height = '100%';
+         _canvas.main.style.width  = window.innerWidth  + 'px';
+         _canvas.main.style.height = window.innerHeight + 'px';
          break;
       case 'aspect fit':
          _canvas.main.style.width  = (w * scale) + 'px';
@@ -35,6 +40,13 @@ function setScale(){
       case 'aspect fill':
          console.log('Trabajando...');
    }
+
+   window.devGameJs.width       = w;
+   window.devGameJs.height      = h;
+   window.devGameJs.scaleWidth  = parseFloat(_canvas.main.style.width.replace('px', ''));
+   window.devGameJs.scaleHeight = parseFloat(_canvas.main.style.height.replace('px', ''));
+   window.devGameJs.scaleLeft   = parseFloat(_canvas.main.style.left.replace('px', ''));
+   window.devGameJs.scaleTop    = parseFloat(_canvas.main.style.top.replace('px', ''));
 }
 
 module.exports = setScale;

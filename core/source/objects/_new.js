@@ -12,6 +12,7 @@ function init(){
    this.elastic     = 0;
    this.listen      = {};
    this.layer       = 9;
+   this.touchMe     = false;
 }
 
 module.exports = function(){

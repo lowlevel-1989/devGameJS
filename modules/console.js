@@ -10,6 +10,7 @@
 
       return {
          init : function(){
+            window.console.info = window.console.log;
             window.console.log = function(log, clear){
                if (!active)
                   return;

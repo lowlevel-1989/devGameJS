@@ -5,6 +5,8 @@ var _gameInterval = require('./_gameInterval');
 var _getRequestAnimationFrame = require('./_getRequestAnimationFrame');
 
 function startGame(){
+   // devGameJs.addObject = function(){};
+   // devGameJs.addModule = function(){};
    var animationFrame = _getRequestAnimationFrame(_fps.interval);
    var PAUSE = _state.getAll().PAUSE;
    var STATE = _state.get;

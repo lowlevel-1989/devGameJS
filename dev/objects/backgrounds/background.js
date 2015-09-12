@@ -1,6 +1,6 @@
 ﻿var background = devGameJs.objects.new();
-background.width    = 900;
-background.height   = 400;
+background.width    = devGameJs.width;
+background.height   = devGameJs.height;
 background.layer    = 0;
 
 background.draw = function(ctx){
