@@ -37,6 +37,7 @@
     "karma-htmlfile-reporter": "^0.2.2",
     "karma-phantomjs-launcher": "^0.2.1",
     "nib": "^1.1.0",
+    "path": "^0.11.14",
     "phantomjs": "^1.9.18"
   }
 }
