@@ -1,4 +1,4 @@
-describe('DevGameJs', function(){
+describe('devGameJs', function(){
 
    it('Se creo la class devGameJs?', function(){
       
