@@ -1,3 +1,5 @@
+devGameJs.setup({title: 'DevGameJS', width: 900, height: 400, scale: 'aspect fit'});
+
 describe('devGameJs', function(){
 
    it('Se creo la class devGameJs?', function(){
