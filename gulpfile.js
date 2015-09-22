@@ -16,9 +16,6 @@ var stripDebug  = require('gulp-strip-debug');
 var karma       = require('karma').Server;
 var path        = require('path');
 
-
-var _DEBUG = true;
-
 var _KARMA_CONFIG = 'test/karma.config.js';
 
 // WARNING CORE
@@ -32,6 +29,8 @@ var _HTML   = 'core/static/**/*.html';
 var _IMGS   = 'resource/**/*.png';
 var _LIBS   = 'libs/**/*.js';
 var _STYLUS = 'core/stylus/**/*.styl';
+
+var _DEBUG  = false;
 
 gulp.task('minify-css', function () {
    gulp.src(_STYLUS)
@@ -120,11 +119,14 @@ gulp.task('test', function(done){
 });
 
 gulp.task('dist', ['clean'], function() {
+   if (process.argv[3] === '--debug')
+      _DEBUG = true;
    gulp.start('libs-js', 'copyImgs', 'minify-css', 'minify-html', 'core-minify-js', 'mod-minify-js', 'dev-minify-js', 'lint');
 });
 
-gulp.task('server', function() {
-   gulp.start('server-start', 'watch');
+gulp.task('server', ['server-start'], function() {
+   if (process.argv[3] === '--watch')
+      gulp.start('watch');
 });
 
 gulp.task('clean', function(cb) {
