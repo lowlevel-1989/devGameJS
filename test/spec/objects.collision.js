@@ -1,20 +1,19 @@
+var objA   = devGameJs.objects.new();
+var objB = devGameJs.objects.new();
+
+objA.title = 'soyVinicio';
+objA.applyCollision();
+
+objB.applyReaction = function(other){
+   objB.result = other.title;
+};
+
+devGameJs.addObject(objA);
+devGameJs.addObject(objB);
+
 describe('objects.collision', function(){
-
-   var objA   = devGameJs.objects.new();
-   var objB = devGameJs.objects.new();
    
-   objA.title = 'soyVinicio';
-   objA.applyCollision();
-
    var response = false;
-
-   objB.applyReaction = function(other){
-      objB.result = other.title;
-   };
-
-   devGameJs.addObject(objA);
-   devGameJs.addObject(objB);
-
 
    it('Funcionando el sistema de colision?', function(){
       

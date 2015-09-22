@@ -1,19 +1,19 @@
-describe('devGameJs.module', function(){
-
-   function module(oBinding){
-
-      function print(string){
-         return string;
-      }
-
-      return {
-         print : print
-      };
+devGameJs.addModule('print', function (oBinding){
+   function print(string){
+      return string;
    }
 
+   return {
+      print : print
+   };
+});
+
+devGameJs.startGame();
+
+
+describe('devGameJs.module', function(){
+
    it('Se crea un nuevo modulo?', function(){
-      devGameJs.addModule('print', module);
-      devGameJs.startGame();
       expect('print' in devGameJs.module('print') ? true : false).toBe(true);
    });
 
