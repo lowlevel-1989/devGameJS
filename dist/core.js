@@ -2,7 +2,12 @@
 (function() {
   var DevGame;
 
-  DevGame = function() {
+  module.exports = DevGame = function(canvas) {
+    if (!canvas) {
+      console.error('require canvas');
+    }
+    this.canvas = canvas;
+    this.context = canvas.getContext('2d');
     return this;
   };
 

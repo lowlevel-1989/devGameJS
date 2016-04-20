@@ -9,20 +9,82 @@ module.exports = function(interval) {
 },{}],2:[function(require,module,exports){
 var DevGame;
 
-module.exports = DevGame = function() {
+module.exports = DevGame = function(canvas) {
+  if (!canvas) {
+    console.error('require canvas');
+  }
+  this.canvas = canvas;
+  this.context = canvas.getContext('2d');
+  this.timeElapsed = new Date().getTime();
   return this;
 };
 
 
 },{}],3:[function(require,module,exports){
+module.exports = function(timestamp) {
+  var delta;
+  delta = timestamp - this.timeElapsed;
+  this.timeElapsed = timestamp;
+  return delta;
+};
+
+
+},{}],4:[function(require,module,exports){
+module.exports = function() {
+  if (this.frame === this.frameCurrent) {
+    this.context.fillStyle = this.color;
+    this.context.fillRect(this.x, this.y, this.width, this.height);
+    return this.frameCurrent = 0;
+  } else {
+    return this.frameCurrent++;
+  }
+};
+
+
+},{}],5:[function(require,module,exports){
+var Entity;
+
+Entity = function(context) {
+  this.x = 0;
+  this.y = 0;
+  this.dx = 0;
+  this.dy = 0;
+  this.width = 0;
+  this.height = 0;
+  this.color = '#000';
+  this.frame = 0;
+  this.frameCurrent = 0;
+  this.context = context;
+  return this;
+};
+
+Entity.prototype.draw = require('./draw');
+
+Entity.prototype.move = require('./move');
+
+module.exports = Entity;
+
+
+},{"./draw":4,"./move":6}],6:[function(require,module,exports){
+module.exports = function(delta) {
+  this.x += (delta * this.dx) / 1000;
+  return this.y += (delta * this.dy) / 1000;
+};
+
+
+},{}],7:[function(require,module,exports){
 var DevGame;
 
 DevGame = require('./core');
 
 DevGame.prototype.animate = require('./animate');
 
+DevGame.prototype.delta = require('./delta');
+
+DevGame.Entity = require('./entity');
+
 module.exports = DevGame;
 
 
-},{"./animate":1,"./core":2}]},{},[3])(3)
+},{"./animate":1,"./core":2,"./delta":3,"./entity":5}]},{},[7])(7)
 });

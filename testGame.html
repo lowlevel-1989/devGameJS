@@ -1,0 +1,107 @@
+<canvas id="game" width="800" height="600" style="background: #000"></canvas>
+
+<script src="devGame.js"></script>
+
+<script>
+  var canvas = document.getElementById('game')
+  var game = new DevGame(canvas)
+  
+  var entities = []
+
+  var nave = new DevGame.Entity(game.context)
+
+  game.speed = 300
+
+  nave.x      = 370
+  nave.y      = 550
+  nave.width  = 40
+  nave.height = 25
+  nave.color  = '#00F'
+
+  nave.keyDown = function(event){
+    if (event.keyCode === 65){
+      this.btnLeft = true
+    }else if(event.keyCode === 68){
+      this.btnrRight = true
+    }
+  }
+
+  nave.keyUp = function(event){
+    if (event.keyCode === 65){
+      this.btnLeft = false 
+    }else if(event.keyCode === 68){
+      this.btnrRight = false
+    }
+  }
+
+  nave.logic = function(delta){
+    this.dx = 0
+    if (this.btnLeft){
+      this.dx = -game.speed
+      if (this.dx < 0 && this.x < 10){
+        return
+      }else{
+        this.move(delta)
+      }
+    }
+    if (this.btnrRight){
+      this.dx = +game.speed
+      if (this.dx > 0 && this.x > canvas.width - (this.width+10)){
+        return
+      }else{
+        this.move(delta)
+      }
+    }
+  }
+
+  entities.push(nave)
+
+  for (var row=0; row<5; row++){
+    for (var x=0; x<12; x++){
+      var alien = new DevGame.Entity(game.context)
+      alien.x = 100+x*50
+      alien.y = 50+row*30
+      alien.width = 40
+      alien.height = 25
+      alien.color = '#0F0'
+      entities.push(alien)
+    }
+  }
+  
+  function logic(delta){
+    nave.logic(delta)
+  }
+
+  function draw(){
+    for (var x=0, n=entities.length; x<n; x++){
+      entities[x].draw()
+    }
+  }
+
+
+  var frame  = game.animate(60)
+  function gameloop(timestamp){ 
+
+    var delta = game.delta(timestamp)
+
+    game.context.clearRect(0, 0, canvas.width, canvas.height)
+
+    logic(delta)
+    draw()
+
+    frame(gameloop)
+  }
+  frame(gameloop)
+
+  
+  window.addEventListener('keydown', function(event){
+    event.preventDefault()
+    nave.keyDown(event)
+  }, false)
+
+  window.addEventListener('keyup', function(event){
+    event.preventDefault()
+    nave.keyUp(event)
+  }, false)
+  
+</script>
