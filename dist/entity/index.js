@@ -13,10 +13,17 @@
     this.frame = 0;
     this.frameCurrent = 0;
     this.context = context;
+    this.listen = {};
     return this;
   };
 
   Entity.prototype.draw = require('./draw');
+
+  Entity.prototype.move = require('./move');
+
+  Entity.prototype.on = require('./on');
+
+  Entity.prototype.emit = require('./emit');
 
   module.exports = Entity;
 

@@ -15,7 +15,6 @@ module.exports = DevGame = function(canvas) {
   }
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
-  this.timeElapsed = new Date().getTime();
   return this;
 };
 
@@ -23,6 +22,9 @@ module.exports = DevGame = function(canvas) {
 },{}],3:[function(require,module,exports){
 module.exports = function(timestamp) {
   var delta;
+  if (!this.timeElapsed) {
+    this.timeElapsed = timestamp;
+  }
   delta = timestamp - this.timeElapsed;
   this.timeElapsed = timestamp;
   return delta;
@@ -30,6 +32,14 @@ module.exports = function(timestamp) {
 
 
 },{}],4:[function(require,module,exports){
+var entities;
+
+entities = [];
+
+module.exports = entities;
+
+
+},{}],5:[function(require,module,exports){
 module.exports = function() {
   if (this.frame === this.frameCurrent) {
     this.context.fillStyle = this.color;
@@ -41,7 +51,33 @@ module.exports = function() {
 };
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+var entities;
+
+entities = require('../entities');
+
+module.exports = function(id, args) {
+  var _entities, entity, i, key, n, ref, results, x;
+  if (args == null) {
+    args = [];
+  }
+  n = args.length;
+  _entities = entities.filter(function(entity) {
+    return typeof entity.listen[id] === 'function';
+  });
+  x = _entities.length - 1;
+  results = [];
+  for (key = i = 0, ref = x; 0 <= ref ? i <= ref : i >= ref; key = 0 <= ref ? ++i : --i) {
+    entity = _entities[key];
+    args[n] = key;
+    args[n + 1] = x;
+    results.push(entity.listen[id].apply(entity, args));
+  }
+  return results;
+};
+
+
+},{"../entities":4}],7:[function(require,module,exports){
 var Entity;
 
 Entity = function(context) {
@@ -55,6 +91,7 @@ Entity = function(context) {
   this.frame = 0;
   this.frameCurrent = 0;
   this.context = context;
+  this.listen = {};
   return this;
 };
 
@@ -62,29 +99,43 @@ Entity.prototype.draw = require('./draw');
 
 Entity.prototype.move = require('./move');
 
+Entity.prototype.on = require('./on');
+
+Entity.prototype.emit = require('./emit');
+
 module.exports = Entity;
 
 
-},{"./draw":4,"./move":6}],6:[function(require,module,exports){
+},{"./draw":5,"./emit":6,"./move":8,"./on":9}],8:[function(require,module,exports){
 module.exports = function(delta) {
   this.x += (delta * this.dx) / 1000;
   return this.y += (delta * this.dy) / 1000;
 };
 
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+module.exports = function(id, callback) {
+  return this.listen[id] = callback;
+};
+
+
+},{}],10:[function(require,module,exports){
 var DevGame;
 
 DevGame = require('./core');
 
 DevGame.prototype.animate = require('./animate');
 
+DevGame.prototype.entities = require('./entities');
+
 DevGame.prototype.delta = require('./delta');
+
+DevGame.prototype.emit = require('./entity/emit');
 
 DevGame.Entity = require('./entity');
 
 module.exports = DevGame;
 
 
-},{"./animate":1,"./core":2,"./delta":3,"./entity":5}]},{},[7])(7)
+},{"./animate":1,"./core":2,"./delta":3,"./entities":4,"./entity":7,"./entity/emit":6}]},{},[10])(10)
 });

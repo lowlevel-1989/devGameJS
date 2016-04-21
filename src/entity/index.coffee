@@ -9,9 +9,12 @@ Entity = (context) ->
   @frame = 0
   @frameCurrent = 0
   @context = context
+  @listen  = {}
   @
 
 Entity.prototype.draw = require './draw'
 Entity.prototype.move = require './move'
+Entity.prototype.on = require './on'
+Entity.prototype.emit = require './emit'
 
 module.exports = Entity

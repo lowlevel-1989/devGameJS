@@ -6,16 +6,13 @@
   var canvas = document.getElementById('game')
   var game = new DevGame(canvas)
   
-  var entities = []
-
   var nave = new DevGame.Entity(game.context)
-
-  game.speed = 300
 
   nave.x      = 370
   nave.y      = 550
   nave.width  = 40
   nave.height = 25
+  nave.speed  = 300
   nave.color  = '#00F'
 
   nave.keyDown = function(event){
@@ -37,7 +34,7 @@
   nave.logic = function(delta){
     this.dx = 0
     if (this.btnLeft){
-      this.dx = -game.speed
+      this.dx = -this.speed
       if (this.dx < 0 && this.x < 10){
         return
       }else{
@@ -45,8 +42,8 @@
       }
     }
     if (this.btnrRight){
-      this.dx = +game.speed
-      if (this.dx > 0 && this.x > canvas.width - (this.width+10)){
+      this.dx = +this.speed
+      if (this.dx > 0 && this.x > canvas.width - (this.width + 10)){
         return
       }else{
         this.move(delta)
@@ -54,27 +51,53 @@
     }
   }
 
-  entities.push(nave)
+  game.entities.push(nave)
 
   for (var row=0; row<5; row++){
     for (var x=0; x<12; x++){
+
       var alien = new DevGame.Entity(game.context)
+      
       alien.x = 100+x*50
       alien.y = 50+row*30
       alien.width = 40
       alien.height = 25
+      alien.speed = 75
+      alien.dx    = -alien.speed
       alien.color = '#0F0'
-      entities.push(alien)
+
+      alien.on('alien:collision', function(x, finish){
+        this.dx = -this.dx
+        this.y += 10
+        if (x === finish){
+          game.alertAlien = false
+        }
+      })
+
+      game.alertAlien = false
+      alien.logic = function(delta){
+        if ((this.dx < 0 && this.x < 10) || (this.dx > 0 && this.x > canvas.width - (this.width + 10))){
+          game.alertAlien = true
+        }  
+        this.move(delta)
+      }
+
+      game.entities.push(alien)
     }
   }
   
   function logic(delta){
-    nave.logic(delta)
+    for (var x=0, n=game.entities.length; x<n; x++){
+      game.entities[x].logic(delta)
+    }
+    if (game.alertAlien){
+      game.emit('alien:collision')
+    }
   }
 
   function draw(){
-    for (var x=0, n=entities.length; x<n; x++){
-      entities[x].draw()
+    for (var x=0, n=game.entities.length; x<n; x++){
+      game.entities[x].draw()
     }
   }
 
