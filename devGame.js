@@ -1,7 +1,9 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.DevGame = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = function(interval) {
+module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
-    return window.setTimeout(callback, interval);
+    return window.setTimeout(function() {
+      return callback(+(new Date));
+    }, 1000 / 60);
   };
 };
 
@@ -9,12 +11,7 @@ module.exports = function(interval) {
 },{}],2:[function(require,module,exports){
 var DevGame;
 
-module.exports = DevGame = function(canvas) {
-  if (!canvas) {
-    console.error('require canvas');
-  }
-  this.canvas = canvas;
-  this.context = canvas.getContext('2d');
+module.exports = DevGame = function() {
   return this;
 };
 
@@ -40,10 +37,10 @@ module.exports = entities;
 
 
 },{}],5:[function(require,module,exports){
-module.exports = function() {
+module.exports = function(context) {
   if (this.frame === this.frameCurrent) {
-    this.context.fillStyle = this.color;
-    this.context.fillRect(this.x, this.y, this.width, this.height);
+    context.fillStyle = this.color;
+    context.fillRect(this.x, this.y, this.width, this.height);
     return this.frameCurrent = 0;
   } else {
     return this.frameCurrent++;
@@ -80,18 +77,32 @@ module.exports = function(id, args) {
 },{"../entities":4}],7:[function(require,module,exports){
 var Entity;
 
-Entity = function(context) {
-  this.x = 0;
-  this.y = 0;
+Entity = function(x, y, width, height) {
+  if (x == null) {
+    x = 0;
+  }
+  if (y == null) {
+    y = 0;
+  }
+  if (width == null) {
+    width = 0;
+  }
+  if (height == null) {
+    height = 0;
+  }
+  this.x = x;
+  this.y = y;
+  this.layer = 0;
+  this.width = width;
+  this.height = height;
   this.dx = 0;
   this.dy = 0;
-  this.width = 0;
-  this.height = 0;
+  this.speed = 0;
   this.color = '#000';
   this.frame = 0;
   this.frameCurrent = 0;
-  this.context = context;
   this.listen = {};
+  this["super"] = Object.create(Entity.prototype);
   return this;
 };
 
@@ -102,6 +113,8 @@ Entity.prototype.move = require('./move');
 Entity.prototype.on = require('./on');
 
 Entity.prototype.emit = require('./emit');
+
+Entity.prototype.logic = function() {};
 
 module.exports = Entity;
 
@@ -132,10 +145,20 @@ DevGame.prototype.delta = require('./delta');
 
 DevGame.prototype.emit = require('./entity/emit');
 
+DevGame.prototype.sortLayer = require('./sortLayer');
+
 DevGame.Entity = require('./entity');
 
 module.exports = DevGame;
 
 
-},{"./animate":1,"./core":2,"./delta":3,"./entities":4,"./entity":7,"./entity/emit":6}]},{},[10])(10)
+},{"./animate":1,"./core":2,"./delta":3,"./entities":4,"./entity":7,"./entity/emit":6,"./sortLayer":11}],11:[function(require,module,exports){
+module.exports = function() {
+  return this.entities.sort(function(entityA, entityB) {
+    return entityA.layer - entityB.layer;
+  });
+};
+
+
+},{}]},{},[10])(10)
 });

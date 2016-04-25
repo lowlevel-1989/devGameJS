@@ -1,120 +1,199 @@
 <canvas id="game" width="800" height="600" style="background: #000"></canvas>
 
 <script src="devGame.js"></script>
+<script src="stats.min.js"></script>
 
 <script>
-  var canvas = document.getElementById('game')
-  var game = new DevGame(canvas)
+  var canvas  = document.getElementById('game')
+  var context = canvas.getContext('2d')
+  var game = new DevGame()
+
+
+  var stats = new Stats()
+  stats.showPanel(0)
+   
+  stats.dom.style.left = '720px'
+  stats.dom.style.top  = '10px'
+   
+  document.body.appendChild(stats.dom)
+
+
+  function Fire(x, y){
+    DevGame.Entity.call(this, x, y-30, 2, 30)
+    this.color = '#FF0'
+    this.speed = -300
+    this.dy = this.speed
+    this.layer = 2
+  }
+
+  Fire.prototype = Object.create(DevGame.Entity.prototype)
+
+  Fire.prototype.logic = function(delta){
+    this.move(delta)
+  }
+
+  Fire.prototype.move = function(delta){
+    this.super.move.call(this, delta)
+    if (this.y < -20){
+      //eliminar disparo
+    }
+  }
   
-  var nave = new DevGame.Entity(game.context)
-
-  nave.x      = 370
-  nave.y      = 550
-  nave.width  = 40
-  nave.height = 25
-  nave.speed  = 300
-  nave.color  = '#00F'
-
-  nave.keyDown = function(event){
-    if (event.keyCode === 65){
-      this.btnLeft = true
-    }else if(event.keyCode === 68){
-      this.btnrRight = true
+  
+  function Nave(x, y, width, height, speed, color){
+    DevGame.Entity.call(this, x, y, width, height)
+    this.speed = speed
+    this.color = color
+    this.layer = 1
+    this.btn = {
+      left: false,
+      right: false,
+      fire: false
     }
   }
 
-  nave.keyUp = function(event){
+  Nave.prototype = Object.create(DevGame.Entity.prototype)
+
+  Nave.prototype.keyDown = function(event){
     if (event.keyCode === 65){
-      this.btnLeft = false 
+      this.btn.left = true
     }else if(event.keyCode === 68){
-      this.btnrRight = false
+      this.btn.right = true
+    }else if(event.keyCode === 32){
+      this.btn.fire = true
     }
   }
 
-  nave.logic = function(delta){
+  Nave.prototype.keyUp = function(event){
+    if (event.keyCode === 65){
+      this.btn.left = false 
+    }else if(event.keyCode === 68){
+      this.btn.right = false
+    }else if(event.keyCode === 32){
+      this.btn.fire = false
+    }
+  }
+
+  Nave.prototype.move = function(delta){
     this.dx = 0
-    if (this.btnLeft){
+    if (this.btn.left){
       this.dx = -this.speed
-      if (this.dx < 0 && this.x < 10){
-        return
-      }else{
-        this.move(delta)
-      }
     }
-    if (this.btnrRight){
+    if (this.btn.right){
       this.dx = +this.speed
-      if (this.dx > 0 && this.x > canvas.width - (this.width + 10)){
-        return
-      }else{
-        this.move(delta)
-      }
+    }
+    if ( (this.dx < 0 && this.x < 10 ) || (this.dx > 0 && this.x > canvas.width - (this.width + 10)) ){
+      return
+    }
+    this.super.move.call(this, delta)
+  }
+
+  Nave.prototype.fire = function(){
+    if (this.btn.fire){
+      var fire = new Fire(this.x+(this.width/2), this.y)
+      game.entities.push(fire)
     }
   }
+
+  Nave.prototype.logic = function(delta){
+    this.move(delta)
+    this.fire()
+  }
+
+
+  function Alien(x, y, width, height, speed, color){
+    DevGame.Entity.call(this, x, y, width, height)
+    this.speed = speed
+    this.dx = -this.speed
+    this.color = color
+    this.layer = 3
+
+    this.on('alien:collision', function(i, finish){
+      this.dx = -this.dx
+      this.y += 10
+      if (i === finish){
+        game.alertAlien = false
+      }
+    })
+  }
+
+  Alien.prototype = Object.create(DevGame.Entity.prototype)
+
+  Alien.prototype.move = function(delta){
+    if ((this.dx < 0 && this.x < 10) || (this.dx > 0 && this.x > canvas.width - (this.width + 10))){
+      game.alertAlien = true
+    }  
+    this.super.move.call(this, delta)
+  }
+
+  Alien.prototype.logic = function(delta){
+    this.move(delta)
+  }
+
+
+
+
+  game.alertAlien = false
+  var nave = new Nave(370, 550, 40, 25, 300, '#00F')
 
   game.entities.push(nave)
 
   for (var row=0; row<5; row++){
     for (var x=0; x<12; x++){
-
-      var alien = new DevGame.Entity(game.context)
-      
-      alien.x = 100+x*50
-      alien.y = 50+row*30
-      alien.width = 40
-      alien.height = 25
-      alien.speed = 75
-      alien.dx    = -alien.speed
-      alien.color = '#0F0'
-
-      alien.on('alien:collision', function(x, finish){
-        this.dx = -this.dx
-        this.y += 10
-        if (x === finish){
-          game.alertAlien = false
-        }
-      })
-
-      game.alertAlien = false
-      alien.logic = function(delta){
-        if ((this.dx < 0 && this.x < 10) || (this.dx > 0 && this.x > canvas.width - (this.width + 10))){
-          game.alertAlien = true
-        }  
-        this.move(delta)
-      }
-
+      var alien = new Alien(100+x*50, 50+row*30, 40, 25, 75, '#0F0')
       game.entities.push(alien)
     }
   }
   
-  function logic(delta){
-    for (var x=0, n=game.entities.length; x<n; x++){
-      game.entities[x].logic(delta)
-    }
-    if (game.alertAlien){
-      game.emit('alien:collision')
-    }
+  game.showFps = function(context){
+    context.fillStyle = '#FFF'
+    context.font      = "normal 16pt Arial"
+    context.fillText(this.nFps + ' fps', 10, 26)
   }
 
-  function draw(){
-    for (var x=0, n=game.entities.length; x<n; x++){
-      game.entities[x].draw()
+  game.logic = function(timestamp){
+
+    var delta = this.delta(timestamp)
+    
+    for (var x=0, n=this.entities.length; x<n; x++){
+      this.entities[x].logic(delta)
     }
+    if (this.alertAlien){
+      this.emit('alien:collision')
+    }
+
+    this.sortLayer()
+    this.nFps = ((1/delta)*1000) | 1
+  }
+
+  game.draw = function(context){
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    for (var x=0, n=this.entities.length; x<n; x++){
+      this.entities[x].draw(context)
+    }
+    this.showFps(context)
   }
 
 
-  var frame  = game.animate(60)
-  function gameloop(timestamp){ 
+  game.fps = 30
+  game.interval = 1000/game.fps
 
-    var delta = game.delta(timestamp)
+  var cycleFrame  = game.animate()
+  game.loop = function(timestamp){ 
 
-    game.context.clearRect(0, 0, canvas.width, canvas.height)
+    stats.begin()
 
-    logic(delta)
-    draw()
+    game.logic(timestamp)
+    game.draw(context)
+    
+    stats.end()
 
-    frame(gameloop)
+
+    setTimeout(function() {
+      cycleFrame(game.loop)
+    }, game.interval)
   }
-  frame(gameloop)
+  cycleFrame(game.loop)
 
   
   window.addEventListener('keydown', function(event){

@@ -1,5 +1,1 @@
-module.exports = DevGame = (canvas) ->
-  if !canvas then console.error 'require canvas'
-  @canvas  = canvas
-  @context = canvas.getContext '2d'
-  return @
+module.exports = DevGame = () -> @

@@ -2,18 +2,32 @@
 (function() {
   var Entity;
 
-  Entity = function(context) {
-    this.x = 0;
-    this.y = 0;
+  Entity = function(x, y, width, height) {
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    if (width == null) {
+      width = 0;
+    }
+    if (height == null) {
+      height = 0;
+    }
+    this.x = x;
+    this.y = y;
+    this.layer = 0;
+    this.width = width;
+    this.height = height;
     this.dx = 0;
     this.dy = 0;
-    this.width = 0;
-    this.height = 0;
+    this.speed = 0;
     this.color = '#000';
     this.frame = 0;
     this.frameCurrent = 0;
-    this.context = context;
     this.listen = {};
+    this["super"] = Object.create(Entity.prototype);
     return this;
   };
 
@@ -24,6 +38,8 @@
   Entity.prototype.on = require('./on');
 
   Entity.prototype.emit = require('./emit');
+
+  Entity.prototype.logic = function() {};
 
   module.exports = Entity;
 

@@ -1,7 +1,7 @@
-module.exports = () ->
+module.exports = (context) ->
   if @frame == @frameCurrent
-    @context.fillStyle = @color
-    @context.fillRect @x, @y, @width, @height
+    context.fillStyle = @color
+    context.fillRect @x, @y, @width, @height
     @frameCurrent = 0
   else
     @frameCurrent++
