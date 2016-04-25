@@ -1,5 +1,5 @@
 module.exports = (timestamp) ->
-  this.timeElapsed = timestamp if !this.timeElapsed
-  delta = timestamp - this.timeElapsed
-  this.timeElapsed = timestamp
+  @timeElapsed = timestamp if !@timeElapsed
+  delta = timestamp - @timeElapsed
+  @timeElapsed = timestamp
   return delta

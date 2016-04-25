@@ -14,10 +14,13 @@ Entity = (x=0, y=0, width=0, height=0) ->
   @super = Object.create(Entity.prototype)
   @
 
-Entity.prototype.draw = require './draw'
-Entity.prototype.move = require './move'
-Entity.prototype.on = require './on'
-Entity.prototype.emit = require './emit'
+Entity.prototype.draw  = require './draw'
+Entity.prototype.move  = require './move'
+Entity.prototype.on    = require './on'
+Entity.prototype.emit  = require './emit'
 Entity.prototype.logic = () ->
+
+Entity.prototype.collision     = require './collision'
+Entity.prototype.collisionRect = require './collision/rect'
 
 module.exports = Entity

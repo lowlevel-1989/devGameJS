@@ -2,10 +2,10 @@
 (function() {
   module.exports = function(attr) {
     if (attr == null) {
-      attr = 'layer';
+      attr = 'dead';
     }
-    return this.entities.sort(function(entityA, entityB) {
-      return entityA[attr] - entityB[attr];
+    return this.entities = this.entities.filter(function(entity) {
+      return entity[attr] !== true;
     });
   };
 

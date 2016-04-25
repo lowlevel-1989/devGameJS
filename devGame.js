@@ -9,6 +9,17 @@ module.exports = function() {
 
 
 },{}],2:[function(require,module,exports){
+module.exports = function(attr) {
+  if (attr == null) {
+    attr = 'dead';
+  }
+  return this.entities = this.entities.filter(function(entity) {
+    return entity[attr] !== true;
+  });
+};
+
+
+},{}],3:[function(require,module,exports){
 var DevGame;
 
 module.exports = DevGame = function() {
@@ -16,7 +27,7 @@ module.exports = DevGame = function() {
 };
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = function(timestamp) {
   var delta;
   if (!this.timeElapsed) {
@@ -28,7 +39,7 @@ module.exports = function(timestamp) {
 };
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var entities;
 
 entities = [];
@@ -36,7 +47,31 @@ entities = [];
 module.exports = entities;
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+module["export"] = function(obj) {
+  return this.collisionRect(obj);
+};
+
+
+},{}],7:[function(require,module,exports){
+module.exports = function(obj) {
+  if ((this.x + this.width) < obj.x) {
+    return false;
+  }
+  if ((this.y + this.height) < obj.y) {
+    return false;
+  }
+  if (this.x > (obj.x + obj.width)) {
+    return false;
+  }
+  if (this.y > (obj.y + obj.height)) {
+    return false;
+  }
+  return true;
+};
+
+
+},{}],8:[function(require,module,exports){
 module.exports = function(context) {
   if (this.frame === this.frameCurrent) {
     context.fillStyle = this.color;
@@ -48,7 +83,7 @@ module.exports = function(context) {
 };
 
 
-},{}],6:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var entities;
 
 entities = require('../entities');
@@ -74,7 +109,7 @@ module.exports = function(id, args) {
 };
 
 
-},{"../entities":4}],7:[function(require,module,exports){
+},{"../entities":5}],10:[function(require,module,exports){
 var Entity;
 
 Entity = function(x, y, width, height) {
@@ -116,23 +151,27 @@ Entity.prototype.emit = require('./emit');
 
 Entity.prototype.logic = function() {};
 
+Entity.prototype.collision = require('./collision');
+
+Entity.prototype.collisionRect = require('./collision/rect');
+
 module.exports = Entity;
 
 
-},{"./draw":5,"./emit":6,"./move":8,"./on":9}],8:[function(require,module,exports){
+},{"./collision":6,"./collision/rect":7,"./draw":8,"./emit":9,"./move":11,"./on":12}],11:[function(require,module,exports){
 module.exports = function(delta) {
   this.x += (delta * this.dx) / 1000;
   return this.y += (delta * this.dy) / 1000;
 };
 
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports = function(id, callback) {
   return this.listen[id] = callback;
 };
 
 
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var DevGame;
 
 DevGame = require('./core');
@@ -140,6 +179,8 @@ DevGame = require('./core');
 DevGame.prototype.animate = require('./animate');
 
 DevGame.prototype.entities = require('./entities');
+
+DevGame.prototype.clearEntities = require('./clearEntities');
 
 DevGame.prototype.delta = require('./delta');
 
@@ -152,13 +193,16 @@ DevGame.Entity = require('./entity');
 module.exports = DevGame;
 
 
-},{"./animate":1,"./core":2,"./delta":3,"./entities":4,"./entity":7,"./entity/emit":6,"./sortLayer":11}],11:[function(require,module,exports){
-module.exports = function() {
+},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./entities":5,"./entity":10,"./entity/emit":9,"./sortLayer":14}],14:[function(require,module,exports){
+module.exports = function(attr) {
+  if (attr == null) {
+    attr = 'layer';
+  }
   return this.entities.sort(function(entityA, entityB) {
-    return entityA.layer - entityB.layer;
+    return entityA[attr] - entityB[attr];
   });
 };
 
 
-},{}]},{},[10])(10)
+},{}]},{},[13])(13)
 });

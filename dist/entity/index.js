@@ -41,6 +41,10 @@
 
   Entity.prototype.logic = function() {};
 
+  Entity.prototype.collision = require('./collision');
+
+  Entity.prototype.collisionRect = require('./collision/rect');
+
   module.exports = Entity;
 
 }).call(this);
