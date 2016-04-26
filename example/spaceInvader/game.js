@@ -3,16 +3,8 @@ var context = canvas.getContext('2d')
 var game = new DevGame()
 
 
-
 var stats = new Stats()
-stats.showPanel(0)
-
-stats.dom.style.left = '720px'
-stats.dom.style.top  = '10px'
-
 document.body.appendChild(stats.dom)
-
-
 
 
 var nave = new Nave(370, 550, 40, 25, 300, '#00F')
@@ -28,7 +20,7 @@ for (var row=0; row<5; row++){
 
 
 game.showFps = function(context){
-  context.fillStyle = '#FFF'
+  context.fillStyle = '#000'
   context.font      = "normal 16pt Arial"
   context.fillText(this.nFps + ' fps', 10, 26)
 }
