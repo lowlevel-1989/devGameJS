@@ -13,6 +13,7 @@
     _entities = entities.filter(function(entity) {
       return typeof entity.listen[id] === 'function';
     });
+    _entities = _entities.all();
     x = _entities.length - 1;
     results = [];
     for (key = i = 0, ref = x; 0 <= ref ? i <= ref : i >= ref; key = 0 <= ref ? ++i : --i) {

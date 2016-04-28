@@ -23,11 +23,12 @@ module.exports = function(attr) {
 var DevGame;
 
 module.exports = DevGame = function() {
+  this.entities = require('./entities');
   return this;
 };
 
 
-},{}],4:[function(require,module,exports){
+},{"./entities":6}],4:[function(require,module,exports){
 module.exports = function(timestamp) {
   var delta;
   if (!this.timeElapsed) {
@@ -40,20 +41,77 @@ module.exports = function(timestamp) {
 
 
 },{}],5:[function(require,module,exports){
-var entities;
+var BASE, Block, SUPPORT_IMMUTABLE, SUPPORT_MUTABLE, i, j, len, len1, prop;
 
-entities = [];
+Block = function(entity) {
+  if (entity == null) {
+    entity = [];
+  }
+  this._entities = entity.json ? entity.json() : entity;
+  return this;
+};
 
-module.exports = entities;
+BASE = function(_prop, _immutable) {
+  if (_immutable == null) {
+    _immutable = false;
+  }
+  return function() {
+    if (_immutable) {
+      return new Block(this._entities[_prop].apply(this._entities, arguments));
+    } else {
+      return this._entities[_prop].apply(this._entities, arguments);
+    }
+  };
+};
+
+SUPPORT_MUTABLE = ['push', 'unshift', 'pop', 'splice', 'sort', 'reverse'];
+
+SUPPORT_IMMUTABLE = ['concat', 'map', 'filter', 'forEach'];
+
+for (i = 0, len = SUPPORT_MUTABLE.length; i < len; i++) {
+  prop = SUPPORT_MUTABLE[i];
+  Block.prototype[prop] = BASE(prop);
+}
+
+for (j = 0, len1 = SUPPORT_IMMUTABLE.length; j < len1; j++) {
+  prop = SUPPORT_IMMUTABLE[j];
+  Block.prototype[prop] = BASE(prop, true);
+}
+
+Block.prototype.json = Block.prototype.all = function() {
+  return this._entities;
+};
+
+Block.prototype.add = function() {
+  return this._entities.push.apply(this._entities, arguments);
+};
+
+Block.prototype.length = function() {
+  return this._entities.length;
+};
+
+Block.prototype.clear = function() {
+  return this._entities = [];
+};
+
+module.exports = Block;
 
 
 },{}],6:[function(require,module,exports){
+var Block;
+
+Block = require('./block');
+
+module.exports = new Block();
+
+
+},{"./block":5}],7:[function(require,module,exports){
 module["export"] = function(obj) {
   return this.collisionRect(obj);
 };
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = function(obj) {
   if ((this.x + this.width) < obj.x) {
     return false;
@@ -71,7 +129,7 @@ module.exports = function(obj) {
 };
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = function(context) {
   if (this.frame === this.frameCurrent) {
     context.fillStyle = this.color;
@@ -83,7 +141,7 @@ module.exports = function(context) {
 };
 
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var entities;
 
 entities = require('../entities');
@@ -97,6 +155,7 @@ module.exports = function(id, args) {
   _entities = entities.filter(function(entity) {
     return typeof entity.listen[id] === 'function';
   });
+  _entities = _entities.all();
   x = _entities.length - 1;
   results = [];
   for (key = i = 0, ref = x; 0 <= ref ? i <= ref : i >= ref; key = 0 <= ref ? ++i : --i) {
@@ -109,7 +168,7 @@ module.exports = function(id, args) {
 };
 
 
-},{"../entities":5}],10:[function(require,module,exports){
+},{"../entities":6}],11:[function(require,module,exports){
 var Entity;
 
 Entity = function(x, y, width, height) {
@@ -158,27 +217,25 @@ Entity.prototype.collisionRect = require('./collision/rect');
 module.exports = Entity;
 
 
-},{"./collision":6,"./collision/rect":7,"./draw":8,"./emit":9,"./move":11,"./on":12}],11:[function(require,module,exports){
+},{"./collision":7,"./collision/rect":8,"./draw":9,"./emit":10,"./move":12,"./on":13}],12:[function(require,module,exports){
 module.exports = function(delta) {
   this.x += (delta * this.dx) / 1000;
   return this.y += (delta * this.dy) / 1000;
 };
 
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 module.exports = function(id, callback) {
   return this.listen[id] = callback;
 };
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var DevGame;
 
 DevGame = require('./core');
 
 DevGame.prototype.animate = require('./animate');
-
-DevGame.prototype.entities = require('./entities');
 
 DevGame.prototype.clearEntities = require('./clearEntities');
 
@@ -193,7 +250,7 @@ DevGame.Entity = require('./entity');
 module.exports = DevGame;
 
 
-},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./entities":5,"./entity":10,"./entity/emit":9,"./sortLayer":14}],14:[function(require,module,exports){
+},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./entity":11,"./entity/emit":10,"./sortLayer":15}],15:[function(require,module,exports){
 module.exports = function(attr) {
   if (attr == null) {
     attr = 'layer';
@@ -204,5 +261,5 @@ module.exports = function(attr) {
 };
 
 
-},{}]},{},[13])(13)
+},{}]},{},[14])(14)
 });

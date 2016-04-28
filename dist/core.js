@@ -3,6 +3,7 @@
   var DevGame;
 
   module.exports = DevGame = function() {
+    this.entities = require('./entities');
     return this;
   };
 

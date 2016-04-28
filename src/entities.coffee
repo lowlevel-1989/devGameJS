@@ -1,3 +1,0 @@
-entities = []
-
-module.exports = entities

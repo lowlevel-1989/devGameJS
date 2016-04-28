@@ -1,1 +1,3 @@
-module.exports = DevGame = () -> @
+module.exports = DevGame = () ->
+  @entities = require './entities'
+  @
