@@ -10,7 +10,7 @@
 
   DevGame.prototype.delta = require('./delta');
 
-  DevGame.prototype.emit = require('./entity/emit');
+  DevGame.prototype.emit = require('./emit');
 
   DevGame.prototype.sortLayer = require('./sortLayer');
 

@@ -1,9 +1,7 @@
-entities = require '../entities'
-
 module.exports = (id, args=[]) ->
   n = args.length
   
-  _entities = entities.filter (entity) -> typeof entity.listen[id] is 'function'
+  _entities = this.entities.filter (entity) -> typeof entity.listen[id] is 'function'
 
   _entities = _entities.all()
   x = _entities.length-1

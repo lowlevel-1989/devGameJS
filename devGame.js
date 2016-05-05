@@ -28,7 +28,7 @@ module.exports = DevGame = function() {
 };
 
 
-},{"./entities":6}],4:[function(require,module,exports){
+},{"./entities":7}],4:[function(require,module,exports){
 module.exports = function(timestamp) {
   var delta;
   if (!this.timeElapsed) {
@@ -41,6 +41,29 @@ module.exports = function(timestamp) {
 
 
 },{}],5:[function(require,module,exports){
+module.exports = function(id, args) {
+  var _entities, entity, i, key, n, ref, results, x;
+  if (args == null) {
+    args = [];
+  }
+  n = args.length;
+  _entities = this.entities.filter(function(entity) {
+    return typeof entity.listen[id] === 'function';
+  });
+  _entities = _entities.all();
+  x = _entities.length - 1;
+  results = [];
+  for (key = i = 0, ref = x; 0 <= ref ? i <= ref : i >= ref; key = 0 <= ref ? ++i : --i) {
+    entity = _entities[key];
+    args[n] = key;
+    args[n + 1] = x;
+    results.push(entity.listen[id].apply(entity, args));
+  }
+  return results;
+};
+
+
+},{}],6:[function(require,module,exports){
 var BASE, Block, SUPPORT_IMMUTABLE, SUPPORT_MUTABLE, i, j, len, len1, prop;
 
 Block = function(entity) {
@@ -97,7 +120,7 @@ Block.prototype.clear = function() {
 module.exports = Block;
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var Block;
 
 Block = require('./block');
@@ -105,13 +128,13 @@ Block = require('./block');
 module.exports = new Block();
 
 
-},{"./block":5}],7:[function(require,module,exports){
+},{"./block":6}],8:[function(require,module,exports){
 module["export"] = function(obj) {
   return this.collisionRect(obj);
 };
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = function(obj) {
   if ((this.x + this.width) < obj.x) {
     return false;
@@ -129,7 +152,7 @@ module.exports = function(obj) {
 };
 
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = function(context) {
   if (this.frame === this.frameCurrent) {
     context.fillStyle = this.color;
@@ -141,34 +164,7 @@ module.exports = function(context) {
 };
 
 
-},{}],10:[function(require,module,exports){
-var entities;
-
-entities = require('../entities');
-
-module.exports = function(id, args) {
-  var _entities, entity, i, key, n, ref, results, x;
-  if (args == null) {
-    args = [];
-  }
-  n = args.length;
-  _entities = entities.filter(function(entity) {
-    return typeof entity.listen[id] === 'function';
-  });
-  _entities = _entities.all();
-  x = _entities.length - 1;
-  results = [];
-  for (key = i = 0, ref = x; 0 <= ref ? i <= ref : i >= ref; key = 0 <= ref ? ++i : --i) {
-    entity = _entities[key];
-    args[n] = key;
-    args[n + 1] = x;
-    results.push(entity.listen[id].apply(entity, args));
-  }
-  return results;
-};
-
-
-},{"../entities":6}],11:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var Entity;
 
 Entity = function(x, y, width, height) {
@@ -206,8 +202,6 @@ Entity.prototype.move = require('./move');
 
 Entity.prototype.on = require('./on');
 
-Entity.prototype.emit = require('./emit');
-
 Entity.prototype.logic = function() {};
 
 Entity.prototype.collision = require('./collision');
@@ -217,7 +211,7 @@ Entity.prototype.collisionRect = require('./collision/rect');
 module.exports = Entity;
 
 
-},{"./collision":7,"./collision/rect":8,"./draw":9,"./emit":10,"./move":12,"./on":13}],12:[function(require,module,exports){
+},{"./collision":8,"./collision/rect":9,"./draw":10,"./move":12,"./on":13}],12:[function(require,module,exports){
 module.exports = function(delta) {
   this.x += (delta * this.dx) / 1000;
   return this.y += (delta * this.dy) / 1000;
@@ -241,7 +235,7 @@ DevGame.prototype.clearEntities = require('./clearEntities');
 
 DevGame.prototype.delta = require('./delta');
 
-DevGame.prototype.emit = require('./entity/emit');
+DevGame.prototype.emit = require('./emit');
 
 DevGame.prototype.sortLayer = require('./sortLayer');
 
@@ -250,7 +244,7 @@ DevGame.Entity = require('./entity');
 module.exports = DevGame;
 
 
-},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./entity":11,"./entity/emit":10,"./sortLayer":15}],15:[function(require,module,exports){
+},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./emit":5,"./entity":11,"./sortLayer":15}],15:[function(require,module,exports){
 module.exports = function(attr) {
   if (attr == null) {
     attr = 'layer';

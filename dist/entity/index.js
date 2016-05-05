@@ -37,8 +37,6 @@
 
   Entity.prototype.on = require('./on');
 
-  Entity.prototype.emit = require('./emit');
-
   Entity.prototype.logic = function() {};
 
   Entity.prototype.collision = require('./collision');
