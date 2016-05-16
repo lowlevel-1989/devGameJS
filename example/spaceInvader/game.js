@@ -1,6 +1,8 @@
 var stats = new Stats()
 document.body.appendChild(stats.dom)
 
+console.dir(DevGame)
+
 var canvas  = document.getElementById('game')
 var context = canvas.getContext('2d')
 var game = new DevGame()

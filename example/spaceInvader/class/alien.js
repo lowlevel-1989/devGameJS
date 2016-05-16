@@ -1,5 +1,5 @@
 function Alien(x, y, width, height, speed, color){
-  DevGame.Entity.call(this, x, y, width, height)
+  DevGame.entity.Rect.call(this, x, y, width, height)
   this.speed = speed
   this.dx = -this.speed
   this.color = color
@@ -14,7 +14,7 @@ function Alien(x, y, width, height, speed, color){
   })
 }
 
-Alien.prototype = Object.create(DevGame.Entity.prototype)
+Alien.prototype = Object.create(DevGame.entity.Rect.prototype)
 
 Alien.prototype.move = function(delta){
   if ((this.dx < 0 && this.x < 10) || (this.dx > 0 && this.x > canvas.width - (this.width + 10))){

@@ -1,11 +1,11 @@
 function Nave(x, y, width, height, speed, color){
-  DevGame.Entity.call(this, x, y, width, height)
+  DevGame.entity.Rect.call(this, x, y, width, height)
   this.speed = speed
   this.color = color
   this.layer = 1
 }
 
-Nave.prototype = Object.create(DevGame.Entity.prototype)
+Nave.prototype = Object.create(DevGame.entity.Rect.prototype)
 
 Nave.prototype.move = function(delta){
   this.dx = 0

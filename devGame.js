@@ -9,17 +9,6 @@ module.exports = function() {
 
 
 },{}],2:[function(require,module,exports){
-module.exports = function(attr) {
-  if (attr == null) {
-    attr = 'dead';
-  }
-  return this.entities = this.entities.filter(function(entity) {
-    return entity[attr] !== true;
-  });
-};
-
-
-},{}],3:[function(require,module,exports){
 var DevGame;
 
 module.exports = DevGame = function() {
@@ -28,7 +17,7 @@ module.exports = DevGame = function() {
 };
 
 
-},{"./entities":7}],4:[function(require,module,exports){
+},{"./entities":6}],3:[function(require,module,exports){
 module.exports = function(timestamp) {
   var delta;
   if (!this.timeElapsed) {
@@ -40,7 +29,7 @@ module.exports = function(timestamp) {
 };
 
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = function(id, args) {
   var _entities, entity, i, key, n, ref, results, x;
   if (args == null) {
@@ -63,7 +52,7 @@ module.exports = function(id, args) {
 };
 
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var BASE, Block, SUPPORT_IMMUTABLE, SUPPORT_MUTABLE, i, j, len, len1, prop;
 
 Block = function(entity) {
@@ -120,7 +109,7 @@ Block.prototype.clear = function() {
 module.exports = Block;
 
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var Block;
 
 Block = require('./block');
@@ -128,110 +117,95 @@ Block = require('./block');
 module.exports = new Block();
 
 
-},{"./block":6}],8:[function(require,module,exports){
-module["export"] = function(obj) {
-  return this.collisionRect(obj);
-};
+},{"./block":5}],7:[function(require,module,exports){
+var Generic;
 
-
-},{}],9:[function(require,module,exports){
-module.exports = function(obj) {
-  if ((this.x + this.width) < obj.x) {
-    return false;
-  }
-  if ((this.y + this.height) < obj.y) {
-    return false;
-  }
-  if (this.x > (obj.x + obj.width)) {
-    return false;
-  }
-  if (this.y > (obj.y + obj.height)) {
-    return false;
-  }
-  return true;
-};
-
-
-},{}],10:[function(require,module,exports){
-module.exports = function(context) {
-  if (this.frame === this.frameCurrent) {
-    context.fillStyle = this.color;
-    context.fillRect(this.x, this.y, this.width, this.height);
-    return this.frameCurrent = 0;
-  } else {
-    return this.frameCurrent++;
-  }
-};
-
-
-},{}],11:[function(require,module,exports){
-var Entity;
-
-Entity = function(x, y, width, height) {
+Generic = function(x, y) {
   if (x == null) {
     x = 0;
   }
   if (y == null) {
     y = 0;
   }
-  if (width == null) {
-    width = 0;
-  }
-  if (height == null) {
-    height = 0;
-  }
   this.x = x;
   this.y = y;
   this.layer = 0;
-  this.width = width;
-  this.height = height;
   this.dx = 0;
   this.dy = 0;
   this.speed = 0;
+  this.vSpeed = 0;
+  this.hSpeed = 0;
   this.color = '#000';
-  this.frame = 0;
-  this.frameCurrent = 0;
   this.listen = {};
-  this["super"] = Object.create(Entity.prototype);
+  this["super"] = Object.create(Generic.prototype);
   return this;
 };
 
-Entity.prototype.draw = require('./draw');
+Generic.prototype.logic = function() {};
 
-Entity.prototype.move = require('./move');
+Generic.prototype.draw = function() {};
 
-Entity.prototype.on = require('./on');
+Generic.prototype.move = require('./move');
 
-Entity.prototype.logic = function() {};
+Generic.prototype.on = require('./on');
 
-Entity.prototype.collision = require('./collision');
-
-Entity.prototype.collisionRect = require('./collision/rect');
-
-module.exports = Entity;
+module.exports = Generic;
 
 
-},{"./collision":8,"./collision/rect":9,"./draw":10,"./move":12,"./on":13}],12:[function(require,module,exports){
+},{"./move":8,"./on":9}],8:[function(require,module,exports){
 module.exports = function(delta) {
   this.x += (delta * this.dx) / 1000;
   return this.y += (delta * this.dy) / 1000;
 };
 
 
-},{}],13:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = function(id, callback) {
   return this.listen[id] = callback;
 };
 
 
-},{}],14:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+module.exports = {
+  Generic: require('./generic'),
+  Rect: require('./rect')
+};
+
+
+},{"./generic":7,"./rect":12}],11:[function(require,module,exports){
+module.exports = function(context) {
+  context.fillStyle = this.color;
+  return context.fillRect(this.x, this.y, this.width, this.height);
+};
+
+
+},{}],12:[function(require,module,exports){
+var Generic, Rect;
+
+Generic = require('../generic');
+
+Rect = function(x, y, width, height) {
+  Generic.call(this, x, y);
+  this.width = width;
+  this.height = height;
+  this["super"] = Object.create(Rect.prototype);
+  this._figure = 'rect';
+  return this;
+};
+
+Rect.prototype = Object.create(Generic.prototype);
+
+Rect.prototype.draw = require('./draw');
+
+module.exports = Rect;
+
+
+},{"../generic":7,"./draw":11}],13:[function(require,module,exports){
 var DevGame;
 
 DevGame = require('./core');
 
 DevGame.prototype.animate = require('./animate');
-
-DevGame.prototype.clearEntities = require('./clearEntities');
 
 DevGame.prototype.delta = require('./delta');
 
@@ -239,12 +213,12 @@ DevGame.prototype.emit = require('./emit');
 
 DevGame.prototype.sortLayer = require('./sortLayer');
 
-DevGame.Entity = require('./entity');
+DevGame.entity = require('./entity');
 
 module.exports = DevGame;
 
 
-},{"./animate":1,"./clearEntities":2,"./core":3,"./delta":4,"./emit":5,"./entity":11,"./sortLayer":15}],15:[function(require,module,exports){
+},{"./animate":1,"./core":2,"./delta":3,"./emit":4,"./entity":10,"./sortLayer":14}],14:[function(require,module,exports){
 module.exports = function(attr) {
   if (attr == null) {
     attr = 'layer';
@@ -255,5 +229,5 @@ module.exports = function(attr) {
 };
 
 
-},{}]},{},[14])(14)
+},{}]},{},[13])(13)
 });
