@@ -1,9 +1,9 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.DEVGAME = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var CONST, Container, Point;
+var CONST, Container, Generic;
 
 CONST = require('./const');
 
-Point = require('./entity/Point');
+Generic = require('./entity/Generic');
 
 
 /*
@@ -18,25 +18,23 @@ Container = function(x, y) {
   if (y == null) {
     y = 0;
   }
-  Point.call(this, x, y);
-  this.context = null;
-  this.visible = true;
-  this.parent = null;
+  Generic.call(this, x, y);
   this.children = [];
   return this;
 };
 
-Container.prototype = Object.create(Point.prototype);
+Container.prototype = Object.create(Generic.prototype);
 
 Container.prototype.exec = function() {
-  var child, i, len, ref, results;
+  var child, i, len, ref;
+  this.logic();
+  this._save();
   ref = this.children;
-  results = [];
   for (i = 0, len = ref.length; i < len; i++) {
     child = ref[i];
-    results.push(child.exec());
+    child.exec();
   }
-  return results;
+  return this._restore();
 };
 
 Container.prototype.addChild = function() {
@@ -53,7 +51,7 @@ Container.prototype.addChild = function() {
 module.exports = Container;
 
 
-},{"./const":2,"./entity/Point":3}],2:[function(require,module,exports){
+},{"./const":2,"./entity/Generic":3}],2:[function(require,module,exports){
 
 /*
 Constant values used in DevGame
@@ -113,6 +111,76 @@ module.exports = CONST;
 
 
 },{}],3:[function(require,module,exports){
+var CONST, Generic, Point;
+
+CONST = require('../const');
+
+Point = require('./Point');
+
+Generic = function(x, y) {
+  if (x == null) {
+    x = 0;
+  }
+  if (y == null) {
+    y = 0;
+  }
+  Point.call(this, x, y);
+  this._x = x;
+  this._y = y;
+  this.parent = null;
+  this.context = null;
+  this.color = '#000';
+  this.visible = true;
+  return this;
+};
+
+Generic.prototype = Object.create(Point.prototype);
+
+Generic.prototype.getX = function() {
+  if (this.parent) {
+    return this.parent.x + this.x;
+  } else {
+    return this.x;
+  }
+};
+
+Generic.prototype.getY = function() {
+  if (this.parent) {
+    return this.parent.y + this.y;
+  } else {
+    return this.y;
+  }
+};
+
+Generic.prototype._save = function() {
+  this._x = this.x;
+  this._y = this.y;
+  this.x = this.getX();
+  return this.y = this.getY();
+};
+
+Generic.prototype._restore = function() {
+  this.x = this._x;
+  return this.y = this._y;
+};
+
+Generic.prototype.logic = function() {};
+
+Generic.prototype.draw = function() {};
+
+Generic.prototype.exec = function() {
+  this.logic();
+  this._save();
+  if ((this.parent && this.parent.visible) && this.visible) {
+    this.draw();
+  }
+  return this._restore();
+};
+
+module.exports = Generic;
+
+
+},{"../const":2,"./Point":4}],4:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -213,7 +281,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -225,12 +293,12 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":3,"./shapes/Arc":5,"./shapes/Rect":6}],5:[function(require,module,exports){
-var Arc, CONST, Point;
+},{"./Point":4,"./shapes/Arc":6,"./shapes/Rect":7}],6:[function(require,module,exports){
+var Arc, CONST, Generic;
 
 CONST = require('../../const');
 
-Point = require('../Point');
+Generic = require('../Generic');
 
 
 /*
@@ -257,15 +325,11 @@ Arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
   if (anticlockwise == null) {
     anticlockwise = false;
   }
-  Point.call(this, x, y);
-  this.parent = null;
-  this.context = null;
+  Generic.call(this, x, y);
   this.radius = radius;
   this.startAngle = startAngle;
   this.endAngle = endAngle;
   this.anticlockwise = anticlockwise;
-  this.color = '#000';
-  this.visible = true;
 
   /*
   The  type of the object
@@ -276,7 +340,7 @@ Arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
   return this;
 };
 
-Arc.prototype = Object.create(Point.prototype);
+Arc.prototype = Object.create(Generic.prototype);
 
 
 /*
@@ -289,43 +353,25 @@ Arc.prototype.clone = function() {
   return new Arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
 };
 
-Arc.prototype.contains = function() {};
-
-Arc.prototype.logic = function() {};
-
 Arc.prototype.draw = function() {
-  var context, x, y;
-  if ((this.parent && this.parent.visible) || this.visible) {
-    if (this.parent) {
-      x = this.parent.x;
-      y = this.parent.y;
-    } else {
-      x = 0;
-      y = 0;
-    }
-    context = this.context || this.parent.context;
-    context.fillStyle = this.color;
-    context.beginPath();
-    context.arc(x + this.x, y + this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
-    context.closePath();
-    return context.fill();
-  }
-};
-
-Arc.prototype.exec = function() {
-  this.logic();
-  return this.draw();
+  var context;
+  context = this.context || this.parent.context;
+  context.fillStyle = this.color;
+  context.beginPath();
+  context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+  context.closePath();
+  return context.fill();
 };
 
 module.exports = Arc;
 
 
-},{"../../const":2,"../Point":3}],6:[function(require,module,exports){
-var CONST, Point, Rect;
+},{"../../const":2,"../Generic":3}],7:[function(require,module,exports){
+var CONST, Generic, Rect;
 
 CONST = require('../../const');
 
-Point = require('../Point');
+Generic = require('../Generic');
 
 
 /*
@@ -350,9 +396,7 @@ Rect = function(x, y, width, height) {
   if (height == null) {
     height = 0;
   }
-  Point.call(this, x, y);
-  this.parent = null;
-  this.context = null;
+  Generic.call(this, x, y);
 
   /*
   @member {number}
@@ -365,8 +409,6 @@ Rect = function(x, y, width, height) {
   @default 0
    */
   this.height = height;
-  this.color = '#000';
-  this.visible = true;
 
   /*
   The  type of the object
@@ -377,7 +419,7 @@ Rect = function(x, y, width, height) {
   return this;
 };
 
-Rect.prototype = Object.create(Point.prototype);
+Rect.prototype = Object.create(Generic.prototype);
 
 
 /*
@@ -390,54 +432,17 @@ Rect.prototype.clone = function() {
   return new Rect(this.x, this.y, this.width, this.height);
 };
 
-
-/*
-Checks whether the x and y coordinates given are contained within this Rectangle
-
-@param x {number} The X coordinate of the point to test
-@param y {number} The Y coordinate of the point to test
-@return {boolean} Wheter the x/y coordinates are within this Rectangle
- */
-
-Rect.prototype.contains = function() {
-  if (this.width <= 0 || this.height <= 0) {
-    return false;
-  }
-  if (x >= this.x && x < this.x + this.width) {
-    if (y >= this.y && y < this.y + this.height) {
-      return true;
-    }
-  }
-  return false;
-};
-
-Rect.prototype.logic = function() {};
-
 Rect.prototype.draw = function() {
-  var context, x, y;
-  if ((this.param && this.parent.visible) || this.visible) {
-    if (this.parent) {
-      x = this.parent.x;
-      y = this.parent.y;
-    } else {
-      x = 0;
-      y = 0;
-    }
-    context = this.context || this.parent.context;
-    context.fillStyle = this.color;
-    return context.fillRect(x + this.x, y + this.y, this.width, this.height);
-  }
-};
-
-Rect.prototype.exec = function() {
-  this.logic();
-  return this.draw();
+  var context;
+  context = this.context || this.parent.context;
+  context.fillStyle = this.color;
+  return context.fillRect(this.x, this.y, this.width, this.height);
 };
 
 module.exports = Rect;
 
 
-},{"../../const":2,"../Point":3}],7:[function(require,module,exports){
+},{"../../const":2,"../Generic":3}],8:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -451,7 +456,7 @@ DEVGAME["super"] = require('./super');
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./const":2,"./entity":4,"./super":8}],8:[function(require,module,exports){
+},{"./Container":1,"./const":2,"./entity":5,"./super":9}],9:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -460,5 +465,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[7])(7)
+},{}]},{},[8])(8)
 });

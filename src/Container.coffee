@@ -1,5 +1,5 @@
-CONST  = require './const'
-Point  = require './entity/Point'
+CONST   = require './const'
+Generic = require './entity/Generic'
 
 ###
 @class
@@ -7,23 +7,20 @@ Point  = require './entity/Point'
 ###
 Container = (x=0, y=0) ->
 
-  Point.call(@, x, y)
+  Generic.call(@, x, y)
   
-  @context  = null
-
-  @visible  = true
-
-  @parent   = null
-
   @children = []
 
   return @
   
-Container.prototype = Object.create Point.prototype
+Container.prototype = Object.create Generic.prototype
 
 Container.prototype.exec = () ->
+  @logic()
+  @_save()
   for child in @children
     child.exec()
+  @_restore()
 
 Container.prototype.addChild = () ->
   for child in arguments
