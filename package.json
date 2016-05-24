@@ -4,7 +4,7 @@
   "description": "game engine",
   "main": "devGame.js",
   "scripts": {
-    "bundle": "browserify --standalone DevGame --transform coffeeify --extension=coffee src/index.coffee --outfile devGame.js",
+    "bundle": "browserify --standalone DEVGAME --transform coffeeify --extension=coffee src/index.coffee --outfile devGame.js",
     "build": "coffee --compile --output dist/ src/",
     "clean": "rm -rf dist *.log"
   },

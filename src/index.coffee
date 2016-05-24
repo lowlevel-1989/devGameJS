@@ -1,9 +1,7 @@
-DevGame = require './core'
+DEVGAME = require './const'
 
-DevGame.prototype.animate       = require './animate'
-DevGame.prototype.delta         = require './delta'
-DevGame.prototype.emit          = require './emit'
-DevGame.prototype.sortLayer     = require './sortLayer'
-DevGame.entity                  = require './entity'
+DEVGAME.Container = require './Container'
+DEVGAME.entity    = require './entity'
+DEVGAME.super     = require './super'
 
-module.exports = DevGame
+module.exports = DEVGAME
