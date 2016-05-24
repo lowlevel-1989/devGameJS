@@ -59,7 +59,9 @@ Arc.prototype.draw = () ->
 
     context = @context || @parent.context
     context.fillStyle = @color
+    context.beginPath()
     context.arc x + @x, y + @y, @radius, @startAngle, @endAngle, @anticlockwise
+    context.closePath()
     context.fill()
 
 Arc.prototype.exec = () ->

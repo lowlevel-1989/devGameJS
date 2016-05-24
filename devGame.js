@@ -305,7 +305,9 @@ Arc.prototype.draw = function() {
     }
     context = this.context || this.parent.context;
     context.fillStyle = this.color;
+    context.beginPath();
     context.arc(x + this.x, y + this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+    context.closePath();
     return context.fill();
   }
 };
