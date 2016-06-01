@@ -33,6 +33,9 @@
     ref = this.children;
     for (i = 0, len = ref.length; i < len; i++) {
       child = ref[i];
+      if (this.context && child.context === null) {
+        child.context = this.context;
+      }
       child.exec();
     }
     return this._restore();
@@ -43,6 +46,9 @@
     results = [];
     for (i = 0, len = arguments.length; i < len; i++) {
       child = arguments[i];
+      if (this.context && child.context === null) {
+        child.context = this.context;
+      }
       child.parent = this;
       results.push(this.children.push(child));
     }

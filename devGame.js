@@ -32,6 +32,9 @@ Container.prototype.exec = function() {
   ref = this.children;
   for (i = 0, len = ref.length; i < len; i++) {
     child = ref[i];
+    if (this.context && child.context === null) {
+      child.context = this.context;
+    }
     child.exec();
   }
   return this._restore();
@@ -42,6 +45,9 @@ Container.prototype.addChild = function() {
   results = [];
   for (i = 0, len = arguments.length; i < len; i++) {
     child = arguments[i];
+    if (this.context && child.context === null) {
+      child.context = this.context;
+    }
     child.parent = this;
     results.push(this.children.push(child));
   }
@@ -69,6 +75,7 @@ CONST = {
   @contant
    */
   VERSION: '__VERSION__',
+  requestAnimationFrame: require('./requestAnimationFrame'),
   PI: Math.PI,
 
   /*
@@ -103,14 +110,15 @@ CONST = {
    */
   SHAPES: {
     RECT: 0,
-    ARC: 1
+    ARC: 1,
+    CIRCLE: 2
   }
 };
 
 module.exports = CONST;
 
 
-},{}],3:[function(require,module,exports){
+},{"./requestAnimationFrame":10}],3:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -127,14 +135,33 @@ Generic = function(x, y) {
   Point.call(this, x, y);
   this._x = x;
   this._y = y;
+  this.direction = 1;
+  this.hSpeed = 0;
+  this.vSpeed = 0;
+  this.speed = 0;
+  this.xPrevious = x;
+  this.yPrevious = y;
+  this.xStart = x;
+  this.yStart = y;
   this.parent = null;
   this.context = null;
+  this._buffer = {};
   this.color = '#000';
   this.visible = true;
   return this;
 };
 
 Generic.prototype = Object.create(Point.prototype);
+
+Generic.prototype.setContext = function(context) {
+  context.imageSmoothingEnabled = false;
+  this.context = context;
+  this._buffer.canvas = document.createElement('canvas');
+  this._buffer.context = this._buffer.canvas.getContext('2d');
+  this._buffer.context.imageSmoothingEnabled = false;
+  this._buffer.canvas.width = context.canvas.clientWidth;
+  return this._buffer.canvas.height = context.canvas.clientHeight;
+};
 
 Generic.prototype.getX = function() {
   if (this.parent) {
@@ -153,8 +180,8 @@ Generic.prototype.getY = function() {
 };
 
 Generic.prototype._save = function() {
-  this._x = this.x;
-  this._y = this.y;
+  this._x = this.xPrevious = this.x;
+  this._y = this.yPrevious = this.y;
   this.x = this.getX();
   return this.y = this.getY();
 };
@@ -287,13 +314,14 @@ var entity;
 entity = {
   Point: require('./Point'),
   Rect: require('./shapes/Rect'),
-  Arc: require('./shapes/Arc')
+  Arc: require('./shapes/Arc'),
+  Circle: require('./shapes/Circle')
 };
 
 module.exports = entity;
 
 
-},{"./Point":4,"./shapes/Arc":6,"./shapes/Rect":7}],6:[function(require,module,exports){
+},{"./Point":4,"./shapes/Arc":6,"./shapes/Circle":7,"./shapes/Rect":8}],6:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -367,6 +395,56 @@ module.exports = Arc;
 
 
 },{"../../const":2,"../Generic":3}],7:[function(require,module,exports){
+var Arc, CONST, Circle;
+
+CONST = require('../../const');
+
+Arc = require('./Arc');
+
+
+/*
+@class
+@memberof DEVGAME.entity
+ */
+
+Circle = function(x, y, radius) {
+  if (x == null) {
+    x = 0;
+  }
+  if (y == null) {
+    y = 0;
+  }
+  if (radius == null) {
+    radius = 0;
+  }
+  Arc.call(this, x, y, radius, 0, CONST.PI_2);
+
+  /*
+  The  type of the object
+  
+  @member {number}
+   */
+  this.type = CONST.SHAPES.CIRCLE;
+  return this;
+};
+
+Circle.prototype = Object.create(Arc.prototype);
+
+
+/*
+Creates a clone od this Arc
+
+@return {DEVGAME.entity.Arc}
+ */
+
+Circle.prototype.clone = function() {
+  return new Circle(this.x, this.y, this.radius);
+};
+
+module.exports = Circle;
+
+
+},{"../../const":2,"./Arc":6}],8:[function(require,module,exports){
 var CONST, Generic, Rect;
 
 CONST = require('../../const');
@@ -442,7 +520,7 @@ Rect.prototype.draw = function() {
 module.exports = Rect;
 
 
-},{"../../const":2,"../Generic":3}],8:[function(require,module,exports){
+},{"../../const":2,"../Generic":3}],9:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -456,7 +534,17 @@ DEVGAME["super"] = require('./super');
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./const":2,"./entity":5,"./super":9}],9:[function(require,module,exports){
+},{"./Container":1,"./const":2,"./entity":5,"./super":11}],10:[function(require,module,exports){
+module.exports = function() {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+    return window.setTimeout(function() {
+      return callback(+(new Date));
+    }, 1000 / 60);
+  };
+};
+
+
+},{}],11:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -465,5 +553,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[8])(8)
+},{}]},{},[9])(9)
 });

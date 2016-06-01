@@ -18,6 +18,7 @@ Constant values used in DevGame
     @contant
      */
     VERSION: '__VERSION__',
+    requestAnimationFrame: require('./requestAnimationFrame'),
     PI: Math.PI,
 
     /*
@@ -52,7 +53,8 @@ Constant values used in DevGame
      */
     SHAPES: {
       RECT: 0,
-      ARC: 1
+      ARC: 1,
+      CIRCLE: 2
     }
   };
 

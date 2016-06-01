@@ -13,6 +13,8 @@ CONST =
   ###
   VERSION: '__VERSION__'
 
+  requestAnimationFrame: require './requestAnimationFrame'
+
   PI: Math.PI
 
   ###
@@ -48,5 +50,6 @@ CONST =
   SHAPES:
     RECT: 0
     ARC:  1
+    CIRCLE: 2
 
 module.exports = CONST

@@ -16,14 +16,33 @@
     Point.call(this, x, y);
     this._x = x;
     this._y = y;
+    this.direction = 1;
+    this.hSpeed = 0;
+    this.vSpeed = 0;
+    this.speed = 0;
+    this.xPrevious = x;
+    this.yPrevious = y;
+    this.xStart = x;
+    this.yStart = y;
     this.parent = null;
     this.context = null;
+    this._buffer = {};
     this.color = '#000';
     this.visible = true;
     return this;
   };
 
   Generic.prototype = Object.create(Point.prototype);
+
+  Generic.prototype.setContext = function(context) {
+    context.imageSmoothingEnabled = false;
+    this.context = context;
+    this._buffer.canvas = document.createElement('canvas');
+    this._buffer.context = this._buffer.canvas.getContext('2d');
+    this._buffer.context.imageSmoothingEnabled = false;
+    this._buffer.canvas.width = context.canvas.clientWidth;
+    return this._buffer.canvas.height = context.canvas.clientHeight;
+  };
 
   Generic.prototype.getX = function() {
     if (this.parent) {
@@ -42,8 +61,8 @@
   };
 
   Generic.prototype._save = function() {
-    this._x = this.x;
-    this._y = this.y;
+    this._x = this.xPrevious = this.x;
+    this._y = this.yPrevious = this.y;
     this.x = this.getX();
     return this.y = this.getY();
   };

@@ -8,8 +8,19 @@ Generic = (x=0, y=0) ->
   @_x = x
   @_y = y
 
+  @direction = 1
+  @hSpeed = 0
+  @vSpeed = 0
+  @speed  = 0
+  @xPrevious = x
+  @yPrevious = y
+  @xStart = x
+  @yStart = y
+
   @parent  = null
   @context = null
+
+  @_buffer = {}
 
   @color = '#000'
 
@@ -19,6 +30,20 @@ Generic = (x=0, y=0) ->
 
 
 Generic.prototype = Object.create Point.prototype
+
+Generic.prototype.setContext = (context) ->
+  
+  context.imageSmoothingEnabled = false
+
+  @context = context
+
+  @_buffer.canvas   = document.createElement 'canvas'
+  @_buffer.context  = @_buffer.canvas.getContext '2d'
+  
+  @_buffer.context.imageSmoothingEnabled = false
+  
+  @_buffer.canvas.width  = context.canvas.clientWidth
+  @_buffer.canvas.height = context.canvas.clientHeight
 
 Generic.prototype.getX = () ->
   if @parent
@@ -33,8 +58,8 @@ Generic.prototype.getY = () ->
     return @y
 
 Generic.prototype._save = () ->
-  @_x = @x
-  @_y = @y
+  @_x = @xPrevious = @x
+  @_y = @yPrevious = @y
 
   @x = @getX()
   @y = @getY()
