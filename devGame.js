@@ -133,8 +133,6 @@ Generic = function(x, y) {
     y = 0;
   }
   Point.call(this, x, y);
-  this._x = x;
-  this._y = y;
   this.direction = 1;
   this.hSpeed = 0;
   this.vSpeed = 0;
@@ -180,15 +178,15 @@ Generic.prototype.getY = function() {
 };
 
 Generic.prototype._save = function() {
-  this._x = this.xPrevious = this.x;
-  this._y = this.yPrevious = this.y;
+  this.xPrevious = this.x;
+  this.yPrevious = this.y;
   this.x = this.getX();
   return this.y = this.getY();
 };
 
 Generic.prototype._restore = function() {
-  this.x = this._x;
-  return this.y = this._y;
+  this.x = this.xPrevious;
+  return this.y = this.yPrevious;
 };
 
 Generic.prototype.logic = function() {};

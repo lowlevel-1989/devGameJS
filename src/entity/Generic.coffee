@@ -5,9 +5,6 @@ Generic = (x=0, y=0) ->
 
   Point.call(@, x, y)
 
-  @_x = x
-  @_y = y
-
   @direction = 1
   @hSpeed = 0
   @vSpeed = 0
@@ -58,15 +55,15 @@ Generic.prototype.getY = () ->
     return @y
 
 Generic.prototype._save = () ->
-  @_x = @xPrevious = @x
-  @_y = @yPrevious = @y
+  @xPrevious = @x
+  @yPrevious = @y
 
   @x = @getX()
   @y = @getY()
 
 Generic.prototype._restore = () ->
-  @x = @_x
-  @y = @_y
+  @x = @xPrevious
+  @y = @yPrevious
 
 Generic.prototype.logic = () ->
 
