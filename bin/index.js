@@ -10,6 +10,8 @@
 
   DEVGAME["super"] = require('./super');
 
+  DEVGAME.collision = require('./collision');
+
   module.exports = DEVGAME;
 
 }).call(this);

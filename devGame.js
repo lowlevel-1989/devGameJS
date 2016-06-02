@@ -57,7 +57,19 @@ Container.prototype.addChild = function() {
 module.exports = Container;
 
 
-},{"./const":2,"./entity/Generic":3}],2:[function(require,module,exports){
+},{"./const":4,"./entity/Generic":5}],2:[function(require,module,exports){
+module.exports = {
+  rectToRect: require('./rectToRect')
+};
+
+
+},{"./rectToRect":3}],3:[function(require,module,exports){
+module.exports = function(rectA, rectB) {
+  return rectA.getX() < rectB.getX() + rectB.width && rectA.getX() + rectA.width > rectB.getX() && rectA.getY() < rectB.getY() + rectB.height && rectA.getY() + rectA.height > rectB.getY();
+};
+
+
+},{}],4:[function(require,module,exports){
 
 /*
 Constant values used in DevGame
@@ -118,7 +130,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":10}],3:[function(require,module,exports){
+},{"./requestAnimationFrame":12}],5:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -205,7 +217,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":2,"./Point":4}],4:[function(require,module,exports){
+},{"../const":4,"./Point":6}],6:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -306,7 +318,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -319,7 +331,7 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":4,"./shapes/Arc":6,"./shapes/Circle":7,"./shapes/Rect":8}],6:[function(require,module,exports){
+},{"./Point":6,"./shapes/Arc":8,"./shapes/Circle":9,"./shapes/Rect":10}],8:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -392,7 +404,7 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":2,"../Generic":3}],7:[function(require,module,exports){
+},{"../../const":4,"../Generic":5}],9:[function(require,module,exports){
 var Arc, CONST, Circle;
 
 CONST = require('../../const');
@@ -442,7 +454,7 @@ Circle.prototype.clone = function() {
 module.exports = Circle;
 
 
-},{"../../const":2,"./Arc":6}],8:[function(require,module,exports){
+},{"../../const":4,"./Arc":8}],10:[function(require,module,exports){
 var CONST, Generic, Rect;
 
 CONST = require('../../const');
@@ -518,7 +530,7 @@ Rect.prototype.draw = function() {
 module.exports = Rect;
 
 
-},{"../../const":2,"../Generic":3}],9:[function(require,module,exports){
+},{"../../const":4,"../Generic":5}],11:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -529,10 +541,12 @@ DEVGAME.entity = require('./entity');
 
 DEVGAME["super"] = require('./super');
 
+DEVGAME.collision = require('./collision');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./const":2,"./entity":5,"./super":11}],10:[function(require,module,exports){
+},{"./Container":1,"./collision":2,"./const":4,"./entity":7,"./super":13}],12:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -542,7 +556,7 @@ module.exports = function() {
 };
 
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -551,5 +565,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[9])(9)
+},{}]},{},[11])(11)
 });
