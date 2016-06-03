@@ -15,11 +15,18 @@ Container = (x=0, y=0) ->
   
 Container.prototype = Object.create Generic.prototype
 
+Container.prototype.render = () ->
+  @_save()
+  for child in @children
+    child.context = @context if @context and child.context == null
+    child.render()
+  @_restore()
+
+
 Container.prototype.exec = () ->
   @logic()
   @_save()
   for child in @children
-    child.context = @context if @context and child.context == null
     child.exec()
   @_restore()
 

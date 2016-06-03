@@ -34,7 +34,6 @@
 
   stage.addChild(p1)
 
-  console.dir(stage)
   function loop(timestamp){
 
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
@@ -60,6 +59,7 @@
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
     
     stage.exec()
+    stage.render()
     
     
     //draw fps

@@ -25,9 +25,8 @@ Container = function(x, y) {
 
 Container.prototype = Object.create(Generic.prototype);
 
-Container.prototype.exec = function() {
+Container.prototype.render = function() {
   var child, i, len, ref;
-  this.logic();
   this._save();
   ref = this.children;
   for (i = 0, len = ref.length; i < len; i++) {
@@ -35,6 +34,18 @@ Container.prototype.exec = function() {
     if (this.context && child.context === null) {
       child.context = this.context;
     }
+    child.render();
+  }
+  return this._restore();
+};
+
+Container.prototype.exec = function() {
+  var child, i, len, ref;
+  this.logic();
+  this._save();
+  ref = this.children;
+  for (i = 0, len = ref.length; i < len; i++) {
+    child = ref[i];
     child.exec();
   }
   return this._restore();
@@ -205,13 +216,16 @@ Generic.prototype.logic = function() {};
 
 Generic.prototype.draw = function() {};
 
-Generic.prototype.exec = function() {
-  this.logic();
+Generic.prototype.render = function() {
   this._save();
   if ((this.parent && this.parent.visible) && this.visible) {
     this.draw();
   }
   return this._restore();
+};
+
+Generic.prototype.exec = function() {
+  return this.logic();
 };
 
 module.exports = Generic;

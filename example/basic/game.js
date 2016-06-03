@@ -11,7 +11,7 @@
   rect.color = 'blue'
 
   stage.addChild(rect)
-  stage.exec()
+  stage.render()
     
 
 })(window, document, DEVGAME)

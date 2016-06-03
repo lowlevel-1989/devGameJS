@@ -82,6 +82,7 @@
     
     
     stage.exec()
+    stage.render()
     
     //draw debug
     context.fillText( 'FPS: '+ _fps,   10, 20 )

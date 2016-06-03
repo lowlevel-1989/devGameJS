@@ -147,6 +147,7 @@
     
     
     stage.exec()
+    stage.render()
 
     
     //draw debug

@@ -26,9 +26,8 @@
 
   Container.prototype = Object.create(Generic.prototype);
 
-  Container.prototype.exec = function() {
+  Container.prototype.render = function() {
     var child, i, len, ref;
-    this.logic();
     this._save();
     ref = this.children;
     for (i = 0, len = ref.length; i < len; i++) {
@@ -36,6 +35,18 @@
       if (this.context && child.context === null) {
         child.context = this.context;
       }
+      child.render();
+    }
+    return this._restore();
+  };
+
+  Container.prototype.exec = function() {
+    var child, i, len, ref;
+    this.logic();
+    this._save();
+    ref = this.children;
+    for (i = 0, len = ref.length; i < len; i++) {
+      child = ref[i];
       child.exec();
     }
     return this._restore();

@@ -102,6 +102,7 @@
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
     
     stage.exec()
+    stage.render()
     
     
     //draw fps

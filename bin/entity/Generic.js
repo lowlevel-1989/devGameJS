@@ -74,13 +74,16 @@
 
   Generic.prototype.draw = function() {};
 
-  Generic.prototype.exec = function() {
-    this.logic();
+  Generic.prototype.render = function() {
     this._save();
     if ((this.parent && this.parent.visible) && this.visible) {
       this.draw();
     }
     return this._restore();
+  };
+
+  Generic.prototype.exec = function() {
+    return this.logic();
   };
 
   module.exports = Generic;

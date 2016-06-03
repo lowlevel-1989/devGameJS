@@ -67,15 +67,16 @@ Generic.prototype._restore = () ->
 
 Generic.prototype.logic = () ->
 
-Generic.prototype.draw = () ->
-
-Generic.prototype.exec = () ->
-  @logic()
+Generic.prototype.draw   = () ->
+Generic.prototype.render = () ->
   @_save()
   
   if (@parent and @parent.visible) and @visible
     @draw()
 
   @_restore()
+
+Generic.prototype.exec = () ->
+  @logic()
 
 module.exports = Generic
