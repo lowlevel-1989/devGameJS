@@ -68,19 +68,42 @@ Container.prototype.addChild = function() {
 module.exports = Container;
 
 
-},{"./const":4,"./entity/Generic":5}],2:[function(require,module,exports){
+},{"./const":5,"./entity/Generic":6}],2:[function(require,module,exports){
 module.exports = {
-  rectToRect: require('./rectToRect')
+  rectToRect: require('./rectToRect'),
+  rectToCircle: require('./rectToCircle')
 };
 
 
-},{"./rectToRect":3}],3:[function(require,module,exports){
+},{"./rectToCircle":3,"./rectToRect":4}],3:[function(require,module,exports){
+module.exports = function(rect, circle) {
+  var circleDistanceX, circleDistanceY, cornerDistanceSQ;
+  circleDistanceX = Math.abs(circle.getX() - rect.getX() - rect.width / 2);
+  circleDistanceY = Math.abs(circle.getY() - rect.getY() - rect.height / 2);
+  if (circleDistanceX > (rect.width / 2 + circle.radius)) {
+    return false;
+  }
+  if (circleDistanceY > (rect.height / 2 + circle.radius)) {
+    return false;
+  }
+  if (circleDistanceX <= (rect.width / 2)) {
+    return true;
+  }
+  if (circleDistanceY <= (rect.height / 2)) {
+    return true;
+  }
+  cornerDistanceSQ = Math.pow(circleDistanceX - rect.width / 2, 2) + Math.pow(circleDistanceY - rect.height / 2, 2);
+  return cornerDistanceSQ <= (Math.pow(circle.radius, 2));
+};
+
+
+},{}],4:[function(require,module,exports){
 module.exports = function(rectA, rectB) {
   return rectA.getX() < rectB.getX() + rectB.width && rectA.getX() + rectA.width > rectB.getX() && rectA.getY() < rectB.getY() + rectB.height && rectA.getY() + rectA.height > rectB.getY();
 };
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 /*
 Constant values used in DevGame
@@ -141,7 +164,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":12}],5:[function(require,module,exports){
+},{"./requestAnimationFrame":13}],6:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -231,7 +254,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":4,"./Point":6}],6:[function(require,module,exports){
+},{"../const":5,"./Point":7}],7:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -332,7 +355,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -345,7 +368,7 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":6,"./shapes/Arc":8,"./shapes/Circle":9,"./shapes/Rect":10}],8:[function(require,module,exports){
+},{"./Point":7,"./shapes/Arc":9,"./shapes/Circle":10,"./shapes/Rect":11}],9:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -418,7 +441,7 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":4,"../Generic":5}],9:[function(require,module,exports){
+},{"../../const":5,"../Generic":6}],10:[function(require,module,exports){
 var Arc, CONST, Circle;
 
 CONST = require('../../const');
@@ -468,7 +491,7 @@ Circle.prototype.clone = function() {
 module.exports = Circle;
 
 
-},{"../../const":4,"./Arc":8}],10:[function(require,module,exports){
+},{"../../const":5,"./Arc":9}],11:[function(require,module,exports){
 var CONST, Generic, Rect;
 
 CONST = require('../../const');
@@ -544,7 +567,7 @@ Rect.prototype.draw = function() {
 module.exports = Rect;
 
 
-},{"../../const":4,"../Generic":5}],11:[function(require,module,exports){
+},{"../../const":5,"../Generic":6}],12:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -560,7 +583,7 @@ DEVGAME.collision = require('./collision');
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":2,"./const":4,"./entity":7,"./super":13}],12:[function(require,module,exports){
+},{"./Container":1,"./collision":2,"./const":5,"./entity":8,"./super":14}],13:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -570,7 +593,7 @@ module.exports = function() {
 };
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -579,5 +602,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[11])(11)
+},{}]},{},[12])(12)
 });
