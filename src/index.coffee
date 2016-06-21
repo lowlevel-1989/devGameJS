@@ -6,6 +6,7 @@ DEVGAME.super     = require './super'
 DEVGAME.collision = require './collision'
 DEVGAME.distance  = require './distance'
 DEVGAME.random    = require './random'
+DEVGAME.rgb       = require './rgb'
 
 
 module.exports = DEVGAME

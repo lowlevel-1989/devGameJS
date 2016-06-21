@@ -610,10 +610,12 @@ DEVGAME.distance = require('./distance');
 
 DEVGAME.random = require('./random');
 
+DEVGAME.rgb = require('./rgb');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":3,"./const":6,"./distance":8,"./entity":11,"./random":16,"./super":18}],16:[function(require,module,exports){
+},{"./Container":1,"./collision":3,"./const":6,"./distance":8,"./entity":11,"./random":16,"./rgb":18,"./super":19}],16:[function(require,module,exports){
 module.exports = function(min, max) {
   if (min == null) {
     min = 0;
@@ -623,6 +625,7 @@ module.exports = function(min, max) {
   }
   if (max === null) {
     max = min;
+    min = 0;
   }
   return ~~(Math.random() * (max - min + 1) + min);
 };
@@ -639,6 +642,21 @@ module.exports = function() {
 
 
 },{}],18:[function(require,module,exports){
+module.exports = function(red, green, blue) {
+  if (red == null) {
+    red = 0;
+  }
+  if (green == null) {
+    green = 0;
+  }
+  if (blue == null) {
+    blue = 0;
+  }
+  return 'rgb(' + red + ',' + green + ',' + blue + ')';
+};
+
+
+},{}],19:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];

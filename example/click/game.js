@@ -18,14 +18,25 @@
   var stage = new DEVGAME.Container()
   stage.setContext(context)
 
-  var center = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
-  center.color = '#006'
+  var circle = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
+  circle.create = function(){
+
+    var red   = DEVGAME.random(0, 255)
+    var green = DEVGAME.random(0, 255)
+    var blue  = DEVGAME.random(0, 255)
+    
+    this.color = DEVGAME.rgb(red, green, blue)
+
+    this.x = DEVGAME.random(canvas.clientWidth-this.radius*2)+this.radius
+    this.y = DEVGAME.random(canvas.clientHeight-this.radius*2)+this.radius
+
+  }
 
   var mouse = new DEVGAME.entity.Circle(mousex, mousey, 5)
 
   mouse.logic = function(){
-    this.x = mousex
-    this.y = mousey
+    this.x     = mousex
+    this.y     = mousey
 
     if (this.getX() < 0){
       this.x = 0
@@ -39,9 +50,21 @@
     if (this.getY() > canvas.clientHeight){
       this.y = canvas.clientHeight
     }
+
+    if (this.click === 1){
+
+      if (DEVGAME.collision.circleToCircle(this, circle)){
+        circle.create()
+      }
+      this.click = 0
+       
+    }
+
   }
 
-  stage.addChild(center, mouse)
+  stage.addChild(circle, mouse)
+
+  circle.create()
 
   function loop(timestamp){
 
@@ -74,9 +97,6 @@
     context.fillStyle = '#000'
     context.font      = 'normal 16pt Arial'
     context.fillText( 'FPS: '+ _fps, 10, 20 )
-    context.fillText( 'MOUSE X: ' + mouse.x, 10, 40 )
-    context.fillText( 'MOUSE Y: ' + mouse.y, 10, 60 )
-    context.fillText( 'DISTANCE: '+ DEVGAME.distance.circleToCircle(mouse, center), 10, 80 )
 
     exec(loop)
 
@@ -89,6 +109,10 @@
   document.addEventListener('mousemove', function(event){
     mousex = event.pageX - canvas.offsetLeft
     mousey = event.pageY - canvas.offsetTop
+  }, false)
+
+  canvas.addEventListener('mousedown',function(event){
+    mouse.click = event.which
   }, false)
 
 })(window, document, DEVGAME)

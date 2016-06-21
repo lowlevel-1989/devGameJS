@@ -16,6 +16,8 @@
 
   DEVGAME.random = require('./random');
 
+  DEVGAME.rgb = require('./rgb');
+
   module.exports = DEVGAME;
 
 }).call(this);
