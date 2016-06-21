@@ -165,12 +165,12 @@
 
   exec(loop)
 
-  window.addEventListener('keydown', function(event){
+  document.addEventListener('keydown', function(event){
     event.preventDefault()
     keyboard[event.keyCode] = true
   }, false)
 
-  window.addEventListener('keyup', function(event){
+  document.addEventListener('keyup', function(event){
     event.preventDefault()
     keyboard[event.keyCode] = false
   }, false)

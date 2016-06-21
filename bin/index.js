@@ -14,6 +14,8 @@
 
   DEVGAME.distance = require('./distance');
 
+  DEVGAME.random = require('./random');
+
   module.exports = DEVGAME;
 
 }).call(this);

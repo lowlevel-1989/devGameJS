@@ -82,7 +82,7 @@
 
   exec(loop)
 
-  window.addEventListener('mousemove', function(event){
+  document.addEventListener('mousemove', function(event){
     mousex = event.pageX - canvas.offsetLeft
     mousey = event.pageY - canvas.offsetTop
   }, false)

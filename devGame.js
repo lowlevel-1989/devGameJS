@@ -175,7 +175,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":16}],7:[function(require,module,exports){
+},{"./requestAnimationFrame":17}],7:[function(require,module,exports){
 module.exports = function(circleA, circleB) {
   var dx, dy;
   dx = circleA.getX() - circleB.getX();
@@ -608,10 +608,27 @@ DEVGAME.collision = require('./collision');
 
 DEVGAME.distance = require('./distance');
 
+DEVGAME.random = require('./random');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":3,"./const":6,"./distance":8,"./entity":11,"./super":17}],16:[function(require,module,exports){
+},{"./Container":1,"./collision":3,"./const":6,"./distance":8,"./entity":11,"./random":16,"./super":18}],16:[function(require,module,exports){
+module.exports = function(min, max) {
+  if (min == null) {
+    min = 0;
+  }
+  if (max == null) {
+    max = null;
+  }
+  if (max === null) {
+    max = min;
+  }
+  return ~~(Math.random() * (max - min + 1) + min);
+};
+
+
+},{}],17:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -621,7 +638,7 @@ module.exports = function() {
 };
 
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
