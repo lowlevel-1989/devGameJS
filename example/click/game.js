@@ -58,7 +58,7 @@
       if (DEVGAME.collision.circleToCircle(this, circle)){
         circle.create()
       }
-      this.click = 0
+      mouseClick = 0
        
     }
 
