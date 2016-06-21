@@ -14,6 +14,7 @@
 
   var mousex = 0
   var mousey = 0
+  var mouseClick = 0
 
   var stage = new DEVGAME.Container()
   stage.setContext(context)
@@ -37,6 +38,7 @@
   mouse.logic = function(){
     this.x     = mousex
     this.y     = mousey
+    this.click = mouseClick
 
     if (this.getX() < 0){
       this.x = 0
@@ -112,7 +114,7 @@
   }, false)
 
   canvas.addEventListener('mousedown',function(event){
-    mouse.click = event.which
+    mouseClick = event.which
   }, false)
 
 })(window, document, DEVGAME)
