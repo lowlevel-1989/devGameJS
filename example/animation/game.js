@@ -25,7 +25,7 @@
 
   p1.logic = function(){
     
-    if (this.x > (canvas.clientWidth - 15) || (this.x < 15)){
+    if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
       this.direction *= -1
     }
 

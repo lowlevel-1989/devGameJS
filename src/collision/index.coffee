@@ -1,3 +1,4 @@
 module.exports =
-  rectToRect:   require './rectToRect'
-  rectToCircle: require './rectToCircle'
+  rectToRect:     require './rectToRect'
+  rectToCircle:   require './rectToCircle'
+  circleToCircle: require './circleToCircle'

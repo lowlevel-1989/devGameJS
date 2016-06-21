@@ -78,19 +78,19 @@
     }
 
 
-    if (head.x > canvas.clientWidth - head.radius){
+    if (head.getX() > canvas.clientWidth - head.radius){
       head.x = 0
     }
 
-    if (head.y > canvas.clientHeight - head.radius){
+    if (head.getY() > canvas.clientHeight - head.radius){
       head.y = 0
     }
 
-    if (head.x < 0){
+    if (head.getX() < 0){
       head.x = canvas.clientWidth - head.radius
     }
 
-    if (head.y < 0){
+    if (head.getY() < 0){
       head.y = canvas.clientHeight - head.radius
     }
 
@@ -119,7 +119,6 @@
   }
   stage.addChild(snake)
 
-  console.dir(stage)
   function loop(timestamp){
 
     timeElapse = timeElapse === 0 ? timestamp : timeElapse

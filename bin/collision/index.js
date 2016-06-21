@@ -2,7 +2,8 @@
 (function() {
   module.exports = {
     rectToRect: require('./rectToRect'),
-    rectToCircle: require('./rectToCircle')
+    rectToCircle: require('./rectToCircle'),
+    circleToCircle: require('./circleToCircle')
   };
 
 }).call(this);

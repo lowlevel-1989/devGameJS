@@ -24,16 +24,16 @@
     this.x = mousex
     this.y = mousey
 
-    if (this.x < 0){
+    if (this.getX() < 0){
       this.x = 0
     }
-    if (this.x > canvas.clientWidth){
+    if (this.getX() > canvas.clientWidth){
       this.x = canvas.clientWidth
     }
-    if (this.y < 0){
+    if (this.getY() < 0){
       this.y = 0
     }
-    if (this.y > canvas.clientHeight){
+    if (this.getY() > canvas.clientHeight){
       this.y = canvas.clientHeight
     }
   }

@@ -27,7 +27,7 @@
   rectA.logic = function(){
 
     
-    if (this.x > (canvas.clientWidth - this.width) || (this.x < 0)){
+    if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
       this.direction *= -1
     }
 
@@ -61,7 +61,7 @@
 
   rectB.logic = function(){
     
-    if (this.x > (canvas.clientWidth - this.width) || (this.x < 0)){
+    if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
       this.direction *= -1
     }
 
