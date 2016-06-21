@@ -12,6 +12,8 @@
 
   DEVGAME.collision = require('./collision');
 
+  DEVGAME.distance = require('./distance');
+
   module.exports = DEVGAME;
 
 }).call(this);

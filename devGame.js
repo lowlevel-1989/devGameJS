@@ -68,7 +68,7 @@ Container.prototype.addChild = function() {
 module.exports = Container;
 
 
-},{"./const":5,"./entity/Generic":6}],2:[function(require,module,exports){
+},{"./const":5,"./entity/Generic":8}],2:[function(require,module,exports){
 module.exports = {
   rectToRect: require('./rectToRect'),
   rectToCircle: require('./rectToCircle')
@@ -164,7 +164,22 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":13}],6:[function(require,module,exports){
+},{"./requestAnimationFrame":15}],6:[function(require,module,exports){
+module.exports = function(circleA, circleB) {
+  var dx, dy;
+  dx = circleA.getX() - circleB.getX();
+  dy = circleA.getY() - circleB.getY();
+  return Math.sqrt(dx * dx + dy * dy) - (circleA.radius + circleB.radius);
+};
+
+
+},{}],7:[function(require,module,exports){
+module.exports = {
+  circleToCircle: require('./circleToCircle')
+};
+
+
+},{"./circleToCircle":6}],8:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -254,7 +269,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":5,"./Point":7}],7:[function(require,module,exports){
+},{"../const":5,"./Point":9}],9:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -355,7 +370,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -368,7 +383,7 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":7,"./shapes/Arc":9,"./shapes/Circle":10,"./shapes/Rect":11}],9:[function(require,module,exports){
+},{"./Point":9,"./shapes/Arc":11,"./shapes/Circle":12,"./shapes/Rect":13}],11:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -441,7 +456,7 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":5,"../Generic":6}],10:[function(require,module,exports){
+},{"../../const":5,"../Generic":8}],12:[function(require,module,exports){
 var Arc, CONST, Circle;
 
 CONST = require('../../const');
@@ -491,7 +506,7 @@ Circle.prototype.clone = function() {
 module.exports = Circle;
 
 
-},{"../../const":5,"./Arc":9}],11:[function(require,module,exports){
+},{"../../const":5,"./Arc":11}],13:[function(require,module,exports){
 var CONST, Generic, Rect;
 
 CONST = require('../../const');
@@ -567,7 +582,7 @@ Rect.prototype.draw = function() {
 module.exports = Rect;
 
 
-},{"../../const":5,"../Generic":6}],12:[function(require,module,exports){
+},{"../../const":5,"../Generic":8}],14:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -580,10 +595,12 @@ DEVGAME["super"] = require('./super');
 
 DEVGAME.collision = require('./collision');
 
+DEVGAME.distance = require('./distance');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":2,"./const":5,"./entity":8,"./super":14}],13:[function(require,module,exports){
+},{"./Container":1,"./collision":2,"./const":5,"./distance":7,"./entity":10,"./super":16}],15:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -593,7 +610,7 @@ module.exports = function() {
 };
 
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -602,5 +619,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[12])(12)
+},{}]},{},[14])(14)
 });
