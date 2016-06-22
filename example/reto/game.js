@@ -71,8 +71,7 @@
 
     DEVGAME.entity.Rect.call(this, _x, _y, size, size)
     this.id     = id
-    this.color  = color1 || '#000'
-    this.color1 = this.color
+    this.color1 = color1 || '#000'
     this.color2 = color2 || '#000'
     this.fill   = fill   || false
     this.piece  = piece  || false
@@ -113,13 +112,20 @@
 
       if (mouse.up === 1){
         this.select = mouse.dragging = false
+        dragging.visible = false
       }
 
       if (this.select){
-        
-        this.color1 = '#000'
+
+        dragging.setID(this.id)
+        this.visible     = false
+        dragging.visible = true
         this.move(mouse)
+        dragging.copy(this)
+
       }else{
+
+        this.visible     = true
 
         var _meCell = grid.children[this.id]
   
@@ -127,12 +133,31 @@
           this.set(_meCell.getX(), _meCell.getY())
         }
 
-        this.color1 = this.color
       }
 
     }
 
   }
+
+
+  var Dragging = function(x, y, size, fill, color1, color2){
+    DEVGAME.entity.Rect.call(this, x, y, size, size)
+    this.id      = 0
+    this.color1  = color1 || '#000'
+    this.color2  = color2 || '#000'
+    this.fill    = fill   || false
+    this.visible = false
+  }
+
+  Dragging.prototype = Object.create(DEVGAME.entity.Rect.prototype)
+
+  Dragging.prototype.setID = function(id){
+    this.id = id
+  }
+
+  Dragging.prototype.draw = Cell.prototype.draw
+
+  var dragging = new Dragging(0, 0, size, true, '#000', '#FFF')
 
   var pieces = new DEVGAME.Container() 
 
@@ -147,7 +172,7 @@
     }
   }
 
-  stage.addChild(grid, pieces, mouse)
+  stage.addChild(grid, pieces, dragging, mouse)
 
   function loop(timestamp){
 
