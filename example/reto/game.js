@@ -13,14 +13,27 @@
   var _fps = 0
 
   var size  = 60
-  var rows  = 4
-  var cols  = 6
-  var cells = rows*cells
+  var rows  = 8
+  var cols  = 4
+  var cells = rows*cols
 
+
+  var buffer = document.createElement('canvas')
+  buffer._pos   = Math.sqrt((size*2)+(size*2))
+  
+  document.body.appendChild(buffer)
+
+  buffer.width  = size+buffer._pos*2
+  buffer.height = buffer.width
+  
   var center = {
-    x: (canvas.clientWidth/2)-((cols*size)/2),
-    y: (canvas.clientHeight/2)-((rows*size)/2)
+    x: (canvas.clientWidth/2)-(((cols*size)/2)+buffer._pos),
+    y: (canvas.clientHeight/2)-(((rows*size)/2)+buffer._pos)
   }
+
+  var bufferContext = buffer.getContext('2d')
+  bufferContext.fillStyle = '#000'
+  bufferContext.font      = 'normal 16pt Arial'
 
   var mousex    = null
   var mousey    = null
@@ -33,6 +46,9 @@
   var mouse      = new DEVGAME.entity.Circle(mousex, mousey, 1)
   mouse.color    = '#080'
   mouse.dragging = false
+  var mask     = new DEVGAME.entity.Rect(0, 0, 10, 10)
+  mask.color   = mouse.color
+  mask.visible = false
 
   mouse.logic = function(){
     this.x     = mousex
@@ -54,9 +70,10 @@
     }
 
   }
+
   var grid = new DEVGAME.Container(center.x, center.y)
 
-  function Cell(id, x, y, size, piece, fill, color1, color2){
+  function Cell(id, x, y, sx, sy, size, piece, fill, color1, color2){
 
     var _x = null
     var _y = null
@@ -70,56 +87,105 @@
     }
 
     DEVGAME.entity.Rect.call(this, _x, _y, size, size)
-    this.id     = id
-    this.color1 = color1 || '#000'
-    this.color2 = color2 || '#000'
-    this.fill   = fill   || false
-    this.piece  = piece  || false
-    this.select = false
+    this.id       = id
+    this.rotation = piece ? DEVGAME.random(3)*90 : 0
+    this.rotationTransition = 0
+    this.sx       = sx*size
+    this.sy       = sy*size
+    this.color1   = color1 || '#000'
+    this.color2   = color2 || '#000'
+    this.fill     = fill   || false
+    this.piece    = piece  || false
+    this.select   = false
   }
 
   Cell.prototype = Object.create(DEVGAME.entity.Rect.prototype)
 
-  Cell.prototype.draw = function(){
-    context = this.context || this.parent.context
-    context.fillStyle = this.color1
+  Cell.prototype.drawBuffer = function(){
+
+    bufferContext.clearRect(0, 0, buffer.width, buffer.height)
+    var _x        = buffer.width/2
+    var _y        = buffer.height/2
+    var _rotation = (this.rotation + this.rotationTransition) * DEVGAME.DEG_TO_RAD
+
+    bufferContext.translate(_x, _y)
+    bufferContext.rotate(_rotation)
+    bufferContext.fillStyle = this.color1
     if (this.fill){
-      context.fillRect(this.x, this.y, this.width, this.height)
+      bufferContext.fillRect(-this.width/2, -this.height/2, this.width, this.height)
+      bufferContext.drawImage(spritesheet, this.sx, this.sy, this.width, this.height, -this.width/2, -this.height/2, this.width, this.height)
     }
-    context.strokeRect(this.x, this.y, this.width, this.height)
-    context.fillStyle = this.color2
-    context.textAlign = 'center'
-    context.fillText(this.id, this.x+(size/2), this.y+(((size)/2)+7))
+    bufferContext.strokeRect(-this.width/2, -this.height/2, this.width, this.height)
+    bufferContext.fillStyle = this.color2
+    bufferContext.textAlign = 'center'
+    bufferContext.fillText(this.id, 0, 7)
+    bufferContext.rotate(-_rotation)
+    bufferContext.translate(-_x, -_y)
+
+  }
+
+  Cell.prototype.draw = function(){
+    this.drawBuffer()
+    context = this.context || this.parent.context
+    context.drawImage(buffer, this.x, this.y, buffer.width, buffer.height)
   }
 
   Cell.prototype.move = function(mouse){
-    var _x = mouse.x-(this.width/2)
-    var _y = mouse.y-(this.height/2)
+    var _x = mouse.x-(buffer.width/2)
+    var _y = mouse.y-(buffer.height/2)
 
     this.set(_x, _y)
   }
 
+  Cell.prototype.animation = function(){
+    if (this.rotationTransition < 0) {
+      this.rotationTransition += deltaTime * 360/1000
+      if (this.rotationTransition > 0){
+        this.rotationTransition = 0
+      }
+    }
+  }
+
   Cell.prototype.logic = function(){
     if (this.piece){ 
-      
+
+      this.sx -= Math.sin(pieces.change*DEVGAME.DEG_TO_RAD)
+      this.animation()
+
       if (mouse.down === 1 && mouse.dragging === false){
+
+        var _x = this.x
+        var _y = this.y
+
+        this.x += buffer._pos
+        this.y += buffer._pos
 
         if (DEVGAME.collision.rectToCircle(this, mouse)){
           this.select = mouse.dragging = true
+          mask.set(mouse.x-(mask.width/2), mouse.y-(mask.height/2))
+          mask.visible = true
         }
-      
+
+        this.x = _x
+        this.y = _y
+
       }
 
       if (mouse.up === 1){
+        
+        if (this.select && DEVGAME.collision.rectToCircle(mask, mouse)){
+          this.rotationTransition -= 90
+          this.rotation += 90
+          this.rotation = this.rotation > 270 ? 0 : this.rotation 
+        }
+
         this.select = mouse.dragging = false
         dragging.visible = false
       }
 
       if (this.select){
 
-        dragging.setID(this.id)
         this.visible     = false
-        dragging.visible = true
         this.move(mouse)
         dragging.copy(this)
 
@@ -128,8 +194,8 @@
         this.visible     = true
 
         var _meCell = grid.children[this.id]
-  
-        if (DEVGAME.collision.rectToRect(this, _meCell)){
+
+        if (DEVGAME.collision.rectToRect(this, _meCell) && this.rotation === 0){
           this.set(_meCell.getX(), _meCell.getY())
         }
 
@@ -139,22 +205,29 @@
 
   }
 
-
   var Dragging = function(x, y, size, fill, color1, color2){
     DEVGAME.entity.Rect.call(this, x, y, size, size)
-    this.id      = 0
-    this.color1  = color1 || '#000'
-    this.color2  = color2 || '#000'
-    this.fill    = fill   || false
-    this.visible = false
+    this.id       = 0
+    this.color1   = color1 || '#000'
+    this.color2   = color2 || '#000'
+    this.fill     = fill   || false
+    this.visible  = false
   }
 
   Dragging.prototype = Object.create(DEVGAME.entity.Rect.prototype)
 
-  Dragging.prototype.setID = function(id){
-    this.id = id
+  Dragging.prototype.copy = function(cell){
+    this.id = cell.id
+    this.x  = cell.getX()
+    this.y  = cell.getY()
+    this.rotation = cell.rotation
+    this.rotationTransition = cell.rotationTransition
+    this.sx = cell.sx
+    this.sy = cell.sy
+    this.visible = true
   }
 
+  Dragging.prototype.drawBuffer = Cell.prototype.drawBuffer
   Dragging.prototype.draw = Cell.prototype.draw
 
   var dragging = new Dragging(0, 0, size, true, '#000', '#FFF')
@@ -166,13 +239,16 @@
 
       var _id = grid.children.length
 
-      grid.addChild(new Cell(_id, x, y, size))
-      pieces.addChild(new Cell(_id, DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size), size, true, true, '#00A', '#FFF'))
+      grid.addChild(new Cell(_id, x, y, x, y, size))
+      pieces.addChild(new Cell(_id, DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size), x, y, size, true, true, '#00A', '#FFF'))
 
     }
   }
 
-  stage.addChild(grid, pieces, dragging, mouse)
+  pieces.hspeed    = 0.5
+  pieces.change    = 0
+
+  stage.addChild(grid, pieces, dragging, mask, mouse)
 
   function loop(timestamp){
 
@@ -190,7 +266,7 @@
       _seg = 0
     }
 
-    if (deltaTime > 17){
+    if (deltaTime > 17*2){
       deltaTime = 0
     }
 
@@ -198,6 +274,7 @@
     //clear canvas
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
 
+    pieces.change -= 1.2
     stage.exec()
     stage.render()
 
@@ -216,7 +293,13 @@
 
   var exec = DEVGAME.requestAnimationFrame(loop)
 
-  exec(loop)
+  var spritesheet = new Image()
+  spritesheet.src = 'puzzle.jpg'
+
+  spritesheet.onload = function(){
+    exec(loop)
+  }
+
 
   document.addEventListener('mousemove', function(event){
     mousex = event.pageX - canvas.offsetLeft
