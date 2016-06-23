@@ -17,6 +17,8 @@
   var cols  = 4
   var cells = rows*cols
 
+  var img = 'img/puzzle'+DEVGAME.random(1, 5)+'.jpg'
+
 
   var buffer = document.createElement('canvas')
   buffer._pos   = Math.sqrt((size*2)+(size*2))
@@ -294,7 +296,7 @@
   var exec = DEVGAME.requestAnimationFrame(loop)
 
   var spritesheet = new Image()
-  spritesheet.src = 'puzzle.jpg'
+  spritesheet.src = img
 
   spritesheet.onload = function(){
     exec(loop)
