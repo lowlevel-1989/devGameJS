@@ -1,6 +1,7 @@
 CONST   = require '../../const'
 Generic = require '../Generic'
 
+collision = require '../../collision'
 ###
 @class
 @memberof DEVGAME.entity
@@ -49,5 +50,8 @@ Rect.prototype.draw = () ->
     context = @context || @parent.context
     context.fillStyle = @color
     context.fillRect @x, @y, @width, @height
+
+Rect.prototype.collision = (rect) -> collision.rectToRect this, rect
+Rect.prototype.collisionCircle = (circle) -> collision.rectToCircle this, circle
 
 module.exports = Rect

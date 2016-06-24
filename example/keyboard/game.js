@@ -9,16 +9,10 @@
   
   var _debugUpdate = 300
 
-  // debug snake position
   var _seg  = 0
   var _fps  = 0
 
   var keyboard = {}
-
-  var KEY_LEFT  = 37
-  var KEY_UP    = 38
-  var KEY_RIGHT = 39
-  var KEY_DOWN  = 40
 
   var stage = new DEVGAME.Container()
   stage.setContext(context)
@@ -36,19 +30,19 @@
 
   ball.logic = function(){
 
-    if (keyboard[KEY_LEFT]){
+    if (keyboard[DEVGAME.KEY_LEFT]){
       this.hSpeed = -this.speed
     }
 
-    if (keyboard[KEY_UP]){
+    if (keyboard[DEVGAME.KEY_UP]){
       this.vSpeed = -this.speed
     }
 
-    if (keyboard[KEY_RIGHT]){
+    if (keyboard[DEVGAME.KEY_RIGHT]){
       this.hSpeed = this.speed
     }
 
-    if (keyboard[KEY_DOWN]){
+    if (keyboard[DEVGAME.KEY_DOWN]){
       this.vSpeed = this.speed
     }
 
@@ -86,10 +80,10 @@
     
     //draw debug
     context.fillText( 'FPS: '+ _fps,   10, 20 )
-    context.fillText( 'KEY_LEFT: ' + (keyboard[KEY_LEFT]  ? keyboard[KEY_LEFT]  : false),  10, 30 )
-    context.fillText( 'KEY_UP: '   + (keyboard[KEY_UP]    ? keyboard[KEY_UP]    : false),  10, 40 )
-    context.fillText( 'KEY_RIGHT: '+ (keyboard[KEY_RIGHT] ? keyboard[KEY_RIGHT] : false),  10, 50 )
-    context.fillText( 'KEY_DOWN: ' + (keyboard[KEY_DOWN]  ? keyboard[KEY_DOWN]  : false),  10, 60 )
+    context.fillText( 'KEY_LEFT: ' + (keyboard[DEVGAME.KEY_LEFT]  || false),  10, 30 )
+    context.fillText( 'KEY_UP: '   + (keyboard[DEVGAME.KEY_UP]    || false),  10, 40 )
+    context.fillText( 'KEY_RIGHT: '+ (keyboard[DEVGAME.KEY_RIGHT] || false),  10, 50 )
+    context.fillText( 'KEY_DOWN: ' + (keyboard[DEVGAME.KEY_DOWN]  || false),  10, 60 )
     
     exec(loop)
 

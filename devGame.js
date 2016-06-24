@@ -68,7 +68,7 @@ Container.prototype.addChild = function() {
 module.exports = Container;
 
 
-},{"./const":6,"./entity/Generic":9}],2:[function(require,module,exports){
+},{"./const":7,"./entity/Generic":10}],2:[function(require,module,exports){
 var distance;
 
 distance = require('../distance/circleToCircle');
@@ -78,15 +78,38 @@ module.exports = function(circleA, circleB) {
 };
 
 
-},{"../distance/circleToCircle":7}],3:[function(require,module,exports){
+},{"../distance/circleToCircle":8}],3:[function(require,module,exports){
+module.exports = function(circle, rect) {
+  var circleDistanceX, circleDistanceY, cornerDistanceSQ;
+  circleDistanceX = Math.abs(circle.getX() - rect.getX() - rect.width / 2);
+  circleDistanceY = Math.abs(circle.getY() - rect.getY() - rect.height / 2);
+  if (circleDistanceX > (rect.width / 2 + circle.radius)) {
+    return false;
+  }
+  if (circleDistanceY > (rect.height / 2 + circle.radius)) {
+    return false;
+  }
+  if (circleDistanceX <= (rect.width / 2)) {
+    return true;
+  }
+  if (circleDistanceY <= (rect.height / 2)) {
+    return true;
+  }
+  cornerDistanceSQ = Math.pow(circleDistanceX - rect.width / 2, 2) + Math.pow(circleDistanceY - rect.height / 2, 2);
+  return cornerDistanceSQ <= (Math.pow(circle.radius, 2));
+};
+
+
+},{}],4:[function(require,module,exports){
 module.exports = {
   rectToRect: require('./rectToRect'),
   rectToCircle: require('./rectToCircle'),
+  circleToRect: require('./circleToRect'),
   circleToCircle: require('./circleToCircle')
 };
 
 
-},{"./circleToCircle":2,"./rectToCircle":4,"./rectToRect":5}],4:[function(require,module,exports){
+},{"./circleToCircle":2,"./circleToRect":3,"./rectToCircle":5,"./rectToRect":6}],5:[function(require,module,exports){
 module.exports = function(rect, circle) {
   var circleDistanceX, circleDistanceY, cornerDistanceSQ;
   circleDistanceX = Math.abs(circle.getX() - rect.getX() - rect.width / 2);
@@ -108,13 +131,13 @@ module.exports = function(rect, circle) {
 };
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports = function(rectA, rectB) {
   return rectA.getX() < rectB.getX() + rectB.width && rectA.getX() + rectA.width > rectB.getX() && rectA.getY() < rectB.getY() + rectB.height && rectA.getY() + rectA.height > rectB.getY();
 };
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
 /*
 Constant values used in DevGame
@@ -133,6 +156,22 @@ CONST = {
    */
   VERSION: '__VERSION__',
   requestAnimationFrame: require('./requestAnimationFrame'),
+  KEY_F1: 112,
+  KEY_F2: 113,
+  KEY_F3: 114,
+  KEY_F4: 115,
+  KEY_F5: 116,
+  KEY_F6: 117,
+  KEY_F7: 118,
+  KEY_F8: 119,
+  KEY_F9: 120,
+  KEY_F10: 121,
+  KEY_F11: 122,
+  KEY_F12: 123,
+  KEY_LEFT: 37,
+  KEY_UP: 38,
+  KEY_RIGHT: 39,
+  KEY_DOWN: 40,
   PI: Math.PI,
 
   /*
@@ -175,7 +214,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":17}],7:[function(require,module,exports){
+},{"./requestAnimationFrame":18}],8:[function(require,module,exports){
 module.exports = function(circleA, circleB) {
   var dx, dy;
   dx = circleA.getX() - circleB.getX();
@@ -184,13 +223,13 @@ module.exports = function(circleA, circleB) {
 };
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = {
   circleToCircle: require('./circleToCircle')
 };
 
 
-},{"./circleToCircle":7}],9:[function(require,module,exports){
+},{"./circleToCircle":8}],10:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -280,7 +319,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":6,"./Point":10}],10:[function(require,module,exports){
+},{"../const":7,"./Point":11}],11:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -381,7 +420,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -394,7 +433,7 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":10,"./shapes/Arc":12,"./shapes/Circle":13,"./shapes/Rect":14}],12:[function(require,module,exports){
+},{"./Point":11,"./shapes/Arc":13,"./shapes/Circle":14,"./shapes/Rect":15}],13:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -467,12 +506,14 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":6,"../Generic":9}],13:[function(require,module,exports){
-var Arc, CONST, Circle;
+},{"../../const":7,"../Generic":10}],14:[function(require,module,exports){
+var Arc, CONST, Circle, collision;
 
 CONST = require('../../const');
 
 Arc = require('./Arc');
+
+collision = require('../../collision');
 
 
 /*
@@ -514,15 +555,25 @@ Circle.prototype.clone = function() {
   return new Circle(this.x, this.y, this.radius);
 };
 
+Circle.prototype.collision = function(circle) {
+  return collision.circleToCircle(this, circle);
+};
+
+Circle.prototype.collisionRect = function(rect) {
+  return collision.circleToRect(this, rect);
+};
+
 module.exports = Circle;
 
 
-},{"../../const":6,"./Arc":12}],14:[function(require,module,exports){
-var CONST, Generic, Rect;
+},{"../../collision":4,"../../const":7,"./Arc":13}],15:[function(require,module,exports){
+var CONST, Generic, Rect, collision;
 
 CONST = require('../../const');
 
 Generic = require('../Generic');
+
+collision = require('../../collision');
 
 
 /*
@@ -590,10 +641,18 @@ Rect.prototype.draw = function() {
   return context.fillRect(this.x, this.y, this.width, this.height);
 };
 
+Rect.prototype.collision = function(rect) {
+  return collision.rectToRect(this, rect);
+};
+
+Rect.prototype.collisionCircle = function(circle) {
+  return collision.rectToCircle(this, circle);
+};
+
 module.exports = Rect;
 
 
-},{"../../const":6,"../Generic":9}],15:[function(require,module,exports){
+},{"../../collision":4,"../../const":7,"../Generic":10}],16:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -615,7 +674,7 @@ DEVGAME.rgb = require('./rgb');
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":3,"./const":6,"./distance":8,"./entity":11,"./random":16,"./rgb":18,"./super":19}],16:[function(require,module,exports){
+},{"./Container":1,"./collision":4,"./const":7,"./distance":9,"./entity":12,"./random":17,"./rgb":19,"./super":20}],17:[function(require,module,exports){
 module.exports = function(min, max) {
   if (min == null) {
     min = 0;
@@ -631,7 +690,7 @@ module.exports = function(min, max) {
 };
 
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -641,7 +700,7 @@ module.exports = function() {
 };
 
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = function(red, green, blue) {
   if (red == null) {
     red = 0;
@@ -656,7 +715,7 @@ module.exports = function(red, green, blue) {
 };
 
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -665,5 +724,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[15])(15)
+},{}]},{},[16])(16)
 });

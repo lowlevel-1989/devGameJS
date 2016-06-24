@@ -32,14 +32,6 @@
   var mouseDown = null
   var mouseUp   = null
 
-
-  var KEY_F1 = 112
-  var KEY_F2 = 113
-  var KEY_F3 = 114
-  var KEY_F4 = 115
-  var KEY_F5 = 116
-
-
   var size  = 60
   var rows  = 8
   var cols  = 4
@@ -65,7 +57,6 @@
   }
 
   document.body.appendChild(buffer)
-
 
   function init(){
 
@@ -131,6 +122,11 @@
   function restart(){
     img = 'img/puzzle'+DEVGAME.random(1, 5)+'.jpg'
     spritesheet.src = img
+    
+    for (var id in pieces.children){
+      pieces.children[id].set(DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size))
+    }
+
     spritesheet.onload = function(){
       run(loop)
     }
@@ -250,19 +246,19 @@
 
     document.addEventListener('keyup', function(event){
       event.preventDefault()
-      if (event.keyCode === KEY_F1){
+      if (event.keyCode === DEVGAME.KEY_F1){
         _debug = !_debug
       }
-      if (event.keyCode === KEY_F2){
+      if (event.keyCode === DEVGAME.KEY_F2){
         _info = !_info
       }
-      if (event.keyCode === KEY_F3){
+      if (event.keyCode === DEVGAME.KEY_F3){
         pieces.animation = !pieces.animation
       }
-      if (event.keyCode === KEY_F4){
+      if (event.keyCode === DEVGAME.KEY_F4){
         _preview = !_preview
       }
-      if (event.keyCode === KEY_F5){
+      if (event.keyCode === DEVGAME.KEY_F5){
         restart()
       }
 
@@ -362,14 +358,9 @@
         this.x += buffer._pos
         this.y += buffer._pos
 
-        if (DEVGAME.collision.rectToCircle(this, pointer)){
+        if (this.collisionCircle(pointer)){
           this.select = mouse.dragging = true
           mask.set(pointer.getX()-(mask.width/2), pointer.getY()-(mask.height/2))
-          if (_debug){
-            mouse.visible = true
-          }else{
-            mouse.visible = false
-          }
         }
 
         this.x = _x
@@ -401,7 +392,7 @@
 
         var _meCell = grid.children[this.id]
 
-        if (DEVGAME.collision.rectToRect(this, _meCell) && this.rotation === 0){
+        if (this.collision(_meCell) && this.rotation === 0){
           this.set(_meCell.getX(), _meCell.getY())
         }
 

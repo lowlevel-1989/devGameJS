@@ -1,6 +1,8 @@
 CONST   = require '../../const'
 Arc = require './Arc'
 
+collision = require '../../collision'
+
 ###
 @class
 @memberof DEVGAME.entity
@@ -27,5 +29,8 @@ Creates a clone od this Arc
 @return {DEVGAME.entity.Arc}
 ###
 Circle.prototype.clone = () -> new Circle(@x, @y, @radius)
+
+Circle.prototype.collision     = (circle) -> collision.circleToCircle this, circle
+Circle.prototype.collisionRect = (rect) -> collision.circleToRect this, rect
 
 module.exports = Circle
