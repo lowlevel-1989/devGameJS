@@ -172,7 +172,7 @@
     }
 
 
-    if (pieces.animation){
+    if (pieces.animation && state === GAME){
       pieces.change -= 1.2
     }
 
