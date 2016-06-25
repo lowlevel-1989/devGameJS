@@ -15,36 +15,44 @@
   var mousex = 0
   var mousey = 0
 
-  var stage = new DEVGAME.Container()
-  stage.setContext(context)
+  var stage  = null
+  var center = null
+  var mouse  = null
 
-  var center = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
-  center.color = '#006'
+  function init(){
+    stage = new DEVGAME.Container()
+    stage.setContext(context)
 
-  var mouse = new DEVGAME.entity.Circle(mousex, mousey, 5)
+    center = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
+    center.color = '#006'
 
-  mouse.logic = function(){
-    this.x = mousex
-    this.y = mousey
+    mouse = new DEVGAME.entity.Circle(mousex, mousey, 5)
 
-    if (this.getX() < 0){
-      this.x = 0
+    mouse.logic = function(){
+      this.x = mousex
+      this.y = mousey
+
+      if (this.getX() < 0){
+        this.x = 0
+      }
+      if (this.getX() > canvas.clientWidth){
+        this.x = canvas.clientWidth
+      }
+      if (this.getY() < 0){
+        this.y = 0
+      }
+      if (this.getY() > canvas.clientHeight){
+        this.y = canvas.clientHeight
+      }
     }
-    if (this.getX() > canvas.clientWidth){
-      this.x = canvas.clientWidth
-    }
-    if (this.getY() < 0){
-      this.y = 0
-    }
-    if (this.getY() > canvas.clientHeight){
-      this.y = canvas.clientHeight
-    }
+
+    stage.add(center, mouse)
+    events()
+    run(loop)
+  
   }
 
-  stage.addChild(center, mouse)
-
-  function loop(timestamp){
-
+  function exec(timestamp){
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
     deltaTime  = timestamp - timeElapse
@@ -64,10 +72,12 @@
     }
 
 
-    //clear canvas
+    stage.exec()
+  }
+
+  function draw(){
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
 
-    stage.exec()
     stage.render()
     
     //draw fps
@@ -77,18 +87,25 @@
     context.fillText( 'MOUSE X: ' + mouse.x, 10, 40 )
     context.fillText( 'MOUSE Y: ' + mouse.y, 10, 60 )
     context.fillText( 'DISTANCE: '+ DEVGAME.distance.circleToCircle(mouse, center), 10, 80 )
-
-    exec(loop)
-
   }
 
-  var exec = DEVGAME.requestAnimationFrame(loop)
+  function events(){
+    document.addEventListener('mousemove', function(event){
+      mousex = event.pageX - canvas.offsetLeft
+      mousey = event.pageY - canvas.offsetTop
+    }, false)
+  }
 
-  exec(loop)
+  function loop(timestamp){
+    exec(timestamp)
+    draw()
 
-  document.addEventListener('mousemove', function(event){
-    mousex = event.pageX - canvas.offsetLeft
-    mousey = event.pageY - canvas.offsetTop
-  }, false)
+
+    run(loop)
+  }
+
+  var run = DEVGAME.requestAnimationFrame(loop)
+  window.addEventListener('load', init, false)
+
 
 })(window, document, DEVGAME)

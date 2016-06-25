@@ -14,71 +14,77 @@
 
   var _pointCollision = {}
 
+  var stage = null
+  var rectA = null
+  var rectB = null
 
-  var stage = new DEVGAME.Container()
-  stage.setContext(context)
+  function init(){
+    stage = new DEVGAME.Container()
+    stage.setContext(context)
 
+    rectA = new DEVGAME.entity.Rect(0, canvas.clientHeight/2, 24, 24)
 
-  var rectA = new DEVGAME.entity.Rect(0, canvas.clientHeight/2, 24, 24)
+    rectA.direction = +1
+    rectA.hspeed    = 0.2
 
-  rectA.direction = +1
-  rectA.hspeed    = 0.2
+    rectA.logic = function(){
 
-  rectA.logic = function(){
-
-    
-    if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
-      this.direction *= -1
-    }
-
-    this.x += this.hspeed*deltaTime*this.direction
-
-    if (DEVGAME.collision.rectToRect(this, rectB)){
       
-      
-      _pointCollision.aX = this.getX()
-      _pointCollision.bX = rectB.getX()
-      _pointCollision.aY = this.getY()
-      _pointCollision.bY = rectB.getY()
+      if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
+        this.direction *= -1
+      }
 
-      this.color = rectB.color = '#F00'
-    }else{
-      this.color = rectB.color = '#000'
+      this.x += this.hspeed*deltaTime*this.direction
+
+      if (this.collision(rectB)){
+        
+        
+        _pointCollision.aX = this.getX()
+        _pointCollision.bX = rectB.getX()
+        _pointCollision.aY = this.getY()
+        _pointCollision.bY = rectB.getY()
+
+        this.color = rectB.color = '#F00'
+      }else{
+        this.color = rectB.color = '#000'
+      }
     }
-  }
 
-  rectA.draw = function(){
-    context.fillStyle = '#000'
-    context.fillText('A', this.x+5.5, this.y-12)
-    context.fillStyle = this.color
-    context.fillRect(this.x, this.y, this.width, this.height)
-  }
-  
-  var rectB = new DEVGAME.entity.Rect(canvas.clientWidth-24, canvas.clientHeight/2, 24, 24)
-
-  rectB.direction = -1
-  rectB.hspeed    = 0.1115
-
-  rectB.logic = function(){
+    rectA.draw = function(){
+      context.fillStyle = '#000'
+      context.fillText('A', this.x+5.5, this.y-12)
+      context.fillStyle = this.color
+      context.fillRect(this.x, this.y, this.width, this.height)
+    }
     
-    if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
-      this.direction *= -1
+    rectB = new DEVGAME.entity.Rect(canvas.clientWidth-24, canvas.clientHeight/2, 24, 24)
+
+    rectB.direction = -1
+    rectB.hspeed    = 0.1115
+
+    rectB.logic = function(){
+      
+      if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
+        this.direction *= -1
+      }
+
+      this.x += this.hspeed*deltaTime*this.direction
     }
 
-    this.x += this.hspeed*deltaTime*this.direction
+    rectB.draw = function(){
+      context.fillStyle = '#000'
+      context.fillText('B', this.x+5.5, this.y+48)
+      context.fillStyle = this.color
+      context.fillRect(this.x, this.y, this.width, this.height)
+    }
+
+    stage.add(rectA, rectB)
+
+    run(loop)
+
   }
 
-  rectB.draw = function(){
-    context.fillStyle = '#000'
-    context.fillText('B', this.x+5.5, this.y+48)
-    context.fillStyle = this.color
-    context.fillRect(this.x, this.y, this.width, this.height)
-  }
-
-  stage.addChild(rectA, rectB)
-
-  function loop(timestamp){
-
+  function exec(timestamp){
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
     deltaTime  = timestamp - timeElapse
@@ -97,11 +103,12 @@
       deltaTime = 0
     }
 
-
-    //clear canvas
-    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-    
     stage.exec()
+  }
+
+
+  function draw(){
+    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
     stage.render()
     
     
@@ -116,13 +123,20 @@
     context.fillText( '  Rectangle B' , 10, 120)
     context.fillText( '    x: ' + _pointCollision.bX, 10, 140)
     context.fillText( '    y: ' + _pointCollision.bY, 10, 160)
+  }
 
-    exec(loop)
+
+  function loop(timestamp){
+
+    exec(timestamp)
+    draw()
+
+    run(loop)
 
   }
 
-  var exec = DEVGAME.requestAnimationFrame(loop)
+  var run = DEVGAME.requestAnimationFrame(loop)
+  window.addEventListener('load', init, false)
 
-  exec(loop)
 
 })(window, document, DEVGAME)

@@ -10,7 +10,7 @@
   var rect = new DEVGAME.entity.Rect(100, 100, 50, 150)
   rect.color = 'blue'
 
-  stage.addChild(rect)
+  stage.add(rect)
   stage.render()
     
 

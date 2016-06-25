@@ -52,7 +52,7 @@
     return this._restore();
   };
 
-  Container.prototype.addChild = function() {
+  Container.prototype.add = function() {
     var child, i, len, results;
     results = [];
     for (i = 0, len = arguments.length; i < len; i++) {
@@ -64,6 +64,14 @@
       results.push(this.children.push(child));
     }
     return results;
+  };
+
+  Container.prototype.get = function(id) {
+    return this.children[id];
+  };
+
+  Container.prototype.forEach = function(callback) {
+    return this.children.forEach(callback);
   };
 
   module.exports = Container;

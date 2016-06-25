@@ -12,30 +12,34 @@
   var _seg = 0
   var _fps = 0
 
+  var stage = null
+  var p1 = null
 
-  var stage = new DEVGAME.Container()
-  stage.setContext(context)
 
+  function init(){
+    stage = new DEVGAME.Container()
+    stage.setContext(context)
 
-  //Particle
-  var p1 = new DEVGAME.entity.Circle(15, canvas.clientHeight/2, 15)
+    p1 = new DEVGAME.entity.Circle(15, canvas.clientHeight/2, 15)
 
-  p1.direction = +1
-  p1.hspeed    = 0.1115
+    p1.direction = +1
+    p1.hspeed    = 0.1115
 
-  p1.logic = function(){
-    
-    if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
-      this.direction *= -1
+    p1.logic = function(){
+      
+      if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
+        this.direction *= -1
+      }
+
+      this.x += this.hspeed*deltaTime*this.direction
     }
 
-    this.x += this.hspeed*deltaTime*this.direction
+    stage.add(p1)
+  
+    run(loop)
   }
 
-  stage.addChild(p1)
-
-  function loop(timestamp){
-
+  function exec(timestamp){
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
     deltaTime  = timestamp - timeElapse
@@ -55,24 +59,32 @@
     }
 
 
-    //clear canvas
-    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-    
     stage.exec()
+  }
+
+  function draw(){
+    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
+  
     stage.render()
-    
     
     //draw fps
     context.fillStyle = '#000'
     context.font      = 'normal 16pt Arial'
     context.fillText( 'FPS: '+ _fps, 10, 20 )
-
-    exec(loop)
-
   }
 
-  var exec = DEVGAME.requestAnimationFrame(loop)
 
-  exec(loop)
+
+
+  function loop(timestamp){
+    exec(timestamp)
+    draw()
+    run(loop)
+  }
+
+  var run = DEVGAME.requestAnimationFrame(loop)
+
+  window.addEventListener('load', init, false)
+
 
 })(window, document, DEVGAME)

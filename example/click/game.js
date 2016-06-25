@@ -16,60 +16,68 @@
   var mousey = 0
   var mouseClick = 0
 
-  var stage = new DEVGAME.Container()
-  stage.setContext(context)
+  var mouse  = null
+  var stage  = null
+  var circle = null
 
-  var circle = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
-  circle.create = function(){
+  function init(){
+    stage = new DEVGAME.Container()
+    stage.setContext(context)
 
-    var red   = DEVGAME.random(0, 255)
-    var green = DEVGAME.random(0, 255)
-    var blue  = DEVGAME.random(0, 255)
-    
-    this.color = DEVGAME.rgb(red, green, blue)
+    circle = new DEVGAME.entity.Circle(canvas.clientWidth/2, canvas.clientHeight/2, 15)
+    circle.create = function(){
 
-    this.x = DEVGAME.random(canvas.clientWidth-this.radius*2)+this.radius
-    this.y = DEVGAME.random(canvas.clientHeight-this.radius*2)+this.radius
+      var red   = DEVGAME.random(0, 255)
+      var green = DEVGAME.random(0, 255)
+      var blue  = DEVGAME.random(0, 255)
+      
+      this.color = DEVGAME.rgb(red, green, blue)
 
-  }
+      this.x = DEVGAME.random(canvas.clientWidth-this.radius*2)+this.radius
+      this.y = DEVGAME.random(canvas.clientHeight-this.radius*2)+this.radius
 
-  var mouse = new DEVGAME.entity.Circle(mousex, mousey, 5)
-
-  mouse.logic = function(){
-    this.x     = mousex
-    this.y     = mousey
-    this.click = mouseClick
-
-    if (this.getX() < 0){
-      this.x = 0
-    }
-    if (this.getX() > canvas.clientWidth){
-      this.x = canvas.clientWidth
-    }
-    if (this.getY() < 0){
-      this.y = 0
-    }
-    if (this.getY() > canvas.clientHeight){
-      this.y = canvas.clientHeight
     }
 
-    if (this.click === 1){
+    mouse = new DEVGAME.entity.Circle(mousex, mousey, 5)
 
-      if (DEVGAME.collision.circleToCircle(this, circle)){
-        circle.create()
+    mouse.logic = function(){
+      this.x     = mousex
+      this.y     = mousey
+      this.click = mouseClick
+
+      if (this.getX() < 0){
+        this.x = 0
       }
-      mouseClick = 0
-       
+      if (this.getX() > canvas.clientWidth){
+        this.x = canvas.clientWidth
+      }
+      if (this.getY() < 0){
+        this.y = 0
+      }
+      if (this.getY() > canvas.clientHeight){
+        this.y = canvas.clientHeight
+      }
+
+      if (this.click === 1){
+
+        if (this.collision(circle)){
+          circle.create()
+        }
+        mouseClick = 0
+         
+      }
+
     }
 
+    stage.add(circle, mouse)
+    circle.create()
+
+    events()
+    run(loop)
   }
 
-  stage.addChild(circle, mouse)
 
-  circle.create()
-
-  function loop(timestamp){
-
+  function exec(timestamp){
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
     deltaTime  = timestamp - timeElapse
@@ -88,33 +96,43 @@
       deltaTime = 0
     }
 
+    stage.exec()
+  }
 
+  function draw(){
     //clear canvas
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
 
-    stage.exec()
     stage.render()
     
     //draw fps
     context.fillStyle = '#000'
     context.font      = 'normal 16pt Arial'
     context.fillText( 'FPS: '+ _fps, 10, 20 )
-
-    exec(loop)
-
   }
 
-  var exec = DEVGAME.requestAnimationFrame(loop)
+  function events(){
+    document.addEventListener('mousemove', function(event){
+      mousex = event.pageX - canvas.offsetLeft
+      mousey = event.pageY - canvas.offsetTop
+    }, false)
 
-  exec(loop)
+    canvas.addEventListener('mousedown',function(event){
+      mouseClick = event.which
+    }, false)
+  }
 
-  document.addEventListener('mousemove', function(event){
-    mousex = event.pageX - canvas.offsetLeft
-    mousey = event.pageY - canvas.offsetTop
-  }, false)
 
-  canvas.addEventListener('mousedown',function(event){
-    mouseClick = event.which
-  }, false)
+  function loop(timestamp){
+    
+    exec(timestamp)
+    draw()
+    
+    run(loop)
+  }
+
+  var run = DEVGAME.requestAnimationFrame(loop)
+
+  window.addEventListener('load', init, false)
 
 })(window, document, DEVGAME)

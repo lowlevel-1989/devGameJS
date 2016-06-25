@@ -19,7 +19,13 @@
   var _info      = true
   var _preview   = false
 
-  var stage    = null
+  var GAME    = 0
+  var LOADING = 1
+
+  var state    = LOADING
+  var stage    = []
+  var game     = null
+  var loading  = null
   var grid     = null
   var pieces   = null
   var dragging = null
@@ -60,9 +66,21 @@
 
   function init(){
 
-    stage = new DEVGAME.Container()
-    stage.setContext(context)
+    game = new DEVGAME.Container()
+    game.setContext(context)
 
+    loading = new DEVGAME.Container()
+    loading.setContext(context)
+
+    stage[GAME] = game
+    stage[LOADING] = loading
+
+    loading.add(new DEVGAME.entity.Rect())
+    
+    loading.children[0].draw = function(){
+      context.fillText('LOADING', canvas.clientWidth/2, canvas.clientHeight/2)
+    }
+  
     mouse = new DEVGAME.Container()
     mouse.color    = '#080'
     mouse.dragging = false
@@ -97,8 +115,8 @@
 
     dragging = new Dragging(0, 0, size, true, '#000', '#FFF')
     
-    mouse.addChild(pointer, mask)
-    stage.addChild(grid, pieces, dragging, mouse)
+    mouse.add(pointer, mask)
+    game.add(grid, pieces, dragging, mouse)
 
     pieces.animation = true
     pieces.hspeed    = 0.5
@@ -108,27 +126,29 @@
       for (var x = 0; x < cols; x++){
 
         var _id = grid.children.length
-        grid.addChild(new Cell(_id, x, y, x, y, size))
-        pieces.addChild(new Cell(_id, DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size), x, y, size, true, true, '#00A', '#FFF'))
+        grid.add(new Cell(_id, x, y, x, y, size))
+        pieces.add(new Cell(_id, DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size), x, y, size, true, true, '#00A', '#FFF'))
 
       }
     }
 
     restart()
     events()
+    run(loop)
   }
 
 
   function restart(){
+    state = LOADING
     img = 'img/puzzle'+DEVGAME.random(1, 5)+'.jpg'
     spritesheet.src = img
     
-    for (var id in pieces.children){
-      pieces.children[id].set(DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size))
-    }
+    pieces.forEach(function(piece){
+      piece.set(DEVGAME.random(canvas.clientWidth-size), DEVGAME.random(canvas.clientHeight-size))
+    })
 
     spritesheet.onload = function(){
-      run(loop)
+      state = GAME
     }
   }
 
@@ -156,7 +176,7 @@
       pieces.change -= 1.2
     }
 
-    stage.exec()
+    stage[state].exec()
 
     mouseDown = mouseUp = null
 
@@ -197,7 +217,7 @@
       context.drawImage(spritesheet, (canvas.clientWidth-spritesheet.width/1.8) - 45, 10, spritesheet.width/1.8, spritesheet.height/1.8)
     }
 
-    stage.render()
+    stage[state].render()
 
   }
 
@@ -427,8 +447,6 @@
 
   Dragging.prototype.drawBuffer = Cell.prototype.drawBuffer
   Dragging.prototype.draw = Cell.prototype.draw
-
-
 
   function loop(timestamp){
     exec(timestamp)

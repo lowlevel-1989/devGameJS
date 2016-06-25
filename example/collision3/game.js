@@ -13,57 +13,61 @@
   var _fps = 0
 
   var _pointCollision = {}
+  
+  var stage   = null
+  var circleA = null
+  var circleB = null
 
-
-  var stage = new DEVGAME.Container()
-  stage.setContext(context)
-
-
-  var circleA = new DEVGAME.entity.Circle(12, canvas.clientHeight/2, 12)
-
-  circleA.direction = +1
-  circleA.hspeed    = 0.2
-
-  circleA.logic = function(){
-
-    if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
-      this.direction *= -1
-    }
-
-    this.x += this.hspeed*deltaTime*this.direction
+  function init(){
+    stage = new DEVGAME.Container()
+    stage.setContext(context)
     
-    if (DEVGAME.collision.circleToCircle(this, circleB)){
-      
-      
-      _pointCollision.aX = this.getX()
-      _pointCollision.bX = circleB.getX()
-      _pointCollision.aY = this.getY()
-      _pointCollision.bY = circleB.getY()
+    circleA = new DEVGAME.entity.Circle(12, canvas.clientHeight/2, 12)
 
-      this.color = circleB.color = '#F00'
-    }else{
-      this.color = circleB.color = '#000'
+    circleA.direction = +1
+    circleA.hspeed    = 0.2
+
+    circleA.logic = function(){
+
+      if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
+        this.direction *= -1
+      }
+
+      this.x += this.hspeed*deltaTime*this.direction
+      
+      if (this.collision(circleB)){
+        
+        _pointCollision.aX = this.getX()
+        _pointCollision.bX = circleB.getX()
+        _pointCollision.aY = this.getY()
+        _pointCollision.bY = circleB.getY()
+
+        this.color = circleB.color = '#F00'
+      }else{
+        this.color = circleB.color = '#000'
+      }
     }
+
+    circleB = new DEVGAME.entity.Circle(canvas.clientWidth/3, canvas.clientHeight/2, 12)
+
+    circleB.direction = -1
+    circleB.hspeed    = 0.1115
+
+    circleB.logic = function(){
+      
+      if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
+        this.direction *= -1
+      }
+
+      this.x += this.hspeed*deltaTime*this.direction
+    }
+
+    stage.add(circleA, circleB)
+    run(loop)
   }
 
-  var circleB = new DEVGAME.entity.Circle(canvas.clientWidth/3, canvas.clientHeight/2, 12)
 
-  circleB.direction = -1
-  circleB.hspeed    = 0.1115
-
-  circleB.logic = function(){
-    
-    if (this.getX() > (canvas.clientWidth - this.radius) || (this.getX() < this.radius)){
-      this.direction *= -1
-    }
-
-    this.x += this.hspeed*deltaTime*this.direction
-  }
-
-  stage.addChild(circleA, circleB)
-
-  function loop(timestamp){
-
+  function exec(timestamp){
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
     deltaTime  = timestamp - timeElapse
@@ -82,11 +86,11 @@
       deltaTime = 0
     }
 
-
-    //clear canvas
-    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-    
     stage.exec()
+  }
+
+  function draw(){
+    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
     stage.render()
     
     
@@ -102,12 +106,18 @@
     context.fillText( '    x: ' + _pointCollision.bX, 10, 140)
     context.fillText( '    y: ' + _pointCollision.bY, 10, 160)
 
-    exec(loop)
-
   }
 
-  var exec = DEVGAME.requestAnimationFrame(loop)
 
-  exec(loop)
+  function loop(timestamp){
+    exec(timestamp)
+    draw()
+
+    run(loop)
+  }
+
+  var run = DEVGAME.requestAnimationFrame(loop)
+  window.addEventListener('load', init, false)
+
 
 })(window, document, DEVGAME)

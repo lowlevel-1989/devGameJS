@@ -45,7 +45,7 @@
   var snake = new DEVGAME.Container()
 
   for ( var i = body.length-1; i >= 0; i-- ){
-    snake.addChild(body[i])
+    snake.add(body[i])
   }
 
   snake.direction = 0
@@ -117,7 +117,7 @@
     this.move()
 
   }
-  stage.addChild(snake)
+  stage.add(snake)
 
   function loop(timestamp){
 
