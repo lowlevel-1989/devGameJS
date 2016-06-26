@@ -10,7 +10,7 @@ collision = require '../../collision'
 @param width {number} The overall width of the rectangle
 @param height {number} The overall height of this rectangle
 ###
-Rect = (x=0, y=0, width=0, height=0) ->
+Rect = (x=0, y=0, width=0, height=0, fill=false) ->
 
   Generic.call(@, x, y)
 
@@ -25,6 +25,8 @@ Rect = (x=0, y=0, width=0, height=0) ->
   @default 0
   ###
   @height = height
+
+  @fill = fill
 
   ###
   The  type of the object
@@ -48,8 +50,14 @@ Rect.prototype.clone = () -> new Rect(@x, @y, @width, @height)
 
 Rect.prototype.draw = () ->
     context = @context || @parent.context
-    context.fillStyle = @color
-    context.fillRect @x, @y, @width, @height
+    if @fill == true
+      context.fillStyle   = @color
+      context.fillRect @x, @y, @width, @height
+    else
+      context.strokeStyle = @color
+      context.rect @x, @y, @width, @height
+      context.stroke()
+    
 
 Rect.prototype.collision = (rect) -> collision.rectToRect this, rect
 Rect.prototype.collisionCircle = (circle) -> collision.rectToCircle this, circle

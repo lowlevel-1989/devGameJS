@@ -32,6 +32,7 @@
       anticlockwise = false;
     }
     Generic.call(this, x, y);
+    this.fill = false;
     this.radius = radius;
     this.startAngle = startAngle;
     this.endAngle = endAngle;
@@ -61,12 +62,21 @@
 
   Arc.prototype.draw = function() {
     var context;
-    context = this.context || this.parent.context;
-    context.fillStyle = this.color;
-    context.beginPath();
-    context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
-    context.closePath();
-    return context.fill();
+    if (this.fill) {
+      context = this.context || this.parent.context;
+      context.fillStyle = this.color;
+      context.beginPath();
+      context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+      context.closePath();
+      return context.fill();
+    } else {
+      context = this.context || this.parent.context;
+      context.strokeStyle = this.color;
+      context.beginPath();
+      context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+      context.closePath();
+      return context.stroke();
+    }
   };
 
   module.exports = Arc;

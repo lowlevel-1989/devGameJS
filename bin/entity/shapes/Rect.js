@@ -18,7 +18,7 @@
   @param height {number} The overall height of this rectangle
    */
 
-  Rect = function(x, y, width, height) {
+  Rect = function(x, y, width, height, fill) {
     if (x == null) {
       x = 0;
     }
@@ -30,6 +30,9 @@
     }
     if (height == null) {
       height = 0;
+    }
+    if (fill == null) {
+      fill = false;
     }
     Generic.call(this, x, y);
 
@@ -44,6 +47,7 @@
     @default 0
      */
     this.height = height;
+    this.fill = fill;
 
     /*
     The  type of the object
@@ -70,8 +74,14 @@
   Rect.prototype.draw = function() {
     var context;
     context = this.context || this.parent.context;
-    context.fillStyle = this.color;
-    return context.fillRect(this.x, this.y, this.width, this.height);
+    if (this.fill === true) {
+      context.fillStyle = this.color;
+      return context.fillRect(this.x, this.y, this.width, this.height);
+    } else {
+      context.strokeStyle = this.color;
+      context.rect(this.x, this.y, this.width, this.height);
+      return context.stroke();
+    }
   };
 
   Rect.prototype.collision = function(rect) {

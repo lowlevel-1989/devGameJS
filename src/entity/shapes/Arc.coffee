@@ -9,6 +9,8 @@ Arc = (x=0, y=0, radius=0, startAngle=0, endAngle=0, anticlockwise=false) ->
 
   Generic.call(@, x, y)
 
+  @fill   = false
+
   @radius = radius
 
   @startAngle = startAngle
@@ -37,11 +39,19 @@ Creates a clone od this Arc
 Arc.prototype.clone = () -> new Arc(@x, @y, @radius, @startAngle, @endAngle, @anticlockwise)
 
 Arc.prototype.draw = () ->
+  if @fill
     context = @context || @parent.context
     context.fillStyle = @color
     context.beginPath()
     context.arc @x, @y, @radius, @startAngle, @endAngle, @anticlockwise
     context.closePath()
     context.fill()
+  else
+    context = @context || @parent.context
+    context.strokeStyle = @color
+    context.beginPath()
+    context.arc @x, @y, @radius, @startAngle, @endAngle, @anticlockwise
+    context.closePath()
+    context.stroke()
 
 module.exports = Arc

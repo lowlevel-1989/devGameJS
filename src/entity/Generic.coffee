@@ -17,8 +17,6 @@ Generic = (x=0, y=0) ->
   @parent  = null
   @context = null
 
-  @_buffer = {}
-
   @color = '#000'
 
   @visible = true
@@ -34,13 +32,6 @@ Generic.prototype.setContext = (context) ->
 
   @context = context
 
-  @_buffer.canvas   = document.createElement 'canvas'
-  @_buffer.context  = @_buffer.canvas.getContext '2d'
-  
-  @_buffer.context.imageSmoothingEnabled = false
-  
-  @_buffer.canvas.width  = context.canvas.clientWidth
-  @_buffer.canvas.height = context.canvas.clientHeight
 
 Generic.prototype.getX = () ->
   if @parent

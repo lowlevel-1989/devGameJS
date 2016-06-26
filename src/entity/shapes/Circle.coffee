@@ -7,9 +7,11 @@ collision = require '../../collision'
 @class
 @memberof DEVGAME.entity
 ###
-Circle = (x=0, y=0, radius=0) ->
+Circle = (x=0, y=0, radius=0, fill=false) ->
 
   Arc.call(@, x, y, radius, 0, CONST.PI_2)
+
+  @fill = fill
 
   ###
   The  type of the object
@@ -22,6 +24,7 @@ Circle = (x=0, y=0, radius=0) ->
 
 
 Circle.prototype = Object.create Arc.prototype
+
 
 ###
 Creates a clone od this Arc

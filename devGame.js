@@ -262,7 +262,6 @@ Generic = function(x, y) {
   this.yStart = y;
   this.parent = null;
   this.context = null;
-  this._buffer = {};
   this.color = '#000';
   this.visible = true;
   return this;
@@ -272,12 +271,7 @@ Generic.prototype = Object.create(Point.prototype);
 
 Generic.prototype.setContext = function(context) {
   context.imageSmoothingEnabled = false;
-  this.context = context;
-  this._buffer.canvas = document.createElement('canvas');
-  this._buffer.context = this._buffer.canvas.getContext('2d');
-  this._buffer.context.imageSmoothingEnabled = false;
-  this._buffer.canvas.width = context.canvas.clientWidth;
-  return this._buffer.canvas.height = context.canvas.clientHeight;
+  return this.context = context;
 };
 
 Generic.prototype.getX = function() {
@@ -474,6 +468,7 @@ Arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
     anticlockwise = false;
   }
   Generic.call(this, x, y);
+  this.fill = false;
   this.radius = radius;
   this.startAngle = startAngle;
   this.endAngle = endAngle;
@@ -503,12 +498,21 @@ Arc.prototype.clone = function() {
 
 Arc.prototype.draw = function() {
   var context;
-  context = this.context || this.parent.context;
-  context.fillStyle = this.color;
-  context.beginPath();
-  context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
-  context.closePath();
-  return context.fill();
+  if (this.fill) {
+    context = this.context || this.parent.context;
+    context.fillStyle = this.color;
+    context.beginPath();
+    context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+    context.closePath();
+    return context.fill();
+  } else {
+    context = this.context || this.parent.context;
+    context.strokeStyle = this.color;
+    context.beginPath();
+    context.arc(this.x, this.y, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+    context.closePath();
+    return context.stroke();
+  }
 };
 
 module.exports = Arc;
@@ -529,7 +533,7 @@ collision = require('../../collision');
 @memberof DEVGAME.entity
  */
 
-Circle = function(x, y, radius) {
+Circle = function(x, y, radius, fill) {
   if (x == null) {
     x = 0;
   }
@@ -539,7 +543,11 @@ Circle = function(x, y, radius) {
   if (radius == null) {
     radius = 0;
   }
+  if (fill == null) {
+    fill = false;
+  }
   Arc.call(this, x, y, radius, 0, CONST.PI_2);
+  this.fill = fill;
 
   /*
   The  type of the object
@@ -593,7 +601,7 @@ collision = require('../../collision');
 @param height {number} The overall height of this rectangle
  */
 
-Rect = function(x, y, width, height) {
+Rect = function(x, y, width, height, fill) {
   if (x == null) {
     x = 0;
   }
@@ -605,6 +613,9 @@ Rect = function(x, y, width, height) {
   }
   if (height == null) {
     height = 0;
+  }
+  if (fill == null) {
+    fill = false;
   }
   Generic.call(this, x, y);
 
@@ -619,6 +630,7 @@ Rect = function(x, y, width, height) {
   @default 0
    */
   this.height = height;
+  this.fill = fill;
 
   /*
   The  type of the object
@@ -645,8 +657,14 @@ Rect.prototype.clone = function() {
 Rect.prototype.draw = function() {
   var context;
   context = this.context || this.parent.context;
-  context.fillStyle = this.color;
-  return context.fillRect(this.x, this.y, this.width, this.height);
+  if (this.fill === true) {
+    context.fillStyle = this.color;
+    return context.fillRect(this.x, this.y, this.width, this.height);
+  } else {
+    context.strokeStyle = this.color;
+    context.rect(this.x, this.y, this.width, this.height);
+    return context.stroke();
+  }
 };
 
 Rect.prototype.collision = function(rect) {

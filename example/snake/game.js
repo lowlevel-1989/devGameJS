@@ -28,6 +28,7 @@
 
     head = new DEVGAME.entity.Arc(canvas.clientWidth/2, canvas.clientHeight/2, 5, 0, DEVGAME.PI_2)
     head.color = '#D7DF01'
+    head.fill  = true
 
     body = [
       head
@@ -38,6 +39,7 @@
     for (var i = 0; i < 400; i++){
       var x = particle.clone()
       x.color = '#424242'
+      x.fill  = true
       body.push(x)
     }
     

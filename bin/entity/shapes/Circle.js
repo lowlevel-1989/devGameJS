@@ -14,7 +14,7 @@
   @memberof DEVGAME.entity
    */
 
-  Circle = function(x, y, radius) {
+  Circle = function(x, y, radius, fill) {
     if (x == null) {
       x = 0;
     }
@@ -24,7 +24,11 @@
     if (radius == null) {
       radius = 0;
     }
+    if (fill == null) {
+      fill = false;
+    }
     Arc.call(this, x, y, radius, 0, CONST.PI_2);
+    this.fill = fill;
 
     /*
     The  type of the object

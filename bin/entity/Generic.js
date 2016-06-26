@@ -24,7 +24,6 @@
     this.yStart = y;
     this.parent = null;
     this.context = null;
-    this._buffer = {};
     this.color = '#000';
     this.visible = true;
     return this;
@@ -34,12 +33,7 @@
 
   Generic.prototype.setContext = function(context) {
     context.imageSmoothingEnabled = false;
-    this.context = context;
-    this._buffer.canvas = document.createElement('canvas');
-    this._buffer.context = this._buffer.canvas.getContext('2d');
-    this._buffer.context.imageSmoothingEnabled = false;
-    this._buffer.canvas.width = context.canvas.clientWidth;
-    return this._buffer.canvas.height = context.canvas.clientHeight;
+    return this.context = context;
   };
 
   Generic.prototype.getX = function() {
