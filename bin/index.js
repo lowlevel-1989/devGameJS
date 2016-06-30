@@ -18,6 +18,8 @@
 
   DEVGAME.rgb = require('./rgb');
 
+  DEVGAME.Sprite = require('./Sprite');
+
   module.exports = DEVGAME;
 
 }).call(this);

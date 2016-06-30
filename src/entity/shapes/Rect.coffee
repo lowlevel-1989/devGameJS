@@ -28,6 +28,8 @@ Rect = (x=0, y=0, width=0, height=0, fill=false) ->
 
   @fill = fill
 
+  @sprite = null
+
   ###
   The  type of the object
 
@@ -40,6 +42,9 @@ Rect = (x=0, y=0, width=0, height=0, fill=false) ->
 
 Rect.prototype = Object.create Generic.prototype
 
+Rect.prototype.setSprite = (sprite) ->
+  @sprite = sprite
+
 ###
 Creates a clone od this Rectangle
 
@@ -50,7 +55,9 @@ Rect.prototype.clone = () -> new Rect(@x, @y, @width, @height)
 
 Rect.prototype.draw = () ->
     context = @context || @parent.context
-    if @fill == true
+    if @sprite
+      context.drawImage @sprite.get(), @sprite.sx, @sprite.sy, @sprite.swidth, @sprite.sheight, @x, @y, @width, @height
+    else if @fill == true
       context.fillStyle   = @color
       context.fillRect @x, @y, @width, @height
     else
@@ -61,5 +68,10 @@ Rect.prototype.draw = () ->
 
 Rect.prototype.collision = (rect) -> collision.rectToRect this, rect
 Rect.prototype.collisionCircle = (circle) -> collision.rectToCircle this, circle
+
+Generic.prototype.exec = () ->
+  @logic()
+  if @sprite
+    @sprite.exec()
 
 module.exports = Rect

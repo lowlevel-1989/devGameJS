@@ -76,7 +76,105 @@ Container.prototype.forEach = function(callback) {
 module.exports = Container;
 
 
-},{"./const":7,"./entity/Generic":10}],2:[function(require,module,exports){
+},{"./const":8,"./entity/Generic":11}],2:[function(require,module,exports){
+var Sprite;
+
+Sprite = function(options) {
+  this.source = options.source;
+  this.spritesheet = new Image();
+  this.spritesheet.src = this.source;
+  this.animations = options.animations;
+  this.width = 0;
+  this.height = 0;
+  this.sx = options.sx || 0;
+  this.sy = options.sy || 0;
+  this.swidth = options.swidth;
+  this.sheight = options.sheight;
+  this.fps = options.fps || 0;
+  this.animation = options.animation;
+  this._interval = 1000 / this.fps;
+  this._timestamp = +(new Date);
+  this._timeelapse = this._timestamp;
+  this._deltatime = 0;
+  this._frame = 0;
+  return this._play = 1;
+};
+
+Sprite.prototype.use = function(animation) {
+  if (this.animation !== animation) {
+    this.animation = animation;
+    return this._timeelapse = 0;
+  }
+};
+
+Sprite.prototype.frame = function(n) {
+  if (this.animations[this.animation][n]) {
+    this._frame = n;
+  }
+  return this._timeelapse = 0;
+};
+
+Sprite.prototype.play = function() {
+  return this._play = 1;
+};
+
+Sprite.prototype.stop = function() {
+  this._frame = 0;
+  return this._play = 0;
+};
+
+Sprite.prototype.pause = function() {
+  return this._play = 2;
+};
+
+Sprite.prototype.next = function() {
+  if ((this._frame + 1) < this.animations[this.animation].length) {
+    return this._frame = ++this._frame;
+  }
+};
+
+Sprite.prototype.preview = function() {
+  if (this._frame > 0) {
+    return this._frame = --this._frame;
+  }
+};
+
+Sprite.prototype.load = function(callback) {
+  var self;
+  self = this;
+  this.spritesheet.onload = function() {
+    self.width = this.width;
+    self.height = this.height;
+    return callback.call(self, null);
+  };
+  return this.spritesheet.onerror = function(event) {
+    return callback.call(self, event);
+  };
+};
+
+Sprite.prototype.get = function() {
+  return this.spritesheet;
+};
+
+Sprite.prototype.exec = function() {
+  var frame;
+  this._timestamp = +(new Date);
+  this._deltatime = this._timestamp - this._timeelapse;
+  if (this._deltatime > this._interval) {
+    if (this._play === 1) {
+      this._frame = ++this._frame % this.animations[this.animation].length;
+    }
+    frame = this.animations[this.animation][this._frame];
+    this.sx = frame.sx;
+    this.sy = frame.sy;
+    return this._timeelapse = this._timestamp - (this._deltatime % this._interval);
+  }
+};
+
+module.exports = Sprite;
+
+
+},{}],3:[function(require,module,exports){
 var distance;
 
 distance = require('../distance/circleToCircle');
@@ -86,7 +184,7 @@ module.exports = function(circleA, circleB) {
 };
 
 
-},{"../distance/circleToCircle":8}],3:[function(require,module,exports){
+},{"../distance/circleToCircle":9}],4:[function(require,module,exports){
 module.exports = function(circle, rect) {
   var circleDistanceX, circleDistanceY, cornerDistanceSQ;
   circleDistanceX = Math.abs(circle.getX() - rect.getX() - rect.width / 2);
@@ -108,7 +206,7 @@ module.exports = function(circle, rect) {
 };
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 module.exports = {
   rectToRect: require('./rectToRect'),
   rectToCircle: require('./rectToCircle'),
@@ -117,7 +215,7 @@ module.exports = {
 };
 
 
-},{"./circleToCircle":2,"./circleToRect":3,"./rectToCircle":5,"./rectToRect":6}],5:[function(require,module,exports){
+},{"./circleToCircle":3,"./circleToRect":4,"./rectToCircle":6,"./rectToRect":7}],6:[function(require,module,exports){
 module.exports = function(rect, circle) {
   var circleDistanceX, circleDistanceY, cornerDistanceSQ;
   circleDistanceX = Math.abs(circle.getX() - rect.getX() - rect.width / 2);
@@ -139,13 +237,13 @@ module.exports = function(rect, circle) {
 };
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = function(rectA, rectB) {
   return rectA.getX() < rectB.getX() + rectB.width && rectA.getX() + rectA.width > rectB.getX() && rectA.getY() < rectB.getY() + rectB.height && rectA.getY() + rectA.height > rectB.getY();
 };
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
 /*
 Constant values used in DevGame
@@ -222,7 +320,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":18}],8:[function(require,module,exports){
+},{"./requestAnimationFrame":19}],9:[function(require,module,exports){
 module.exports = function(circleA, circleB) {
   var dx, dy;
   dx = circleA.getX() - circleB.getX();
@@ -231,13 +329,13 @@ module.exports = function(circleA, circleB) {
 };
 
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = {
   circleToCircle: require('./circleToCircle')
 };
 
 
-},{"./circleToCircle":8}],10:[function(require,module,exports){
+},{"./circleToCircle":9}],11:[function(require,module,exports){
 var CONST, Generic, Point;
 
 CONST = require('../const');
@@ -321,7 +419,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":7,"./Point":11}],11:[function(require,module,exports){
+},{"../const":8,"./Point":12}],12:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -422,7 +520,7 @@ Point.prototype.equals = function(point) {
 module.exports = Point;
 
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var entity;
 
 entity = {
@@ -435,7 +533,7 @@ entity = {
 module.exports = entity;
 
 
-},{"./Point":11,"./shapes/Arc":13,"./shapes/Circle":14,"./shapes/Rect":15}],13:[function(require,module,exports){
+},{"./Point":12,"./shapes/Arc":14,"./shapes/Circle":15,"./shapes/Rect":16}],14:[function(require,module,exports){
 var Arc, CONST, Generic;
 
 CONST = require('../../const');
@@ -518,7 +616,7 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":7,"../Generic":10}],14:[function(require,module,exports){
+},{"../../const":8,"../Generic":11}],15:[function(require,module,exports){
 var Arc, CONST, Circle, collision;
 
 CONST = require('../../const');
@@ -582,7 +680,7 @@ Circle.prototype.collisionRect = function(rect) {
 module.exports = Circle;
 
 
-},{"../../collision":4,"../../const":7,"./Arc":13}],15:[function(require,module,exports){
+},{"../../collision":5,"../../const":8,"./Arc":14}],16:[function(require,module,exports){
 var CONST, Generic, Rect, collision;
 
 CONST = require('../../const');
@@ -631,6 +729,7 @@ Rect = function(x, y, width, height, fill) {
    */
   this.height = height;
   this.fill = fill;
+  this.sprite = null;
 
   /*
   The  type of the object
@@ -642,6 +741,10 @@ Rect = function(x, y, width, height, fill) {
 };
 
 Rect.prototype = Object.create(Generic.prototype);
+
+Rect.prototype.setSprite = function(sprite) {
+  return this.sprite = sprite;
+};
 
 
 /*
@@ -657,7 +760,9 @@ Rect.prototype.clone = function() {
 Rect.prototype.draw = function() {
   var context;
   context = this.context || this.parent.context;
-  if (this.fill === true) {
+  if (this.sprite) {
+    return context.drawImage(this.sprite.get(), this.sprite.sx, this.sprite.sy, this.sprite.swidth, this.sprite.sheight, this.x, this.y, this.width, this.height);
+  } else if (this.fill === true) {
     context.fillStyle = this.color;
     return context.fillRect(this.x, this.y, this.width, this.height);
   } else {
@@ -675,10 +780,17 @@ Rect.prototype.collisionCircle = function(circle) {
   return collision.rectToCircle(this, circle);
 };
 
+Generic.prototype.exec = function() {
+  this.logic();
+  if (this.sprite) {
+    return this.sprite.exec();
+  }
+};
+
 module.exports = Rect;
 
 
-},{"../../collision":4,"../../const":7,"../Generic":10}],16:[function(require,module,exports){
+},{"../../collision":5,"../../const":8,"../Generic":11}],17:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -697,10 +809,12 @@ DEVGAME.random = require('./random');
 
 DEVGAME.rgb = require('./rgb');
 
+DEVGAME.Sprite = require('./Sprite');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./collision":4,"./const":7,"./distance":9,"./entity":12,"./random":17,"./rgb":19,"./super":20}],17:[function(require,module,exports){
+},{"./Container":1,"./Sprite":2,"./collision":5,"./const":8,"./distance":10,"./entity":13,"./random":18,"./rgb":20,"./super":21}],18:[function(require,module,exports){
 module.exports = function(min, max) {
   if (min == null) {
     min = 0;
@@ -716,7 +830,7 @@ module.exports = function(min, max) {
 };
 
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -726,7 +840,7 @@ module.exports = function() {
 };
 
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = function(red, green, blue) {
   if (red == null) {
     red = 0;
@@ -741,7 +855,7 @@ module.exports = function(red, green, blue) {
 };
 
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -750,5 +864,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[16])(16)
+},{}]},{},[17])(17)
 });

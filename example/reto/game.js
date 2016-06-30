@@ -141,6 +141,7 @@
   function restart(){
     state = LOADING
     img = 'img/puzzle'+DEVGAME.random(1, 5)+'.jpg'
+
     spritesheet.src = img
     
     pieces.forEach(function(piece){

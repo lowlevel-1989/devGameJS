@@ -48,6 +48,7 @@
      */
     this.height = height;
     this.fill = fill;
+    this.sprite = null;
 
     /*
     The  type of the object
@@ -59,6 +60,10 @@
   };
 
   Rect.prototype = Object.create(Generic.prototype);
+
+  Rect.prototype.setSprite = function(sprite) {
+    return this.sprite = sprite;
+  };
 
 
   /*
@@ -74,7 +79,9 @@
   Rect.prototype.draw = function() {
     var context;
     context = this.context || this.parent.context;
-    if (this.fill === true) {
+    if (this.sprite) {
+      return context.drawImage(this.sprite.get(), this.sprite.sx, this.sprite.sy, this.sprite.swidth, this.sprite.sheight, this.x, this.y, this.width, this.height);
+    } else if (this.fill === true) {
       context.fillStyle = this.color;
       return context.fillRect(this.x, this.y, this.width, this.height);
     } else {
@@ -90,6 +97,13 @@
 
   Rect.prototype.collisionCircle = function(circle) {
     return collision.rectToCircle(this, circle);
+  };
+
+  Generic.prototype.exec = function() {
+    this.logic();
+    if (this.sprite) {
+      return this.sprite.exec();
+    }
   };
 
   module.exports = Rect;
