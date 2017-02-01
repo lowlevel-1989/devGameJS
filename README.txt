@@ -48,3 +48,7 @@ Clase - DEVGAME.entity.Rect
     collision  -> detecta colision con otro rectangulo
     collisionCircle -> detecta colision con un circulo
     exec       -> ejecuta un ciclo de juego
+
+
+Funcion - DEVGAME.requestAnimationFrame(loop)
+  informacion  -> https://developer.mozilla.org/es/docs/Web/API/Window/requestAnimationFrame
