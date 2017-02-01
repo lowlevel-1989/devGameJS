@@ -1,12 +1,13 @@
 {
   "name": "devgamejs",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "game engine",
   "main": "devGame.js",
   "scripts": {
     "bundle": "browserify --standalone DEVGAME --transform coffeeify --extension=coffee src/index.coffee --outfile devGame.js",
     "build": "npm run clean && coffee --compile --output bin/ src/",
-    "clean": "rm -rf bin *.log && mkdir bin"
+    "clean": "rm -rf bin *.log && mkdir bin",
+    "server": "python -m SimpleHTTPServer 3000"
   },
   "repository": {
     "type": "git",
