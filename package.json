@@ -7,7 +7,7 @@
     "bundle": "browserify --standalone DEVGAME --transform coffeeify --extension=coffee src/index.coffee --outfile devGame.js",
     "build": "npm run clean && coffee --compile --output bin/ src/",
     "clean": "rm -rf bin *.log && mkdir bin",
-    "server": "python -m SimpleHTTPServer 3000"
+    "start": "python -m SimpleHTTPServer 3000"
   },
   "repository": {
     "type": "git",

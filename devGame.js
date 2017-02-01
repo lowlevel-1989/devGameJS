@@ -806,7 +806,9 @@ Rect.prototype.draw = function() {
     return context.fillRect(this.x, this.y, this.width, this.height);
   } else {
     context.strokeStyle = this.color;
+    context.beginPath();
     context.rect(this.x, this.y, this.width, this.height);
+    context.closePath();
     return context.stroke();
   }
 };

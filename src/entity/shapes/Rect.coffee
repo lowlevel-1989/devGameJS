@@ -62,7 +62,9 @@ Rect.prototype.draw = () ->
       context.fillRect @x, @y, @width, @height
     else
       context.strokeStyle = @color
+      context.beginPath()
       context.rect @x, @y, @width, @height
+      context.closePath()
       context.stroke()
     
 
