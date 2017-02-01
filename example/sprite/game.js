@@ -109,8 +109,6 @@
       run(loop)
     })
 
-    window.sprite = spritesheet
-
     stage = new DEVGAME.Container()
     stage.setContext(context)
 

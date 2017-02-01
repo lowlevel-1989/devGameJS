@@ -1,8 +1,8 @@
 (function(window, document, DEVGAME, undefined){
   'use strict'
 
-  var canvas   = document.getElementById('game')
-  var context  = canvas.getContext('2d')
+  var canvas  = document.getElementById('game')
+  var context = canvas.getContext('2d')
   context.font = 'normal 16px monospace'
   
   var SECOND   = 1000
@@ -21,9 +21,58 @@
   var timeRender = null
 
   var stage = null
-  var p1    = null
+  var vicky = null
+
+  var spritesheet = null
+
+  var test = 0
 
   function init(){
+   spritesheet = new DEVGAME.Sprite({
+      source:  'vicky.png', 
+      swidth:  32,
+      sheight: 48,
+      fps: 6,
+      animation: 'right',
+      animations: {
+        left: [
+          {
+            sx: 32*0,
+            sy: 48*1
+          },
+          {
+            sx: 32*1,
+            sy: 48*1
+          },
+          {
+            sx: 32*2,
+            sy: 48*1
+          },
+          {
+            sx: 32*3,
+            sy: 48*1
+          }
+        ],
+        right: [
+          {
+            sx: 32*0,
+            sy: 48*2
+          },
+          {
+            sx: 32*1,
+            sy: 48*2
+          },
+          {
+            sx: 32*2,
+            sy: 48*2
+          },
+          {
+            sx: 32*3,
+            sy: 48*2
+          }
+        ]
+      }
+    })
     timeRender = new DEVGAME.Timer(1000/30)
 
     timeRender.logic = function(delta){
@@ -33,14 +82,18 @@
     stage = new DEVGAME.Container()
     stage.setContext(context)
 
-    p1 = new Rect()
-    stage.add(p1)
+    vicky = new Hero(spritesheet)
 
-    run(loop)
+    stage.add(vicky)
+  
+    spritesheet.load(function(error){
+      run(loop)
+    }) 
   }
 
   function exec(timestamp){
     _cicles++
+
 
     timeElapse = timeElapse === 0 ? timestamp : timeElapse
     
@@ -52,6 +105,7 @@
     }
 
     _timeCount += deltaTime
+    test += deltaTime
 
     if (_timeCount > SECOND){
       _cpu = _cicles
@@ -80,22 +134,29 @@
   }
 
   
-  var Rect = function(){
-    DEVGAME.entity.Rect.call(this, 0, canvas.clientHeight/2, 20, 20, true)
+  var Hero = function(sprite){
+    DEVGAME.entity.Rect.call(this, 0, canvas.clientHeight/2, 32*3, 48*3, true)
     this.direction = +1
     this.hspeed    = 100/1000
+    this.setSprite(sprite)
   }
 
-  Rect.prototype = Object.create(DEVGAME.entity.Rect.prototype)
+  Hero.prototype = Object.create(DEVGAME.entity.Rect.prototype)
 
-  Rect.prototype.logic = function(){
+  Hero.prototype.logic = function(){
       
     if (this.getX() > (canvas.clientWidth - this.width) || (this.getX() < 0)){
+      console.info((test/1000 >> 0) +' seconds')
+      test = 0
       this.direction *= -1
+      this.sprite.use((this.direction < 0) ? 'left' : 'right')
     }
 
     this.x += this.hspeed*deltaTime*this.direction
   }
+
+
+
 
   function loop(timestamp){
     exec(timestamp)

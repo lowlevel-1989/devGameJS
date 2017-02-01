@@ -20,6 +20,8 @@
 
   DEVGAME.Sprite = require('./Sprite');
 
+  DEVGAME.Timer = require('./Timer');
+
   module.exports = DEVGAME;
 
 }).call(this);

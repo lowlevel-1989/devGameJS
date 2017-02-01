@@ -1,3 +1,5 @@
+Timer = require './Timer'
+
 Sprite = (options) ->
   @source = options.source
   @spritesheet = new Image()
@@ -11,21 +13,28 @@ Sprite = (options) ->
   @sheight = options.sheight
   @fps   = options.fps || 0
   @animation = options.animation
-  @_interval = 1000/@fps
-  @_timestamp  = +new Date
-  @_timeelapse = @_timestamp
-  @_deltatime  = 0
+  @_timer = new Timer(fps: @fps)
   @_frame = 0
   @_play  = 1
+
+  self = @
+  @_timer.logic = () ->
+    if self._play == 1
+      self._frame = ++self._frame % self.animations[self.animation].length
+    frame = self.animations[self.animation][self._frame]
+    self.sx = frame.sx
+    self.sy = frame.sy
+
+  return @
 
 Sprite.prototype.use   = (animation) ->
   if @animation != animation
     @animation   = animation
-    @_timeelapse = 0
+    @_timer.reset()
 
 Sprite.prototype.frame = (n) ->
   @_frame = n if @animations[@animation][n]
-  @_timeelapse = 0
+  @_timer.reset()
 
 Sprite.prototype.play = () -> @_play = 1
 
@@ -51,17 +60,6 @@ Sprite.prototype.load = (callback) ->
 Sprite.prototype.get = () -> return @spritesheet
 
 Sprite.prototype.exec = () ->
-  @_timestamp  = +new Date
-  @_deltatime  = @_timestamp - @_timeelapse
-
-  if @_deltatime > @_interval
-    if @_play == 1
-      @_frame = ++@_frame % @animations[@animation].length
-    frame = @animations[@animation][@_frame]
-    @sx = frame.sx
-    @sy = frame.sy
-
-    @_timeelapse = @_timestamp - (@_deltatime % @_interval)
-    
+  @_timer.exec()
 
 module.exports = Sprite

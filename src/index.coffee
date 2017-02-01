@@ -8,6 +8,7 @@ DEVGAME.distance  = require './distance'
 DEVGAME.random    = require './random'
 DEVGAME.rgb       = require './rgb'
 DEVGAME.Sprite    = require './Sprite'
+DEVGAME.Timer     = require './Timer'
 
 
 module.exports = DEVGAME
