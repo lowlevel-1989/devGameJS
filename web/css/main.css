@@ -30,6 +30,13 @@ h2 {
 a:hover {
   text-decoration: none;
 }
+footer {
+  background: #fcfcfc;
+  border: #eee solid 1px;
+  font-weight: bold;
+  margin: 0 10px 40px 10px;
+  padding: 5px 25px;
+}
 .section-heading {
   text-align: center;
   margin-bottom: 65px;
@@ -253,8 +260,7 @@ a:hover {
   max-width: 100%;
 }
 .works {
-  padding: 80px 0;
-  background: #FCFCFC;
+  padding: 80px 0 0 0;
 }
 .works .block {
   position: relative;
