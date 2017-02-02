@@ -31,11 +31,13 @@ a:hover {
   text-decoration: none;
 }
 footer {
-  background: #fcfcfc;
-  border: #eee solid 1px;
   font-weight: bold;
   margin: 0 10px 40px 10px;
-  padding: 5px 25px;
+}
+footer a {
+  font-size: 18px;
+  color: #999;
+  font-weight: normal;
 }
 .section-heading {
   text-align: center;
@@ -363,8 +365,9 @@ figure .overlay:hover a {
 }
 figure .buttons {
   position: absolute;
-  top: 45%;
-  left: 24%;
+  top: 20%;
+  left: 0;
+  right: 0;
 }
 figure figcaption {
   padding: 20px 25px;
