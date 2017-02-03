@@ -30,6 +30,15 @@ h2 {
 a:hover {
   text-decoration: none;
 }
+footer {
+  font-weight: bold;
+  margin: 0 10px 40px 10px;
+}
+footer a {
+  font-size: 18px;
+  color: #999;
+  font-weight: normal;
+}
 .section-heading {
   text-align: center;
   margin-bottom: 65px;
@@ -253,8 +262,7 @@ a:hover {
   max-width: 100%;
 }
 .works {
-  padding: 80px 0;
-  background: #FCFCFC;
+  padding: 80px 0 0 0;
 }
 .works .block {
   position: relative;
@@ -357,8 +365,9 @@ figure .overlay:hover a {
 }
 figure .buttons {
   position: absolute;
-  top: 45%;
-  left: 24%;
+  top: 20%;
+  left: 0;
+  right: 0;
 }
 figure figcaption {
   padding: 20px 25px;
