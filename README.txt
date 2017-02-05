@@ -16,39 +16,67 @@ estas pueden ser rectangulos o circulos.
 Empecemos explicando cada metodo y atributo de la clase Rect
 
 
-Clase - DEVGAME.entity.Rect
-  Atributos:
-    x         -> posicion en eje x
-    y         -> posicion en eje y
-    direction -> direccion
-    hSpeed    -> velocidad horizontal
-    vSpeed    -> velocidad vertical
-    speed     -> velocidad
-    xPrevious -> posicion previa de x
-    yPrevious -> posicion previa de y
-    xStart    -> posicion inicial x
-    yStart    -> posicion inicial y
-    parent    -> entidad padre
-    context   -> contexto
-    color     -> color
-    visible   -> si es visible en el Juegos
+CLASE - DEVGAME.entity.Rect
+  ARGUMENTOS:
+     x:      posicion en el eje x           | tipo: int    | default: 0
+     y:      posicion en el eje y           | tipo: int    | default: 0
+     width:  ancho                          | tipo: int    | default: 0
+     height: alto                           | tipo: int    | default: 0
+
+  ATRIBUTOS:
+    x         -> posicion en eje el x
+    y         -> posicion en eje el y
     width     -> ancho
     height    -> alto
+
+
+    direction -> direccion                  | tipo: int    | default: 1
+    hSpeed    -> velocidad horizontal       | tipo: int    | default: 0
+    vSpeed    -> velocidad vertical         | tipo: int    | default: 0
+    speed     -> velocidad                  | tipo: int    | default: 0
+
+    color     -> color                      | tipo: string | default: '#000'
+    visible   -> si es visible en el Juegos | tipo: bool   | default: true
     fill      -> relleno
+
+    // Estas son controladas por el motor
+    xPrevious -> posicion previa de x       | tipo: int    | default: x
+    yPrevious -> posicion previa de y       | tipo: int    | default: y
+    xStart    -> posicion inicial x         | tipo: int    | default: x
+    yStart    -> posicion inicial y         | tipo: int    | default: y
+
+    // Estas que son mas complejas se documentaran mas adelante
     sprite    -> instancia de sprite
     type      -> tipo de entidad
-  Metodos:
+    parent    -> entidad padre
+    context   -> contexto
+
+  METODOS:
     setContext -> le asigna el contexto
+      ARGS: (contexto)
+
     getX       -> retorna la posicion en x real
+      ARGS: ()
+
     getY       -> retorna la posicion en y real
+      ARGS: ()
+
     logic      -> logica que ejecutara cada ciclo de juego
-    setSprite  -> Asigna un sprite
+      DEF: logic se debe asignar una funcion definida por el programador
+
     clone      -> clona el objeto
+      ARGS: ()
     draw       -> dibuja el objeto en pantalla
+      ARGS: ()
+    exec       -> ejecuta un ciclo de juego
+      ARGS: ()
+
+    // Estas que son mas complejas se documentaran mas adelante
+    setSprite  -> Asigna un sprite
     collision  -> detecta colision con otro rectangulo
     collisionCircle -> detecta colision con un circulo
-    exec       -> ejecuta un ciclo de juego
 
 
-Funcion - DEVGAME.requestAnimationFrame(loop)
-  informacion  -> https://developer.mozilla.org/es/docs/Web/API/Window/requestAnimationFrame
+Funcion - DEVGAME.requestAnimationFrame
+  ARGS: (loop)
+  INFO: https://developer.mozilla.org/es/docs/Web/API/Window/requestAnimationFrame
