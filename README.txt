@@ -16,6 +16,7 @@ estas pueden ser rectangulos o circulos.
 Empecemos explicando cada metodo y atributo de la clase Rect
 
 
+// Crear objeto rectangulo
 CLASE - DEVGAME.entity.Rect
   ARGUMENTOS:
      x:      posicion en el eje x           | tipo: int    | default: 0
@@ -66,8 +67,10 @@ CLASE - DEVGAME.entity.Rect
 
     clone      -> clona el objeto
       ARGS: ()
+
     draw       -> dibuja el objeto en pantalla
       ARGS: ()
+
     exec       -> ejecuta un ciclo de juego
       ARGS: ()
 
@@ -76,6 +79,22 @@ CLASE - DEVGAME.entity.Rect
     collision  -> detecta colision con otro rectangulo
     collisionCircle -> detecta colision con un circulo
 
+
+//Contador de pasos
+CLASE - DEVGAME.Timer
+  ARGUMENTOS: ({fps: int}) // Frame por segundo
+  ARGUMENTOS: ({ms:  int}) // Milisegundos
+  ARGUMENTOS: (ms)         // Milisegundos
+
+  METODOS:
+    logic -> Logica que se ejecutara una vez el timer cuente los pasos asignados
+      DEF: logic se debe asignar una funcion definida por el programador
+
+    reset -> reinicia los pasos
+      ARGS: ()
+
+    exec -> Se debe ejecutar para contar cada paso
+      ARGS: ()
 
 Funcion - DEVGAME.requestAnimationFrame
   ARGS: (loop)
