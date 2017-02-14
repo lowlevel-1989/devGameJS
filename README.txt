@@ -99,3 +99,68 @@ CLASE - DEVGAME.Timer
 Funcion - DEVGAME.requestAnimationFrame
   ARGS: (loop)
   INFO: https://developer.mozilla.org/es/docs/Web/API/Window/requestAnimationFrame
+
+
+// Crear objeto container
+CLASE - DEVGAME.Container
+  ARGUMENTOS:
+     x:      posicion en el eje x           | tipo: int    | default: 0
+     y:      posicion en el eje y           | tipo: int    | default: 0
+
+  ATRIBUTOS:
+    x         -> posicion en eje el x
+    y         -> posicion en eje el y
+
+
+    direction -> direccion                  | tipo: int    | default: 1
+    hSpeed    -> velocidad horizontal       | tipo: int    | default: 0
+    vSpeed    -> velocidad vertical         | tipo: int    | default: 0
+    speed     -> velocidad                  | tipo: int    | default: 0
+
+    color     -> color                      | tipo: string | default: '#000'
+    visible   -> si es visible en el Juegos | tipo: bool   | default: true
+
+    // Estas son controladas por el motor
+    xPrevious -> posicion previa de x       | tipo: int    | default: x
+    yPrevious -> posicion previa de y       | tipo: int    | default: y
+    xStart    -> posicion inicial x         | tipo: int    | default: x
+    yStart    -> posicion inicial y         | tipo: int    | default: y
+
+    // Estas que son mas complejas se documentaran mas adelante
+    parent    -> entidad padre
+    context   -> contexto
+
+  METODOS:
+    setContext -> le asigna el contexto
+      ARGS: (contexto)
+
+    getX       -> retorna la posicion en x real
+      ARGS: ()
+
+    getY       -> retorna la posicion en y real
+      ARGS: ()
+
+    logic      -> logica que ejecutara cada ciclo de juego
+      DEF: logic se debe asignar una funcion definida por el programador
+
+    exec       -> ejecuta un ciclo de juego
+      ARGS: ()
+
+    add        -> agrega entidades al container
+      ARGS: (rect, rect, arc) // Todas las entidades que se quieran agregrar
+      ARGS: (rect) // Luego puedes agregar mas de ser necesario
+
+    render     -> dibuja los objetos en pantalla
+      ARGS: ()
+
+    get        -> devuelve el objeto en la posicion x
+      ARGS: (posicion | int)
+
+    forEach    -> Recorre todos los objetos del container
+      DEF: funciona como cualquier otro forEach
+
+
+
+
+
+
