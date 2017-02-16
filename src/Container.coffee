@@ -1,4 +1,5 @@
 CONST   = require './const'
+extend  = require './extend'
 Generic = require './entity/Generic'
 
 ###
@@ -13,7 +14,9 @@ Container = (x=0, y=0) ->
 
   return @
   
-Container.prototype = Object.create Generic.prototype
+
+extend Container, Generic
+
 
 Container.prototype.render = () ->
   @_save()

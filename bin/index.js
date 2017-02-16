@@ -8,8 +8,6 @@
 
   DEVGAME.entity = require('./entity');
 
-  DEVGAME["super"] = require('./super');
-
   DEVGAME.collision = require('./collision');
 
   DEVGAME.distance = require('./distance');
@@ -21,6 +19,10 @@
   DEVGAME.Sprite = require('./Sprite');
 
   DEVGAME.Timer = require('./Timer');
+
+  DEVGAME.extend = require('./extend');
+
+  DEVGAME["super"] = require('./super');
 
   module.exports = DEVGAME;
 

@@ -1,5 +1,6 @@
 CONST   = require '../../const'
-Arc = require './Arc'
+extend  = require '../../extend'
+Arc     = require './Arc'
 
 collision = require '../../collision'
 
@@ -23,7 +24,7 @@ Circle = (x=0, y=0, radius=0, fill=false) ->
   return @
 
 
-Circle.prototype = Object.create Arc.prototype
+extend Circle, Arc
 
 
 ###

@@ -1,5 +1,6 @@
-CONST = require '../const'
-Point = require './Point'
+CONST  = require '../const'
+extend = require '../extend'
+Point  = require './Point'
 
 Generic = (x=0, y=0) ->
 
@@ -23,8 +24,7 @@ Generic = (x=0, y=0) ->
 
   return @
 
-
-Generic.prototype = Object.create Point.prototype
+extend Generic, Point
 
 Generic.prototype.setContext = (context) ->
   

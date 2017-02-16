@@ -1,4 +1,5 @@
 CONST   = require '../../const'
+extend  = require '../../extend'
 Generic = require '../Generic'
 
 collision = require '../../collision'
@@ -40,7 +41,7 @@ Rect = (x=0, y=0, width=0, height=0, fill=false) ->
   return @
 
 
-Rect.prototype = Object.create Generic.prototype
+extend Rect, Generic
 
 Rect.prototype.setSprite = (sprite) ->
   @sprite = sprite

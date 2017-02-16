@@ -1,7 +1,9 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.DEVGAME = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var CONST, Container, Generic;
+var CONST, Container, Generic, extend;
 
 CONST = require('./const');
+
+extend = require('./extend');
 
 Generic = require('./entity/Generic');
 
@@ -23,7 +25,7 @@ Container = function(x, y) {
   return this;
 };
 
-Container.prototype = Object.create(Generic.prototype);
+extend(Container, Generic);
 
 Container.prototype.render = function() {
   var child, i, len, ref;
@@ -76,7 +78,7 @@ Container.prototype.forEach = function(callback) {
 module.exports = Container;
 
 
-},{"./const":9,"./entity/Generic":12}],2:[function(require,module,exports){
+},{"./const":9,"./entity/Generic":12,"./extend":18}],2:[function(require,module,exports){
 var Sprite, Timer;
 
 Timer = require('./Timer');
@@ -383,7 +385,7 @@ CONST = {
 module.exports = CONST;
 
 
-},{"./requestAnimationFrame":20}],10:[function(require,module,exports){
+},{"./requestAnimationFrame":21}],10:[function(require,module,exports){
 module.exports = function(circleA, circleB) {
   var dx, dy;
   dx = circleA.getX() - circleB.getX();
@@ -399,9 +401,11 @@ module.exports = {
 
 
 },{"./circleToCircle":10}],12:[function(require,module,exports){
-var CONST, Generic, Point;
+var CONST, Generic, Point, extend;
 
 CONST = require('../const');
+
+extend = require('../extend');
 
 Point = require('./Point');
 
@@ -428,7 +432,7 @@ Generic = function(x, y) {
   return this;
 };
 
-Generic.prototype = Object.create(Point.prototype);
+extend(Generic, Point);
 
 Generic.prototype.setContext = function(context) {
   context.imageSmoothingEnabled = false;
@@ -482,7 +486,7 @@ Generic.prototype.exec = function() {
 module.exports = Generic;
 
 
-},{"../const":9,"./Point":13}],13:[function(require,module,exports){
+},{"../const":9,"../extend":18,"./Point":13}],13:[function(require,module,exports){
 
 /*
 The Point object represents a location in a two-dimensional coordinate system,
@@ -597,9 +601,11 @@ module.exports = entity;
 
 
 },{"./Point":13,"./shapes/Arc":15,"./shapes/Circle":16,"./shapes/Rect":17}],15:[function(require,module,exports){
-var Arc, CONST, Generic;
+var Arc, CONST, Generic, extend;
 
 CONST = require('../../const');
+
+extend = require('../../extend');
 
 Generic = require('../Generic');
 
@@ -644,7 +650,7 @@ Arc = function(x, y, radius, startAngle, endAngle, anticlockwise) {
   return this;
 };
 
-Arc.prototype = Object.create(Generic.prototype);
+extend(Arc, Generic);
 
 
 /*
@@ -679,10 +685,12 @@ Arc.prototype.draw = function() {
 module.exports = Arc;
 
 
-},{"../../const":9,"../Generic":12}],16:[function(require,module,exports){
-var Arc, CONST, Circle, collision;
+},{"../../const":9,"../../extend":18,"../Generic":12}],16:[function(require,module,exports){
+var Arc, CONST, Circle, collision, extend;
 
 CONST = require('../../const');
+
+extend = require('../../extend');
 
 Arc = require('./Arc');
 
@@ -719,7 +727,7 @@ Circle = function(x, y, radius, fill) {
   return this;
 };
 
-Circle.prototype = Object.create(Arc.prototype);
+extend(Circle, Arc);
 
 
 /*
@@ -743,10 +751,12 @@ Circle.prototype.collisionRect = function(rect) {
 module.exports = Circle;
 
 
-},{"../../collision":6,"../../const":9,"./Arc":15}],17:[function(require,module,exports){
-var CONST, Generic, Rect, collision;
+},{"../../collision":6,"../../const":9,"../../extend":18,"./Arc":15}],17:[function(require,module,exports){
+var CONST, Generic, Rect, collision, extend;
 
 CONST = require('../../const');
+
+extend = require('../../extend');
 
 Generic = require('../Generic');
 
@@ -803,7 +813,7 @@ Rect = function(x, y, width, height, fill) {
   return this;
 };
 
-Rect.prototype = Object.create(Generic.prototype);
+extend(Rect, Generic);
 
 Rect.prototype.setSprite = function(sprite) {
   return this.sprite = sprite;
@@ -855,7 +865,30 @@ Generic.prototype.exec = function() {
 module.exports = Rect;
 
 
-},{"../../collision":6,"../../const":9,"../Generic":12}],18:[function(require,module,exports){
+},{"../../collision":6,"../../const":9,"../../extend":18,"../Generic":12}],18:[function(require,module,exports){
+module.exports = function() {
+  var ClassChild, ClassPather, _temp, args, i, source;
+  args = [].slice.call(arguments);
+  ClassChild = args.shift();
+  _temp = {};
+  for (i = args.length - 1; i >= 0; i += -1) {
+    ClassPather = args[i];
+    source = ClassPather.prototype;
+    Object.keys(source).map(function(method) {
+      if (!_temp[method] && typeof source[method] === 'function') {
+        return _temp[method] = source[method];
+      }
+    });
+  }
+  return Object.keys(_temp).map(function(method) {
+    if (!ClassChild.prototype[method]) {
+      return ClassChild.prototype[method] = _temp[method];
+    }
+  });
+};
+
+
+},{}],19:[function(require,module,exports){
 var DEVGAME;
 
 DEVGAME = require('./const');
@@ -863,8 +896,6 @@ DEVGAME = require('./const');
 DEVGAME.Container = require('./Container');
 
 DEVGAME.entity = require('./entity');
-
-DEVGAME["super"] = require('./super');
 
 DEVGAME.collision = require('./collision');
 
@@ -878,10 +909,14 @@ DEVGAME.Sprite = require('./Sprite');
 
 DEVGAME.Timer = require('./Timer');
 
+DEVGAME.extend = require('./extend');
+
+DEVGAME["super"] = require('./super');
+
 module.exports = DEVGAME;
 
 
-},{"./Container":1,"./Sprite":2,"./Timer":3,"./collision":6,"./const":9,"./distance":11,"./entity":14,"./random":19,"./rgb":21,"./super":22}],19:[function(require,module,exports){
+},{"./Container":1,"./Sprite":2,"./Timer":3,"./collision":6,"./const":9,"./distance":11,"./entity":14,"./extend":18,"./random":20,"./rgb":22,"./super":23}],20:[function(require,module,exports){
 module.exports = function(min, max) {
   if (min == null) {
     min = 0;
@@ -897,7 +932,7 @@ module.exports = function(min, max) {
 };
 
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     return window.setTimeout(function() {
@@ -907,7 +942,7 @@ module.exports = function() {
 };
 
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 module.exports = function(red, green, blue) {
   if (red == null) {
     red = 0;
@@ -922,7 +957,7 @@ module.exports = function(red, green, blue) {
 };
 
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 module.exports = function(self, method, args) {
   if (args == null) {
     args = [];
@@ -931,5 +966,5 @@ module.exports = function(self, method, args) {
 };
 
 
-},{}]},{},[18])(18)
+},{}]},{},[19])(19)
 });

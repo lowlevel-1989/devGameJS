@@ -1,4 +1,5 @@
 CONST   = require '../../const'
+extend  = require '../../extend'
 Generic = require '../Generic'
 
 ###
@@ -29,7 +30,7 @@ Arc = (x=0, y=0, radius=0, startAngle=0, endAngle=0, anticlockwise=false) ->
   return @
 
 
-Arc.prototype = Object.create Generic.prototype
+extend Arc, Generic
 
 ###
 Creates a clone od this Arc
