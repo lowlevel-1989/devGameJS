@@ -17,7 +17,7 @@ Constant values used in DevGame
     @static
     @contant
      */
-    VERSION: '__VERSION__',
+    VERSION: '0.5.1',
     requestAnimationFrame: require('./requestAnimationFrame'),
     KEY_F1: 112,
     KEY_F2: 113,

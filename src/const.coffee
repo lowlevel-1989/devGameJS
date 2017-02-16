@@ -11,7 +11,7 @@ CONST =
   @static
   @contant
   ###
-  VERSION: '__VERSION__'
+  VERSION: '0.5.1'
 
   requestAnimationFrame: require './requestAnimationFrame'
 

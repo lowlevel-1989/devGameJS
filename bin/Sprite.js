@@ -18,28 +18,50 @@
     this.sheight = options.sheight;
     this.fps = options.fps || 0;
     this.animation = options.animation;
-    this._timer = new Timer({
-      fps: this.fps
-    });
     this._frame = 0;
-    this._play = 1;
-    self = this;
-    this._timer.logic = function() {
-      var frame;
-      if (self._play === 1) {
-        self._frame = ++self._frame % self.animations[self.animation].length;
-      }
-      frame = self.animations[self.animation][self._frame];
-      self.sx = frame.sx;
-      return self.sy = frame.sy;
-    };
+    this._play = 0;
+    this._timer = null;
+    this.is_animation = false;
+    if (options.fps) {
+      this.is_animation = true;
+    }
+    if (options.fps) {
+      this._play = 1;
+    }
+    if (this.is_animation) {
+      self = this;
+      this._timer = new Timer({
+        fps: this.fps
+      });
+      this._timer.logic = function() {
+        if (self._play === 1) {
+          self._frame = ++self._frame % self.animations[self.animation].length;
+        }
+        return self._update.apply(self);
+      };
+    }
     return this;
+  };
+
+  Sprite.prototype._update = function() {
+    var frame;
+    frame = this.animations[this.animation][this._frame];
+    this.sx = frame.sx;
+    return this.sy = frame.sy;
+  };
+
+  Sprite.prototype._setFrame = function() {
+    if (this.is_animation) {
+      return this._timer.reset();
+    } else {
+      return this._update();
+    }
   };
 
   Sprite.prototype.use = function(animation) {
     if (this.animation !== animation) {
       this.animation = animation;
-      return this._timer.reset();
+      return this._setFrame();
     }
   };
 
@@ -47,7 +69,7 @@
     if (this.animations[this.animation][n]) {
       this._frame = n;
     }
-    return this._timer.reset();
+    return this._setFrame();
   };
 
   Sprite.prototype.play = function() {
@@ -93,7 +115,9 @@
   };
 
   Sprite.prototype.exec = function() {
-    return this._timer.exec();
+    if (this.is_animation) {
+      return this._timer.exec();
+    }
   };
 
   module.exports = Sprite;

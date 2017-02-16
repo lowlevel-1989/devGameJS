@@ -13,28 +13,42 @@ Sprite = (options) ->
   @sheight = options.sheight
   @fps   = options.fps || 0
   @animation = options.animation
-  @_timer = new Timer(fps: @fps)
   @_frame = 0
-  @_play  = 1
+  @_play  = 0
+  @_timer = null
+  @is_animation = false
+  @is_animation = true if options.fps
+  @_play = 1 if options.fps
 
-  self = @
-  @_timer.logic = () ->
-    if self._play == 1
-      self._frame = ++self._frame % self.animations[self.animation].length
-    frame = self.animations[self.animation][self._frame]
-    self.sx = frame.sx
-    self.sy = frame.sy
+  if @is_animation
+    self = @
+    @_timer = new Timer(fps: @fps)
+    @_timer.logic = () ->
+      if self._play == 1
+        self._frame = ++self._frame % self.animations[self.animation].length
+      self._update.apply self
 
   return @
+
+Sprite.prototype._update = () ->
+  frame = @animations[@animation][@_frame]
+  @sx = frame.sx
+  @sy = frame.sy
+
+Sprite.prototype._setFrame = () ->
+  if @is_animation
+    @_timer.reset()
+  else
+    @_update()
 
 Sprite.prototype.use   = (animation) ->
   if @animation != animation
     @animation   = animation
-    @_timer.reset()
+    @_setFrame()
 
 Sprite.prototype.frame = (n) ->
   @_frame = n if @animations[@animation][n]
-  @_timer.reset()
+  @_setFrame()
 
 Sprite.prototype.play = () -> @_play = 1
 
@@ -60,6 +74,6 @@ Sprite.prototype.load = (callback) ->
 Sprite.prototype.get = () -> return @spritesheet
 
 Sprite.prototype.exec = () ->
-  @_timer.exec()
+  if @is_animation then @_timer.exec()
 
 module.exports = Sprite
